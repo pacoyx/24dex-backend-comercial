@@ -1,0 +1,3 @@
+﻿<Project>
+  <Import Project="..\buildMultiTargeting\24dex-backend-comercial.props" />
+</Project>

@@ -1,0 +1,6 @@
+@_24dex_backend_comercial_HostAddress = http://localhost:5239
+
+GET {{_24dex_backend_comercial_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###

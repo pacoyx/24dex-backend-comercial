@@ -1,0 +1,3 @@
+﻿<Project>
+  <Import Project="..\build\24dex-backend-comercial.props" />
+</Project>
