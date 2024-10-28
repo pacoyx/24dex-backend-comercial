@@ -6,6 +6,6 @@ public static class CustomerEndpoints{
         group.MapCreateCustomer();
         group.MapUpdateCustomer();
         group.MapDeleteCustomer();
-        
+        group.MapSearchCustomer();        
     }
 }

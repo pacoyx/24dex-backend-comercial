@@ -141,3 +141,4 @@ D:\workspace\dexter-company\24dex-backend-comercial\bin\Debug\net8.0\Newtonsoft.
 D:\workspace\dexter-company\24dex-backend-comercial\bin\Debug\net8.0\Newtonsoft.Json.Bson.dll
 D:\workspace\dexter-company\24dex-backend-comercial\bin\Debug\net8.0\Microsoft.Bcl.TimeProvider.dll
 D:\workspace\dexter-company\24dex-backend-comercial\bin\Debug\net8.0\Microsoft.AspNetCore.Authentication.JwtBearer.dll
+D:\workspace\dexter-company\24dex-backend-comercial\obj\Debug\net8.0\24dex-backend-comercial.sourcelink.json

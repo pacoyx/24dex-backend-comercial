@@ -12,7 +12,14 @@ public static class GetNumbersDocumentSearchEndpoints
             {
                 return Results.NotFound();
             }
-            return Results.Ok(numbersDocument);
+
+            var response = new ApiResponse<NumbersDocument>(){
+                Data = numbersDocument,
+                Errors = [],
+                Message = "NumbersDocument found",
+                Success = true
+            };
+            return Results.Ok(response);
         });
     }
 }
