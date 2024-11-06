@@ -1,28 +1,36 @@
 using Microsoft.EntityFrameworkCore;
 
-public static class GetWorkGuideMainEndpoint
+public static class GetWorkGuideByDocumentEndpoint
 {
-    public static void MapGetWorkGuideMain(this IEndpointRouteBuilder app)
+    public static void MapGetWorkGuideByDocument(this IEndpointRouteBuilder app)
     {
-        app.MapGet("/{id}", async (int id, RecepcionDbContext db) =>
+        app.MapGet("/document/{serie}/{numero}", async (string serie, string numero, RecepcionDbContext db) =>
         {
-
-            if (id <= 0){
-                return Results.BadRequest("Id must be greater than zero");                
+            if (string.IsNullOrEmpty(serie) || string.IsNullOrEmpty(numero))
+            {
+                return Results.BadRequest("Serie and Number must not be empty");
             }
 
             var workGuideMain = await db.WorkGuideMains
             .Include(w => w.Customer)
             .Include(w => w.WorkGuideDetails)
                 .ThenInclude(d => d.Product)
-            .FirstOrDefaultAsync(w => w.Id == id);
+            .FirstOrDefaultAsync(w => w.SerieGuia == serie && w.NumeroGuia == numero);
 
             if (workGuideMain == null)
             {
-                return Results.NotFound();
+                var responseValidation = new ApiResponse<string>()
+                {
+                    Data = "",
+                    Message = "WorkGuideMain not found",
+                    StatusCode = 404,
+                    Success = false
+                };
+                return Results.NotFound(responseValidation);
             }
 
-            var responseWgmDto = new ResponseWgmDto(
+            var responseWgmDto = new ResponseGuiaByDocumentDto(
+                workGuideMain.Id,
                 workGuideMain.SerieGuia,
                 workGuideMain.NumeroGuia,
                 workGuideMain.FechaOperacion,
@@ -38,14 +46,16 @@ public static class GetWorkGuideMainEndpoint
                 workGuideMain.Acuenta,
                 workGuideMain.Saldo,
                 workGuideMain.CustomerId,
-                workGuideMain.Customer!.FirtsName + ' '+ workGuideMain.Customer.LastName,
+                workGuideMain.Customer!.FirtsName + ' ' + workGuideMain.Customer.LastName,
                 workGuideMain.Customer.Phone,
                 workGuideMain.EstadoPago,
                 workGuideMain.FechaPago,
                 workGuideMain.EstadoRegistro,
                 workGuideMain.EstadoSituacion,
                 workGuideMain.FechaRecojo,
-                workGuideMain.WorkGuideDetails.Select(d => new ResponseWgdDto(
+                workGuideMain.TipoPagoCancelacion,
+                workGuideMain.WorkGuideDetails.Select(d => new ResponseGuiaByDocumentDtoDet(
+                    d.Id,
                     d.Cant,
                     d.Precio,
                     d.Total,
@@ -59,10 +69,12 @@ public static class GetWorkGuideMainEndpoint
                     d.EstadoSituacion,
                     d.EstadoPago
                 ))
-            );           
-            var response = new ApiResponse<ResponseWgmDto>(){
+            );
+
+            var response = new ApiResponse<ResponseGuiaByDocumentDto>()
+            {
                 Data = responseWgmDto,
-                Message = "WorkGuideMain found",
+                Message = "guias por encontradas por documento",
                 StatusCode = 200,
                 Success = true
             };

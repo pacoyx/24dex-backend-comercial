@@ -1,7 +1,8 @@
 using DexterCompany.Models;
 
-public record ResponseWgmDto
+public record ResponseGuiaByDocumentDto
 (
+    int Id,
      string SerieGuia,
      string NumeroGuia,
      DateTime FechaOperacion,
@@ -24,11 +25,13 @@ public record ResponseWgmDto
      string estadoRegistro,
      string estadoSituacion,
      DateTime? fechaRecojo,
-     IEnumerable<ResponseWgdDto> WorkGuideDetailsDTO
+     string TipoPagoCancelacion,
+     IEnumerable<ResponseGuiaByDocumentDtoDet> WorkGuideDetailsDTO
 );
 
 
-public record ResponseWgdDto(
+public record ResponseGuiaByDocumentDtoDet(
+    int Id,
     decimal Cant,
     decimal Precio,
     decimal Total,

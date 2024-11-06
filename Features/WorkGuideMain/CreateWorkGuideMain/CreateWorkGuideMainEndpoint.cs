@@ -1,3 +1,4 @@
+using System.Text.Json;
 using Microsoft.EntityFrameworkCore;
 
 public static class CreateWorkGuideMainEndpoint
@@ -8,15 +9,15 @@ public static class CreateWorkGuideMainEndpoint
         {
             if (wgmCreateDto == null)
             {
-                return Results.BadRequest("Create data is missing");
+                return Results.BadRequest("Request vacio");
             }
-
+            DateTime fechaOperacion = DateTime.Now;
             var workGuideMain = new WorkGuideMain
             {
                 SerieGuia = wgmCreateDto.SerieGuia,
                 NumeroGuia = wgmCreateDto.NumeroGuia,
-                FechaOperacion = wgmCreateDto.FechaOperacion,
-                FechaHoraEntrega = wgmCreateDto.FechaHoraEntrega,
+                FechaOperacion = fechaOperacion,
+                FechaHoraEntrega = fechaOperacion.AddDays(2), // Add 2 days to the current date
                 MensajeAlertas = wgmCreateDto.MensajeAlertas,
                 Observaciones = wgmCreateDto.Observaciones,
                 TipoPago = wgmCreateDto.TipoPago,
@@ -28,6 +29,13 @@ public static class CreateWorkGuideMainEndpoint
                 Acuenta = wgmCreateDto.Acuenta,
                 Saldo = wgmCreateDto.Saldo,
                 CustomerId = wgmCreateDto.CustomerId,
+
+                EstadoPago = wgmCreateDto.EstadoPago,
+                FechaPago = wgmCreateDto.EstadoPago == "PA" ? fechaOperacion : null,
+                EstadoRegistro = wgmCreateDto.EstadoRegistro,
+                EstadoSituacion = wgmCreateDto.EstadoSituacion,
+                FechaRecojo = null,
+
                 WorkGuideDetails = wgmCreateDto.WorkGuideDetailsDTO.Select(x => new WorkGuideDetail
                 {
                     Cant = x.Cant,
@@ -43,6 +51,9 @@ public static class CreateWorkGuideMainEndpoint
                     EstadoPago = x.EstadoPago,
                 }).ToList()
             };
+
+            var jsonString = JsonSerializer.Serialize(workGuideMain);
+            Console.WriteLine("workGuideMain: ====>" +  jsonString);
 
             // actualiza el correlativo de la guia de servicio
             var numbersDocument = await db.NumbersDocuments
@@ -68,7 +79,7 @@ public static class CreateWorkGuideMainEndpoint
                     TipoComprobante = wgmCreateDto.TypeDocument,
                     SerieComprobante = wgmCreateDto.SerieGuia,
                     NumComprobante = wgmCreateDto.NumeroGuia,
-                    FechaComprobante = wgmCreateDto.FechaOperacion,
+                    FechaComprobante = fechaOperacion,
                     Importe = 0,
                     Adelanto = wgmCreateDto.Acuenta,
                     TipoPago = wgmCreateDto.TipoPago,

@@ -21,5 +21,5 @@ public class WorkGuideDetail
     public string EstadoRegistro { get; set; } = "";  // A: Activo, I: Inactivo    
     public int CompanyId { get; set; }
     public string EstadoSituacion { get; set; } = "";  // P: Pendiente, E: Entregado; D: Devuelto
-    public string EstadoPago { get; set; } = "";    // A: Pendiente, P: Pagado, C: Anulado
+    public string EstadoPago { get; set; } = "";    // PE: Pendiente, PA: Pagado, AN: Anulado
 }

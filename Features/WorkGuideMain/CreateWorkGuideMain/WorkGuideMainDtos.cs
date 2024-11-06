@@ -2,9 +2,7 @@
 public record WgmCreateDto
 (
      string SerieGuia,
-     string NumeroGuia,
-     DateTime FechaOperacion,
-     DateTime FechaHoraEntrega,
+     string NumeroGuia,     
      string MensajeAlertas,
      string Observaciones,
      string TipoPago,
@@ -19,7 +17,10 @@ public record WgmCreateDto
      IEnumerable<WgdCreateDto> WorkGuideDetailsDTO,
      int BranchStoreId,
      string TypeDocument,
-     int UserId
+     int UserId,
+     string EstadoPago,     
+     string EstadoRegistro,
+     string EstadoSituacion     
 );
 
 public record WgdCreateDto(

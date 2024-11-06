@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -10,9 +11,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace _24dex_backend_comercial.Migrations
 {
     [DbContext(typeof(RecepcionDbContext))]
-    partial class RecepcionDbContextModelSnapshot : ModelSnapshot
+    [Migration("20241102161417_addcolspagorecojoestado")]
+    partial class addcolspagorecojoestado
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -20,34 +23,6 @@ namespace _24dex_backend_comercial.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
-
-            modelBuilder.Entity("AlertMsg", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<string>("Mensaje")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("TipoAlerta")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Titulo")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("WorkGuideMainId")
-                        .HasColumnType("int");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("AlertMsgs");
-                });
 
             modelBuilder.Entity("BrachSalesUser", b =>
                 {
@@ -531,12 +506,6 @@ namespace _24dex_backend_comercial.Migrations
                     b.Property<decimal>("Acuenta")
                         .HasColumnType("decimal(18,2)");
 
-                    b.Property<int>("AlertMsgId")
-                        .HasColumnType("int");
-
-                    b.Property<int?>("AlertMsgId1")
-                        .HasColumnType("int");
-
                     b.Property<int>("CustomerId")
                         .HasColumnType("int");
 
@@ -603,10 +572,6 @@ namespace _24dex_backend_comercial.Migrations
                         .HasMaxLength(2)
                         .HasColumnType("nvarchar(2)");
 
-                    b.Property<string>("TipoPagoCancelacion")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<string>("TipoRecepcion")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -615,8 +580,6 @@ namespace _24dex_backend_comercial.Migrations
                         .HasColumnType("decimal(18,2)");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("AlertMsgId1");
 
                     b.HasIndex("CustomerId");
 
@@ -713,17 +676,11 @@ namespace _24dex_backend_comercial.Migrations
 
             modelBuilder.Entity("WorkGuideMain", b =>
                 {
-                    b.HasOne("AlertMsg", "AlertMsg")
-                        .WithMany()
-                        .HasForeignKey("AlertMsgId1");
-
                     b.HasOne("Customer", "Customer")
                         .WithMany()
                         .HasForeignKey("CustomerId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-
-                    b.Navigation("AlertMsg");
 
                     b.Navigation("Customer");
                 });
