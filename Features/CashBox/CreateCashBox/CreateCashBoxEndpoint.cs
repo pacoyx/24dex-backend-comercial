@@ -6,8 +6,8 @@ public static class CreateCashBoxEndpoint
         {
             var cashBox = new CashBoxMain
             {
-                FechaCaja = requestCashBoxCreateDto.FechaCaja,
-                FechaHoraApertura = requestCashBoxCreateDto.FechaHoraApertura,
+                FechaCaja = DateTime.Now,
+                FechaHoraApertura = DateTime.Now,
                 FechaHoraCierre = null,
                 EstadoCaja = "A",
                 SaldoInicial = requestCashBoxCreateDto.SaldoInicial,

@@ -13,5 +13,6 @@ public static class WorkGuideMainEndpoints{
         group.MapGetAlertsByWorkGuide();
         group.MapCancelItemWorkGuide();
         group.MapReturnUnwashedClothes();
+        group.MapPickUpItem();
     }
 }

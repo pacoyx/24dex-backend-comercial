@@ -32,6 +32,7 @@ public static class ReturnUnwashedClothesEndpoint
             }
 
             workGuideItem.EstadoSituacion = "D";
+            workGuideItem.FechaDevolucion = DateTime.Now;
 
 
             // si el monto es mayor a 0 se registra en ExpenseBox
@@ -51,6 +52,10 @@ public static class ReturnUnwashedClothesEndpoint
                     return Results.NotFound(responseValidation);
                 }
                 workGuide.Saldo = workGuide.Saldo - request.Monto;
+                if (workGuide.Saldo < 0)
+                {
+                    workGuide.Saldo = 0;
+                }
 
                 // obtener el id de caja principal por el iduser
                 var cashBoxMain = await db.CashBoxMains.FirstOrDefaultAsync(x => x.UserId == request.UserId && x.EstadoRegistro == "A" && x.EstadoCaja == "A");
@@ -66,6 +71,33 @@ public static class ReturnUnwashedClothesEndpoint
                     return Results.NotFound(responseValidation);
                 }
 
+
+                var customer = await db.Customers.FindAsync(workGuide.CustomerId);
+                if (customer == null)
+                {
+                    var responseValidation = new ApiResponse<string>()
+                    {
+                        Data = "",
+                        Message = "No se encontro el cliente",
+                        StatusCode = 404,
+                        Success = false
+                    };
+                    return Results.NotFound(responseValidation);
+                }
+
+                var product = await db.ProdServices.FindAsync(workGuideItem.ProductId);
+                if (product == null)
+                {
+                    var responseValidation = new ApiResponse<string>()
+                    {
+                        Data = "",
+                        Message = "No se encontro el producto",
+                        StatusCode = 404,
+                        Success = false
+                    };
+                    return Results.NotFound(responseValidation);
+                }
+
                 // registrar devolucion de efectivo en ExpenseBox
                 var expenseBox = new ExpenseBox()
                 {
@@ -73,7 +105,7 @@ public static class ReturnUnwashedClothesEndpoint
                     PersonalAutoriza = "Sistema",
                     FechaGasto = DateTime.Now,
                     Importe = (decimal)request.Monto,
-                    DetallesEgreso = "Devolucion de ropa sin lavar",
+                    DetallesEgreso = customer.FirtsName + " " + customer.LastName + " | Guia: " + workGuide.SerieGuia + "-" + workGuide.NumeroGuia + " | Producto: " + product.Description,
                     EstadoRegistro = "A",
                     UserId = request.UserId,
                     CashBoxMainId = cashBoxMain.Id
@@ -82,9 +114,9 @@ public static class ReturnUnwashedClothesEndpoint
             }
 
             await db.SaveChangesAsync();
-            var response = new ApiResponse<string>()
+            var response = new ApiResponse<DateTime?>()
             {
-                Data = "El item fue actualizado como DEVUELTO con exito",
+                Data = workGuideItem.FechaDevolucion,
                 Message = "El item fue actualizado como DEVUELTO con exito",
                 Success = true,
                 StatusCode = 200

@@ -1,10 +1,10 @@
 public record CreateExpenseBoxDto(
-    string CategoryGasto,
-    string PersonalAutoriza,
-    DateTime FechaGasto,
+    string CategoriaGasto,
+    string PersonalAutoriza,    
     decimal Importe,
     string DetallesEgreso,
-    string EstadoRegistro
+    string EstadoRegistro,
+     int UserId     
 );
 
 public record CreateExpenseBoxDetailsDto(
@@ -13,5 +13,5 @@ public record CreateExpenseBoxDetailsDto(
     string PersonalAutoriza,
     DateTime FechaGasto,
     decimal Importe,
-    string DetallesEgreso    
+    string DetallesEgreso
 );

@@ -43,5 +43,7 @@ public record ResponseGuiaByDocumentDtoDet(
     ProdService Product,
     string EstadoRegistro,
     string EstadoSituacion,
-    string EstadoPago
+    string EstadoPago,
+    DateTime? FechaRecojo ,
+    DateTime? FechaDevolucion 
 );

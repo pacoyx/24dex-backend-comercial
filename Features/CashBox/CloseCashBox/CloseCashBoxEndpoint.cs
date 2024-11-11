@@ -57,9 +57,9 @@ public static class CloseCashBoxEndpoint
 
             await db.SaveChangesAsync();
 
-            var response = new ApiResponse<CashBoxMain>(){
-                Data = cashBox,
-                Message = "Request was successful",
+            var response = new ApiResponse<string>(){
+                Data = "Caja cerrada",
+                Message = "Caja cerrada correctamente",
                 StatusCode = 200,
                 Success = true
             };

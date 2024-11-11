@@ -2,7 +2,7 @@ public static class CreateCustomerEndpoint
 {
     public static void MapCreateCustomer(this IEndpointRouteBuilder app)
     {
-        app.MapPost("/create", async (CreateCustomerDto customerDto, RecepcionDbContext context) =>
+        app.MapPost("/", async (CreateCustomerDto customerDto, RecepcionDbContext context) =>
         {
             if (customerDto == null)
             {

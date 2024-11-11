@@ -20,9 +20,7 @@ public static class UpdateWorkGuideInfoPayEndpoint
                 return Results.NotFound(responseErr);
             }
 
-            workGuide.TipoPagoCancelacion = request.TipoPago;            
-            workGuide.FechaPago = DateTime.Now;
-            workGuide.EstadoPago = request.EstadoPago;
+          
 
             // registramos el pago en caja
             var cashBoxMain = await db.CashBoxMains.FirstOrDefaultAsync(c => c.UserId == request.idUser && c.EstadoRegistro == "A" && c.EstadoCaja == "A");
@@ -46,6 +44,12 @@ public static class UpdateWorkGuideInfoPayEndpoint
                 CustomerId = workGuide.CustomerId,
                 CashBoxMainId = cashBoxMain.Id
             };
+
+
+            workGuide.TipoPagoCancelacion = request.TipoPago;            
+            workGuide.FechaPago = DateTime.Now;
+            workGuide.EstadoPago = request.EstadoPago;
+            workGuide.Saldo = 0;
 
             await db.CashBoxDetails.AddAsync(cashBoxDetail);
             await db.SaveChangesAsync();

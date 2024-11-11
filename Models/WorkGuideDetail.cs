@@ -22,4 +22,6 @@ public class WorkGuideDetail
     public int CompanyId { get; set; }
     public string EstadoSituacion { get; set; } = "";  // P: Pendiente, E: Entregado; D: Devuelto
     public string EstadoPago { get; set; } = "";    // PE: Pendiente, PA: Pagado, AN: Anulado
+    public DateTime? FechaRecojo { get; set; }
+    public DateTime? FechaDevolucion { get; set; }
 }

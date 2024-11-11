@@ -67,7 +67,9 @@ public static class GetWorkGuideByDocumentEndpoint
                     d.Product!,
                     d.EstadoRegistro,
                     d.EstadoSituacion,
-                    d.EstadoPago
+                    d.EstadoPago,
+                    d.FechaRecojo,
+                    d.FechaDevolucion
                 ))
             );
 

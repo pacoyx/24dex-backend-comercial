@@ -4,14 +4,32 @@ public static class DeleteExpenseBoxEndpoint
     {
         app.MapDelete("/{id}", async (int id, RecepcionDbContext context) =>
         {
-            var expenseBox = await context.ExpenseBoxMains.FindAsync(Convert.ToInt32(id));
+            var expenseBox = await context.ExpenseBoxMains.FindAsync(id);
             if (expenseBox == null)
             {
-                return Results.NotFound();
+                 var responseErr = new ApiResponse<string>
+                {
+                    Data = "Gasto no encontrado",
+                    Message = "Gasto no encontrado",
+                    Success = false,
+                    Errors = [],
+                    StatusCode = 404
+                };
+                return Results.NotFound(responseErr);
             }
             context.ExpenseBoxMains.Remove(expenseBox);
             await context.SaveChangesAsync();
-            return Results.Ok(expenseBox);
+
+            var response = new ApiResponse<string>
+            {
+                Data = "Gasto eliminado",
+                Message = "Gasto eliminado",
+                Success = true,
+                Errors = [],
+                StatusCode = 200
+            };
+
+            return Results.Ok(response);
         });
     }
 }
