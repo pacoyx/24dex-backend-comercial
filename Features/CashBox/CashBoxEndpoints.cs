@@ -9,5 +9,7 @@ public static class CashBoxEndpoints{
         group.MapGetCashBoxOpenByUser();
         group.MapCloseCashBox();
         group.MapGetItemsCashBoxDetail();
+        group.MapCreateCashBoxDetailOtros();
+        group.MapDeleteCashBoxDetail();
     }
 }

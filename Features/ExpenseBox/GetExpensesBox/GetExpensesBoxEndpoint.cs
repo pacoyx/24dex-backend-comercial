@@ -18,7 +18,7 @@ public static class GetExpensesBoxEndpoint
 
             if (cashBoxMain == null)
             {
-                return Results.NotFound("No se encontro caja registrada para el usuario");
+                return Results.NotFound("No se encontro 'Caja Abierta' registrada para el usuario");
             }
 
             var expenseBox = await context.ExpenseBoxMains.AsNoTracking()

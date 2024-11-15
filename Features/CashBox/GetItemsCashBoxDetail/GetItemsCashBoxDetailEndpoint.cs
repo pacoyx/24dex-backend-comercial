@@ -8,7 +8,7 @@ public static class GetItemsCashBoxDetail
         {
             if (userId == 0)
             {
-                return Results.BadRequest("UserId must be greater than 0");
+                return Results.BadRequest("el UserId debe ser diferente de 0");
             }
 
             // buscar cashboxMain por userId
@@ -19,7 +19,7 @@ public static class GetItemsCashBoxDetail
 
             if (cashBoxMain == null)
             {
-                return Results.NotFound(new { id = 0, message = "No se encontró caja abierta para el usuario" });
+                return Results.NotFound("No se encontró 'Caja Abierta' para el usuario");
             }
 
             var cashBoxDetail = await db.CashBoxDetails.AsNoTracking()
@@ -43,7 +43,7 @@ public static class GetItemsCashBoxDetail
                 cbd.TipoPago,
                 cbd.DescripcionPago,
                 cbd.Observaciones,
-                cbd.Customer
+                cbd.Customer ?? new Customer(){ Id = 0, FirtsName = cbd.Observaciones}
             )).ToList();
 
 

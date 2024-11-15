@@ -13,8 +13,8 @@ public static class GetCashBoxOpenByUserEndpoint
                 .FirstOrDefaultAsync();
 
             if (openCashBox == null)
-            {
-                return Results.NotFound(new { id = 0, message = "No se encontró caja abierta para el usuario" });
+            {                
+                return Results.NotFound("No se encontró 'Caja Abierta' para el usuario");
             }
 
             var cashBoxMainDTO = new ResponseCashBoxOpenDto(

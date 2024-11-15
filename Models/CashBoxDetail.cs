@@ -16,7 +16,7 @@ public class CashBoxDetail
     public string DescripcionPago { get; set; } = ""; // yape, plin, visa,etc
     public string Observaciones { get; set; } = "";
     public string EstadoRegistro { get; set; } = ""; // A: Activo, I: Inactivo
-    public int CustomerId { get; set; }
+    public int? CustomerId { get; set; }
     public Customer? Customer { get; set; }
     public int CashBoxMainId { get; set; }
     [JsonIgnore]
