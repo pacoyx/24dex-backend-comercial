@@ -4,5 +4,7 @@ string Name,
 string Description,
 decimal Price,
 string Status,
-int CatServiceId
+int CatServiceId,
+string IsPeso,
+string IsLavado
 );

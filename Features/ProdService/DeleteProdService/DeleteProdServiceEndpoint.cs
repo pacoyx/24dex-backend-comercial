@@ -7,11 +7,28 @@ public static class DeleteProdServiceEndpoint
             var prodService = await context.ProdServices.FindAsync(id);
             if (prodService == null)
             {
-                return Results.NotFound();
+                var responseValidation = new ApiResponse<string>
+                {
+                    Success = false,
+                    Data = "ProdService not found",
+                    StatusCode = StatusCodes.Status404NotFound,
+                    Message = "ProdService not found"
+                };
+                return Results.NotFound(responseValidation);
             }
+
             context.ProdServices.Remove(prodService);
             await context.SaveChangesAsync();
-            return Results.Ok(prodService);
+            
+            var response = new ApiResponse<string>
+            {
+                Success = true,
+                Data = "ProdService deleted successfully",
+                StatusCode = StatusCodes.Status200OK,
+                Message = "ProdService deleted successfully"
+            };
+            
+            return Results.Ok(response);
         });
     }
 }

@@ -8,5 +8,6 @@ public static class ProdServiceEndpoints{
         group.MapUpdateProdService();
         group.MapGetProdServiceByCat();
         group.MapGetProdServiceSearchByDescription();
+        group.MapGetIdServicePeso();
     }
 }

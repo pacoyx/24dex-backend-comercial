@@ -11,7 +11,7 @@ public static class CreateCustomerEndpoint
 
             var customer = new Customer()
             {
-                FirtsName = customerDto.FirtsName,
+                FirtsName = customerDto.FirstName,
                 LastName = customerDto.LastName,
                 Address = customerDto.Address,
                 Phone = customerDto.Phone,
@@ -22,9 +22,7 @@ public static class CreateCustomerEndpoint
 
             await context.Customers.AddAsync(customer);
             await context.SaveChangesAsync();
-            return Results.Ok(customer);
-
-            // return Results.CreatedAtRoute($"/api/customer/{customer.Id}", customer);
+            return Results.Ok(customer);            
         });
 
 

@@ -20,7 +20,11 @@ public static class UpdateWorkGuideInfoPayEndpoint
                 return Results.NotFound(responseErr);
             }
 
-          
+            var workGuideDetails = await db.WorkGuideDetails.Where(wgd => wgd.WorkGuideMainId == id).ToListAsync();
+            foreach (var detail in workGuideDetails)
+            {
+                detail.EstadoPago = "PA";
+            }
 
             // registramos el pago en caja
             var cashBoxMain = await db.CashBoxMains.FirstOrDefaultAsync(c => c.UserId == request.idUser && c.EstadoRegistro == "A" && c.EstadoCaja == "A");

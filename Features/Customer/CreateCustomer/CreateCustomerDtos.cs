@@ -1,6 +1,6 @@
 
 public record CreateCustomerDto(
-string FirtsName,
+string FirstName,
 string LastName,
 string Address,
 string Phone,

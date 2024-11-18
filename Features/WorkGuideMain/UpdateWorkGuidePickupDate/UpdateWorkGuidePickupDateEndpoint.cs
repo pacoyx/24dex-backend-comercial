@@ -1,4 +1,5 @@
 using System.Diagnostics.CodeAnalysis;
+using Microsoft.EntityFrameworkCore;
 
 public static class UpdateWorkGuidePickupDateEndpoint{
     public static void MapUpdateWorkGuidePickupDate(this IEndpointRouteBuilder app){
@@ -13,6 +14,13 @@ public static class UpdateWorkGuidePickupDateEndpoint{
                     Errors = new List<string> { "guia no se encuentra" }
                 };
                 return Results.NotFound(responseErr);
+            }
+
+            var workGuideDetails = await db.WorkGuideDetails.Where(wgd => wgd.WorkGuideMainId == id).ToListAsync();
+            foreach (var detail in workGuideDetails)
+            {
+                detail.FechaRecojo = DateTime.Now;
+                detail.EstadoSituacion = "E";
             }
 
             workGuide.FechaRecojo = DateTime.Now;

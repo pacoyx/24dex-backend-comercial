@@ -15,5 +15,9 @@ namespace DexterCompany.Models
         [MaxLength(1)] 
         public string Status { get; set; } = "A";
         public int CatServiceId { get; set; }
+        [MaxLength(1)] 
+        public string IsPeso { get; set; } = "N";
+        [MaxLength(1)] 
+        public string IsLavado { get; set; } = "N";
     }
 }
