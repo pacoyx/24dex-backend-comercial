@@ -4,6 +4,7 @@ public record LoginUserDto(
 
 public record LoginUserResponseDto(
     string Token,
+    string RefreshToken,
     string Name,
     string UserName,
     string Role,
@@ -18,3 +19,9 @@ public record BranchSalesResponseDto(
      string BranchSalesName,
      string Status
      );
+
+
+public record RefreshTokenRequestDto(
+string Token,
+string RefreshToken
+);

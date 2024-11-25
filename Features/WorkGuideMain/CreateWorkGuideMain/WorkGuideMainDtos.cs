@@ -34,5 +34,6 @@ public record WgdCreateDto(
      int ProductId,
      string EstadoRegistro,
      string EstadoSituacion,
-     string EstadoPago
+     string EstadoPago,
+     string Identificador
 );

@@ -6,8 +6,14 @@ public static class GetCustomersEndpoint
     {
         app.MapGet("/{pageNumber}/{pageSize}", async (int pageNumber, int pageSize, RecepcionDbContext context) =>
         {
-            var pagedCustomers = await context.Customers
-                .AsNoTracking()
+            // Aplicar un filtro (por ejemplo, solo clientes activos)
+            var query = context.Customers.AsNoTracking();
+
+             // Obtener el total de filas después de aplicar el filtro
+            var totalRows = await query.CountAsync();
+
+            // Obtener los clientes paginados después de aplicar el filtro
+            var pagedCustomers = await query
                 .OrderBy(c => c.FirtsName)
                 .ThenBy(c => c.LastName)
                 .Skip((pageNumber - 1) * pageSize)
@@ -15,7 +21,7 @@ public static class GetCustomersEndpoint
                 .ToListAsync();
 
             var responsePaginator = new GetCustomersResponseDto(
-                await context.Customers.CountAsync(),
+                totalRows,
                 pagedCustomers.Select(c => new GetCustomersResponseDatosDto(
                     c.Id,
                     c.FirtsName,
@@ -30,12 +36,17 @@ public static class GetCustomersEndpoint
 
             var response = new ApiResponse<GetCustomersResponseDto>
             {
-                Success = true,
                 Data = responsePaginator,
-                StatusCode = StatusCodes.Status200OK,
-                Message = "Customers retrieved successfully"
+                Success = true,
+                Message = "",
+                StatusCode = 200
             };
+
+           
             return Results.Ok(response);
-        });
+        })
+         // aplicar a la ruta el atributo de autorización
+        .RequireAuthorization();
+
     }
 }

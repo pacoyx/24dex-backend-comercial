@@ -49,6 +49,7 @@ public static class CreateWorkGuideMainEndpoint
                     EstadoRegistro = x.EstadoRegistro,
                     EstadoSituacion = x.EstadoSituacion,
                     EstadoPago = x.EstadoPago,
+                    Identificador = x.Identificador
                 }).ToList()
             };
 

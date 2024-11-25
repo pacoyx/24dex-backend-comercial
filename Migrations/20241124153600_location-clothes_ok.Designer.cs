@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -10,9 +11,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace _24dex_backend_comercial.Migrations
 {
     [DbContext(typeof(RecepcionDbContext))]
-    partial class RecepcionDbContextModelSnapshot : ModelSnapshot
+    [Migration("20241124153600_location-clothes_ok")]
+    partial class locationclothes_ok
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -428,6 +431,7 @@ namespace _24dex_backend_comercial.Migrations
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<string>("Comments")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("CreatedBy")
@@ -447,14 +451,10 @@ namespace _24dex_backend_comercial.Migrations
                     b.Property<DateTime?>("ModifiedDate")
                         .HasColumnType("datetime2");
 
-                    b.Property<string>("NumeroGuia")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int?>("WorkGuideDetailId")
+                    b.Property<int>("WorkGuideDetailId")
                         .HasColumnType("int");
 
-                    b.Property<int?>("WorkGuideId")
+                    b.Property<int>("WorkGuideId")
                         .HasColumnType("int");
 
                     b.HasKey("Id");
@@ -567,10 +567,6 @@ namespace _24dex_backend_comercial.Migrations
 
                     b.Property<DateTime?>("FechaRecojo")
                         .HasColumnType("datetime2");
-
-                    b.Property<string>("Identificador")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Observaciones")
                         .IsRequired()

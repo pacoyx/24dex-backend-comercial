@@ -7,4 +7,5 @@ public class User
     public required string Role { get; set; }
     public required string Status { get; set; }        
     public List<BrachSalesUser> BrachSalesUsers { get; set; } = [];
+    public string RefreshToken { get; set; } = "";
 }

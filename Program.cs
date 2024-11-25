@@ -64,9 +64,9 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
+app.UseCors("AllowAngularApp");
 app.UseAuthentication();
 app.UseAuthorization();
-app.UseCors("AllowAngularApp");
 
 app.MapLoginUser();
 app.MapExpenseBox();
@@ -79,5 +79,7 @@ app.MapNumbersDocument();
 app.MapWorkShift();
 app.MapWorkGuideMain();
 app.MapCashBox();
+app.MapReport();
+app.MapLocationClothes();
 
 app.Run();

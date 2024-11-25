@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -10,9 +11,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace _24dex_backend_comercial.Migrations
 {
     [DbContext(typeof(RecepcionDbContext))]
-    partial class RecepcionDbContextModelSnapshot : ModelSnapshot
+    [Migration("20241122212301_col-refreshtoken")]
+    partial class colrefreshtoken
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -398,72 +401,6 @@ namespace _24dex_backend_comercial.Migrations
                     b.ToTable("ExpenseBoxMains");
                 });
 
-            modelBuilder.Entity("LocationClothes", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<string>("Description")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("LocationClothes");
-                });
-
-            modelBuilder.Entity("LocationWorkGuide", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<string>("Comments")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("CreatedBy")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime>("CreatedDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<int>("LocationClothesId")
-                        .HasColumnType("int");
-
-                    b.Property<string>("ModifiedBy")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime?>("ModifiedDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("NumeroGuia")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int?>("WorkGuideDetailId")
-                        .HasColumnType("int");
-
-                    b.Property<int?>("WorkGuideId")
-                        .HasColumnType("int");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("LocationClothesId");
-
-                    b.ToTable("LocationWorkGuides");
-                });
-
             modelBuilder.Entity("NumbersDocument", b =>
                 {
                     b.Property<int>("Id")
@@ -567,10 +504,6 @@ namespace _24dex_backend_comercial.Migrations
 
                     b.Property<DateTime?>("FechaRecojo")
                         .HasColumnType("datetime2");
-
-                    b.Property<string>("Identificador")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Observaciones")
                         .IsRequired()
@@ -775,17 +708,6 @@ namespace _24dex_backend_comercial.Migrations
                     b.Navigation("Customer");
                 });
 
-            modelBuilder.Entity("LocationWorkGuide", b =>
-                {
-                    b.HasOne("LocationClothes", "LocationClothes")
-                        .WithMany("LocationWorkGuides")
-                        .HasForeignKey("LocationClothesId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("LocationClothes");
-                });
-
             modelBuilder.Entity("WorkGuideDetail", b =>
                 {
                     b.HasOne("DexterCompany.Models.ProdService", "Product")
@@ -830,11 +752,6 @@ namespace _24dex_backend_comercial.Migrations
             modelBuilder.Entity("CashBoxMain", b =>
                 {
                     b.Navigation("CashBoxDetails");
-                });
-
-            modelBuilder.Entity("LocationClothes", b =>
-                {
-                    b.Navigation("LocationWorkGuides");
                 });
 
             modelBuilder.Entity("User", b =>

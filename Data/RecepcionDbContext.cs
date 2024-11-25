@@ -24,4 +24,6 @@ public class RecepcionDbContext : DbContext
     public DbSet<CashBoxDetail> CashBoxDetails { get; set; }
     public DbSet<BrachSalesUser> BrachSalesUsers { get; set; }
     public DbSet<AlertMsg> AlertMsgs { get; set; }
+    public DbSet<LocationClothes> LocationClothes { get; set; }
+    public DbSet<LocationWorkGuide> LocationWorkGuides { get; set; }
 }
