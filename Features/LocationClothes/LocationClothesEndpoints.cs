@@ -4,12 +4,9 @@ public static class LocationClothesEndpoints
     {
         var group = app.MapGroup("/api/locationclothes");
         group.MapCreateLocation();
-         group.MapGetLocations();
-         group.MapRegisterLocationWorkGuide();
-        
-        // group.MapUpdateLocationClothes();
-        // group.MapDeleteLocationClothes();
-        // group.MapSearchLocationClothes();
-        // group.MapUpdateLocationClothesPhone();
+        group.MapGetLocations();
+        group.MapRegisterLocationWorkGuide();
+        group.MapUpdateLocation();
+        group.MapDeleteLocation();
     }
 }

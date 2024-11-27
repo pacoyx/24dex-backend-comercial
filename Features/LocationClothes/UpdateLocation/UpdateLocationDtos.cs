@@ -1,0 +1,1 @@
+public record UpdateLocationRequestDto(string Nombre, string Descripcion);

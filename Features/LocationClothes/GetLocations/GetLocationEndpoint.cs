@@ -8,9 +8,15 @@ public static class GetLocation
         {
             var location = await context.LocationClothes
             .AsNoTracking()
+            .Select(lc => new LocationClothesResponseDto
+            (
+                 lc.Id,
+                 lc.Name,
+                 lc.Description
+            ))
             .ToListAsync();
 
-            var response = new ApiResponse<List<LocationClothes>>
+            var response = new ApiResponse<List<LocationClothesResponseDto>>
             {
                 Data = location,
                 Message = "Location found",

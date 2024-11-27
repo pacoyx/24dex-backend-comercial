@@ -44,4 +44,5 @@ public class WgByDateDetailResponseDto
     public string EstadoPago { get; set; } = "";
     public DateTime? FechaRecojo { get; set; }
     public DateTime? FechaDevolucion { get; set; }
+    public string Identificador { get; set; } = "";
 }

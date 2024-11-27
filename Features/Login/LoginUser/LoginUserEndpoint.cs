@@ -93,11 +93,13 @@ public static class LoginUserEndpoint
                                 .AsNoTracking()
                                 .FirstOrDefaultAsync(u => u.UserName == username);
 
-
-        Console.WriteLine("User: ===>" + user);
+            Console.WriteLine("User: ===>" + user);       
 
         if (user == null || user.RefreshToken != refreshTokenRequest.RefreshToken)
         {
+            Console.WriteLine("Debugueando ERROR ======");
+            Console.WriteLine("No autorizado ======");
+            Console.WriteLine("User: ===>" +  Newtonsoft.Json.JsonConvert.SerializeObject(user));
             return Results.Unauthorized();
         }
 

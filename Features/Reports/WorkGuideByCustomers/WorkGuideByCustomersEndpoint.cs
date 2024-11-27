@@ -60,7 +60,8 @@ public static class WorkGuideByCustomersEndpoint
                         EstadoSituacion = wgd.EstadoSituacion,
                         EstadoPago = wgd.EstadoPago,
                         FechaRecojo = wgd.FechaRecojo,
-                        FechaDevolucion = wgd.FechaDevolucion
+                        FechaDevolucion = wgd.FechaDevolucion,
+                        Identificador = wgd.Identificador
                     }).ToArray()
                 ))
             );
