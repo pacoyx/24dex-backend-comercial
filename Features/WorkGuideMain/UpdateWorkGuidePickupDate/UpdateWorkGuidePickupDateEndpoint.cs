@@ -1,12 +1,18 @@
 using System.Diagnostics.CodeAnalysis;
 using Microsoft.EntityFrameworkCore;
 
-public static class UpdateWorkGuidePickupDateEndpoint{
-    public static void MapUpdateWorkGuidePickupDate(this IEndpointRouteBuilder app){
-        app.MapPut("/pickupDate/{id}", async (int id, RecepcionDbContext db) => {
+public static class UpdateWorkGuidePickupDateEndpoint
+{
+    public static void MapUpdateWorkGuidePickupDate(this IEndpointRouteBuilder app)
+    {
+        app.MapPut("/pickupDate/{id}", async (int id, RecepcionDbContext db, IAppLogger<string> logger) =>
+        {
             var workGuide = await db.WorkGuideMains.FindAsync(id);
-            if (workGuide == null){
-                var responseErr = new ApiResponse<string>{
+            if (workGuide == null)
+            {
+                logger.LogWarning("WorkGuide not found", "UpdateWorkGuidePickupDateEndpoint");
+                var responseErr = new ApiResponse<string>
+                {
                     Data = "WorkGuide not found",
                     Message = "WorkGuide not found",
                     Success = false,
@@ -27,7 +33,8 @@ public static class UpdateWorkGuidePickupDateEndpoint{
             workGuide.EstadoSituacion = "E";
             await db.SaveChangesAsync();
 
-            var response = new ApiResponse<string>{
+            var response = new ApiResponse<string>
+            {
                 Data = "WorkGuide updated",
                 Message = "WorkGuide updated",
                 Success = true,
@@ -35,7 +42,7 @@ public static class UpdateWorkGuidePickupDateEndpoint{
             };
 
             return Results.Ok(response);
-            
+
         });
     }
 }

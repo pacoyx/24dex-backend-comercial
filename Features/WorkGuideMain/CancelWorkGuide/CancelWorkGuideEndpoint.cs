@@ -2,11 +2,12 @@ public static class CancelWorkGuideEndpoint
 {
     public static void MapCancelWorkGuide(this IEndpointRouteBuilder app)
     {
-        app.MapPut("/cancelWorkGuide/{id}", async (RecepcionDbContext db, int id) =>
+        app.MapPut("/cancelWorkGuide/{id}", async (RecepcionDbContext db, int id, IAppLogger<string> logger) =>
         {
             var workGuide = await db.WorkGuideMains.FindAsync(id);
             if (workGuide == null)
             {
+                logger.LogWarning("Guia no encontrada" + id.ToString(), "CancelWorkGuideEndpoint");
                 var responseValidation = new ApiResponse<string>()
                 {
                     Data = "",
@@ -19,6 +20,7 @@ public static class CancelWorkGuideEndpoint
 
             if (workGuide.EstadoRegistro == "I")
             {
+                logger.LogWarning("La guia ya se encuentra anulada" + id.ToString(), "CancelWorkGuideEndpoint");
                 var responseValidation = new ApiResponse<string>()
                 {
                     Data = "",

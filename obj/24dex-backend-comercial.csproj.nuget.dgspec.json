@@ -79,6 +79,10 @@
             "System.IdentityModel.Tokens.Jwt": {
               "target": "Package",
               "version": "[8.1.2, )"
+            },
+            "WatchDog.NET": {
+              "target": "Package",
+              "version": "[1.4.11, )"
             }
           },
           "imports": [

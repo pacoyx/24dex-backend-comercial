@@ -1,9 +1,10 @@
 using System.Text;
+using Dls.Erp.Transversal.Logging;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
 using Newtonsoft.Json;
+using WatchDog;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -30,8 +31,7 @@ builder.Services.AddCors(options =>
 builder.Services.AddControllers()
     .AddNewtonsoftJson(options =>
     {
-        options.SerializerSettings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore;
-        options.SerializerSettings.PreserveReferencesHandling = PreserveReferencesHandling.Objects;
+        options.SerializerSettings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore;        
     });
 
 builder.Services.AddAuthentication(options =>
@@ -55,13 +55,24 @@ builder.Services.AddAuthentication(options =>
 
 builder.Services.AddAuthorization();
 builder.Services.AddScoped<JwtService>();
+builder.Services.AddScoped(typeof(IAppLogger<>), typeof(LoggerAdapter<>));
+
+builder.Services.AddWatchDog(builder.Configuration);
+
+
+
+
 
 var app = builder.Build();
+app.UseWatchDogExceptionLogger();
+
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
     app.UseSwaggerUI();
 }
+
+
 
 app.UseHttpsRedirection();
 app.UseCors("AllowAngularApp");
@@ -81,5 +92,11 @@ app.MapWorkGuideMain();
 app.MapCashBox();
 app.MapReport();
 app.MapLocationClothes();
+
+
+app.UseWatchDog(conf => {
+    conf.WatchPageUsername = builder.Configuration["WatchDog:WatchPageUsername"];
+    conf.WatchPagePassword = builder.Configuration["WatchDog:WatchPagePassword"];
+});
 
 app.Run();

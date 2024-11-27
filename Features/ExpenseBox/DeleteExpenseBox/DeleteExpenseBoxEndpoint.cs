@@ -2,12 +2,13 @@ public static class DeleteExpenseBoxEndpoint
 {
     public static void MapDeleteExpenseBox(this IEndpointRouteBuilder app)
     {
-        app.MapDelete("/{id}", async (int id, RecepcionDbContext context) =>
+        app.MapDelete("/{id}", async (int id, RecepcionDbContext context, IAppLogger<string> logger) =>
         {
             var expenseBox = await context.ExpenseBoxMains.FindAsync(id);
             if (expenseBox == null)
             {
-                 var responseErr = new ApiResponse<string>
+                logger.LogWarning("Gasto no encontrado", "DeleteExpenseBoxEndpoint");
+                var responseErr = new ApiResponse<string>
                 {
                     Data = "Gasto no encontrado",
                     Message = "Gasto no encontrado",

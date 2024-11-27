@@ -4,11 +4,12 @@ public static class PickUpItemEndpoint
 {
     public static void MapPickUpItem(this IEndpointRouteBuilder app)
     {
-        app.MapPut("/pickUpItem/{id}", async (RecepcionDbContext db, int id, RequestRecogerItemDto request) =>
+        app.MapPut("/pickUpItem/{id}", async (RecepcionDbContext db, int id, RequestRecogerItemDto request, IAppLogger<string> logger) =>
         {
             var workGuideItem = await db.WorkGuideDetails.FindAsync(id);
             if (workGuideItem == null)
             {
+                logger.LogWarning("Item no encontrado" + id.ToString(), "PickUpItemEndpoint");
                 var responseValidation = new ApiResponse<string>()
                 {
                     Data = "",
@@ -21,6 +22,7 @@ public static class PickUpItemEndpoint
 
             if (workGuideItem.EstadoSituacion == "E")
             {
+                logger.LogWarning("El item ya se entrego" + id.ToString(), "PickUpItemEndpoint");
                 var responseValidation = new ApiResponse<string>()
                 {
                     Data = "",
@@ -33,6 +35,7 @@ public static class PickUpItemEndpoint
 
             if (workGuideItem.EstadoSituacion == "D")
             {
+                logger.LogWarning("El item ya se encuentra devuelto" + id.ToString(), "PickUpItemEndpoint");
                 var responseValidation = new ApiResponse<string>()
                 {
                     Data = "",
@@ -45,6 +48,7 @@ public static class PickUpItemEndpoint
 
             if (workGuideItem.EstadoRegistro == "I")
             {
+                logger.LogWarning("El item esta anulado" + id.ToString(), "PickUpItemEndpoint");
                 var responseValidation = new ApiResponse<string>()
                 {
                     Data = "",
@@ -59,6 +63,7 @@ public static class PickUpItemEndpoint
             {
                 if (request.Monto <= 0)
                 {
+                    logger.LogWarning("El monto debe ser mayor a 0" + id.ToString(), "PickUpItemEndpoint");
                     var responseValidation = new ApiResponse<string>()
                     {
                         Data = "",
@@ -71,6 +76,7 @@ public static class PickUpItemEndpoint
 
                 if (request.Monto > workGuideItem.Total)
                 {
+                    logger.LogWarning("El monto no puede ser mayor al total" + id.ToString(), "PickUpItemEndpoint");
                     var responseValidation = new ApiResponse<string>()
                     {
                         Data = "",
@@ -84,6 +90,7 @@ public static class PickUpItemEndpoint
                 var workGuide = await db.WorkGuideMains.FindAsync(workGuideItem.WorkGuideMainId);
                 if (workGuide == null)
                 {
+                    logger.LogWarning("No se encontro guia de trabajo" + id.ToString(), "PickUpItemEndpoint");
                     var responseValidation = new ApiResponse<string>()
                     {
                         Data = "",
@@ -99,6 +106,7 @@ public static class PickUpItemEndpoint
                 var cashBoxMain = await db.CashBoxMains.FirstOrDefaultAsync(x => x.UserId == request.UserId && x.EstadoRegistro == "A" && x.EstadoCaja == "A");
                 if (cashBoxMain == null)
                 {
+                    logger.LogWarning("No se encontro caja principal" + id.ToString(), "PickUpItemEndpoint");
                     var responseValidation = new ApiResponse<string>()
                     {
                         Data = "",

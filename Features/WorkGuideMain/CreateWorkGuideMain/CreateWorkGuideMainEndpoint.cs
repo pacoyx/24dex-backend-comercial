@@ -5,10 +5,11 @@ public static class CreateWorkGuideMainEndpoint
 {
     public static void MapCreateWorkGuideMain(this IEndpointRouteBuilder app)
     {
-        app.MapPost("/", async (WgmCreateDto wgmCreateDto, RecepcionDbContext db) =>
+        app.MapPost("/", async (WgmCreateDto wgmCreateDto, RecepcionDbContext db, IAppLogger<string> logger) =>
         {
             if (wgmCreateDto == null)
             {
+                logger.LogWarning("Request vacio", "CreateWorkGuideMainEndpoint");
                 return Results.BadRequest("Request vacio");
             }
             DateTime fechaOperacion = DateTime.Now;
@@ -53,8 +54,7 @@ public static class CreateWorkGuideMainEndpoint
                 }).ToList()
             };
 
-            var jsonString = JsonSerializer.Serialize(workGuideMain);
-            Console.WriteLine("workGuideMain: ====>" +  jsonString);
+            var jsonString = JsonSerializer.Serialize(workGuideMain);            
 
             // actualiza el correlativo de la guia de servicio
             var numbersDocument = await db.NumbersDocuments
@@ -73,6 +73,7 @@ public static class CreateWorkGuideMainEndpoint
                 var cashBoxMain = await db.CashBoxMains.FirstOrDefaultAsync(c => c.UserId == wgmCreateDto.UserId && c.EstadoRegistro == "A" && c.EstadoCaja == "A");
                 if (cashBoxMain == null)
                 {
+                    logger.LogWarning("No se encontró caja abierta para el usuario", "CreateWorkGuideMainEndpoint");
                     return Results.BadRequest("No se encontró caja abierta para el usuario");
                 }
                 var cashBoxDetail = new CashBoxDetail

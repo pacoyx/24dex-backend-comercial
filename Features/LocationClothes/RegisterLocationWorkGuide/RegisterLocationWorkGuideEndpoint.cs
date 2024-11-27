@@ -1,13 +1,16 @@
-public static class RegisterLocationClothesEndpoint{
+public static class RegisterLocationClothesEndpoint
+{
     public static void MapRegisterLocationWorkGuide(this IEndpointRouteBuilder app)
     {
-        app.MapPost("/RegisterWorkGuide", async (RecepcionDbContext context, CreateLocationWorkGuideRequestDto request) =>
+        app.MapPost("/RegisterWorkGuide", async (RecepcionDbContext context, CreateLocationWorkGuideRequestDto request, IAppLogger<string> logger) =>
         {
-            
+
             var numeroGuia = request.NumeroGuia.Substring(0, request.NumeroGuia.Length - 1);
             var letraGuia = request.NumeroGuia.Substring(request.NumeroGuia.Length - 1);
 
-            if(string.IsNullOrEmpty(numeroGuia) || string.IsNullOrEmpty(letraGuia)){
+            if (string.IsNullOrEmpty(numeroGuia) || string.IsNullOrEmpty(letraGuia))
+            {
+                logger.LogWarning("NumeroGuia ó LetraGuia esta vacio", "RegisterLocationClothesEndpoint");
                 var responseVal = new ApiResponse<string>
                 {
                     Data = "",
@@ -24,7 +27,9 @@ public static class RegisterLocationClothesEndpoint{
                 .Select(wg => wg.Id)
                 .FirstOrDefault();
 
-            if (workGuideId == 0 ){
+            if (workGuideId == 0)
+            {
+                logger.LogWarning("Numero de Guia no encontrado", "RegisterLocationClothesEndpoint");
                 var responseValMain = new ApiResponse<string>
                 {
                     Data = "",
@@ -41,7 +46,9 @@ public static class RegisterLocationClothesEndpoint{
                 // .Select(wgd => wgd.Id)
                 .FirstOrDefault();
 
-            if (workGuideDetailId == null){
+            if (workGuideDetailId == null)
+            {
+                logger.LogWarning("WorkGuideDetail not found", "RegisterLocationClothesEndpoint");
                 var responseValDetail = new ApiResponse<string>
                 {
                     Data = "",
@@ -67,7 +74,9 @@ public static class RegisterLocationClothesEndpoint{
                 .Select(lc => lc.Name)
                 .FirstOrDefault();
 
-            if (ubicacion == null){
+            if (ubicacion == null)
+            {
+                logger.LogWarning("Location not found", "RegisterLocationClothesEndpoint");
                 var responseValLocation = new ApiResponse<string>
                 {
                     Data = "",
@@ -80,7 +89,6 @@ public static class RegisterLocationClothesEndpoint{
 
             workGuideDetailId.Ubicacion = ubicacion;
 
-            
 
             context.LocationWorkGuides.Add(location);
             await context.SaveChangesAsync();
@@ -92,7 +100,7 @@ public static class RegisterLocationClothesEndpoint{
                 StatusCode = StatusCodes.Status201Created,
                 Success = true
             };
-
+            logger.LogInformacion("Registro Ubicacion de Prendas created: " + location.Id);
             return Results.Ok(response);
         });
     }

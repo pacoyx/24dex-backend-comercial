@@ -2,11 +2,12 @@ public static class UpdateExpenseBoxEndpoint
 {
     public static void MapUpdateExpenseBox(this IEndpointRouteBuilder app)
     {
-        app.MapPut("/{id}", async (RecepcionDbContext context, int id, UpdateExpenseBoxDto request) =>
+        app.MapPut("/{id}", async (RecepcionDbContext context, int id, UpdateExpenseBoxDto request, IAppLogger<string> logger) =>
         {
             var expenseBox = await context.ExpenseBoxMains.FindAsync(id);
             if (expenseBox == null)
             {
+                logger.LogWarning("Gasto no encontrado", "UpdateExpenseBoxEndpoint");
                 var responseErr = new ApiResponse<string>
                 {
                     Data = "Gasto no encontrado",

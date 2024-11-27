@@ -2,7 +2,7 @@ public static class DeleteCashBoxEndpoint
 {
     public static void MapDeleteCashBox(this IEndpointRouteBuilder app)
     {
-        app.MapDelete("/{id}", async (int id, RecepcionDbContext db) =>
+        app.MapDelete("/{id}", async (int id, RecepcionDbContext db, IAppLogger<string> logger) =>
         {
             if (id == 0)
             {
@@ -12,6 +12,7 @@ public static class DeleteCashBoxEndpoint
             var cashBox = await db.CashBoxMains.FindAsync(id);
             if (cashBox == null)
             {
+                logger.LogWarning("CashBox not found", "DeleteCashBoxEndpoint");
                 return Results.NotFound();
             }
             db.CashBoxMains.Remove(cashBox);

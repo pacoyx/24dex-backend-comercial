@@ -4,7 +4,7 @@ public static class CreateCashBoxDetailEndpoint
 {
     public static void MapCreateCashBoxDetail(this IEndpointRouteBuilder app)
     {
-        app.MapPost("/detail", async (RequestCashBoxDetailCreateDto requestCashBoxDetailCreateDto, RecepcionDbContext db) =>
+        app.MapPost("/detail", async (RequestCashBoxDetailCreateDto requestCashBoxDetailCreateDto, RecepcionDbContext db, IAppLogger<string> logger) =>
         {
             var cashBoxDetail = new CashBoxDetail
             {
@@ -23,6 +23,7 @@ public static class CreateCashBoxDetailEndpoint
             };
             await db.CashBoxDetails.AddAsync(cashBoxDetail);
             await db.SaveChangesAsync();
+            logger.LogInformacion("Request vacio", "CreateCashBoxDetailEndpoint");  
 
             var response = new ApiResponse<int>(){
                 Data = cashBoxDetail.Id,

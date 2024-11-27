@@ -4,11 +4,12 @@ public static class UpdateWorkGuideInfoPayEndpoint
 {
     public static void MapUpdateWorkGuideInfoPay(this IEndpointRouteBuilder app)
     {
-        app.MapPut("/updateWorkGuideInfoPay/{id}", async (RecepcionDbContext db, int id, UpdateWorkGuideInfoPayRequestDto request) =>
+        app.MapPut("/updateWorkGuideInfoPay/{id}", async (RecepcionDbContext db, int id, UpdateWorkGuideInfoPayRequestDto request, IAppLogger<string> logger) =>
         {
             var workGuide = await db.WorkGuideMains.FindAsync(id);
             if (workGuide == null)
             {
+                logger.LogWarning("WorkGuide not found", "UpdateWorkGuideInfoPayEndpoint");
                 var responseErr = new ApiResponse<string>
                 {
                     Data = "WorkGuide not found",
@@ -30,6 +31,7 @@ public static class UpdateWorkGuideInfoPayEndpoint
             var cashBoxMain = await db.CashBoxMains.FirstOrDefaultAsync(c => c.UserId == request.idUser && c.EstadoRegistro == "A" && c.EstadoCaja == "A");
             if (cashBoxMain == null)
             {
+                logger.LogWarning("Caja no encontrada", "UpdateWorkGuideInfoPayEndpoint");
                 return Results.BadRequest();
             }
 

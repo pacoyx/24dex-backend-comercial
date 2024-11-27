@@ -5,7 +5,12 @@ public static class LoginUserEndpoint
 {
     public static void MapLoginUser(this IEndpointRouteBuilder app)
     {
-        app.MapPost("/login", async (LoginUserDto loginDto, RecepcionDbContext context, JwtService jwtService) =>
+
+        app.MapPost("/login", async (
+                LoginUserDto loginDto, 
+                RecepcionDbContext context, 
+                JwtService jwtService, 
+                IAppLogger<string> logger) =>
         {
             if (context.Users == null)
             {
@@ -16,9 +21,10 @@ public static class LoginUserEndpoint
                                     .AsNoTracking()
                                     .FirstOrDefaultAsync(u => u.UserName == loginDto.Username && u.Password == loginDto.Password);
 
-            Console.WriteLine("User: " + user);
+            
             if (user == null)
             {
+                logger.LogWarning("Usuario fallo login: " + loginDto.Username);
                 return Results.Unauthorized();
             }
 
@@ -30,7 +36,7 @@ public static class LoginUserEndpoint
 
             if (branchSalesUser == null)
             {
-
+                logger.LogWarning("Usuario no tiene asignado ninguna sucursal de ventas: " + loginDto.Username);
                 return Results.Problem("User does not have any branch sales assigned", statusCode: 401);
             }
 
@@ -67,57 +73,55 @@ public static class LoginUserEndpoint
                 Data = loginUserResponseDto,
                 StatusCode = 200
             };
-
+            
+            logger.LogInformacion("User logueado correctamente: " + loginDto.Username);
             return Results.Ok(response);
         }).AllowAnonymous();
 
 
-
-
-    app.MapPost("/refresh-token", async (RefreshTokenRequestDto refreshTokenRequest, RecepcionDbContext context, JwtService jwtService) =>
-    {
-
-        Console.WriteLine("Refresh Token Request: =====> " + Newtonsoft.Json.JsonConvert.SerializeObject(refreshTokenRequest));
-        
-
-        var principal = jwtService.GetPrincipalFromExpiredToken(refreshTokenRequest.Token);
-        Console.WriteLine("Principal: ===>" + principal);
-        var username = principal.Identity?.Name;
-        if (username == null)
+        app.MapPost("/refresh-token", async (
+            RefreshTokenRequestDto refreshTokenRequest, 
+            RecepcionDbContext context, 
+            JwtService jwtService,
+            IAppLogger<string> logger) =>
         {
-            return Results.Unauthorized();
-        }
-        
+            var principal = jwtService.GetPrincipalFromExpiredToken(refreshTokenRequest.Token);            
+            var username = principal.Identity?.Name;
+            if (username == null)
+            {
+                logger.LogWarning("RefreshToken: Token no autorizado: " + refreshTokenRequest.Token);
+                return Results.Unauthorized();
+            }
 
-        var user = await context.Users
-                                .AsNoTracking()
-                                .FirstOrDefaultAsync(u => u.UserName == username);
+            var user = await context.Users
+                                    .AsNoTracking()
+                                    .FirstOrDefaultAsync(u => u.UserName == username);
+            
 
-            Console.WriteLine("User: ===>" + user);       
+            if (user == null || user.RefreshToken != refreshTokenRequest.RefreshToken)
+            {
+                // Console.WriteLine("Debugueando ERROR ======");
+                // Console.WriteLine("No autorizado ======");
+                // Console.WriteLine("User: ===>" + Newtonsoft.Json.JsonConvert.SerializeObject(user));
+                logger.LogWarning("RefreshToken: Usuario no encontrado por username: " + refreshTokenRequest.Token);
+                return Results.Unauthorized();
+            }
 
-        if (user == null || user.RefreshToken != refreshTokenRequest.RefreshToken)
-        {
-            Console.WriteLine("Debugueando ERROR ======");
-            Console.WriteLine("No autorizado ======");
-            Console.WriteLine("User: ===>" +  Newtonsoft.Json.JsonConvert.SerializeObject(user));
-            return Results.Unauthorized();
-        }
+            var newJwtToken = jwtService.GenerateToken(user.Id.ToString(), user.UserName);
+            var newRefreshToken = jwtService.GenerateRefreshToken();
 
-        var newJwtToken = jwtService.GenerateToken(user.Id.ToString(), user.UserName);
-        var newRefreshToken = jwtService.GenerateRefreshToken();
+            user.RefreshToken = newRefreshToken;
+            context.Users.Update(user);
+            await context.SaveChangesAsync();
 
-        user.RefreshToken = newRefreshToken;
-        context.Users.Update(user);
-        await context.SaveChangesAsync();
+            var response = new
+            {
+                Token = newJwtToken,
+                RefreshToken = newRefreshToken
+            };
 
-        var response = new
-        {
-            Token = newJwtToken,
-            RefreshToken = newRefreshToken
-        };
-
-        return Results.Ok(response);
-    });
+            return Results.Ok(response);
+        });
 
     }
 }

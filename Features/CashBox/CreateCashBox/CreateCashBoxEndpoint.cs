@@ -2,7 +2,7 @@ public static class CreateCashBoxEndpoint
 {
     public static void MapCreateCashBox(this IEndpointRouteBuilder app)
     {
-        app.MapPost("/", async (RequestCashBoxCreateDto requestCashBoxCreateDto, RecepcionDbContext db) =>
+        app.MapPost("/", async (RequestCashBoxCreateDto requestCashBoxCreateDto, RecepcionDbContext db,IAppLogger<string> logger) =>
         {
             var cashBox = new CashBoxMain
             {
@@ -24,6 +24,7 @@ public static class CreateCashBoxEndpoint
             await db.CashBoxMains.AddAsync(cashBox);
             await db.SaveChangesAsync();
 
+            logger.LogInformacion("Caja creada", "CreateCashBoxEndpoint");
             var response = new ApiResponse<int>()
             {
                 Success = true,

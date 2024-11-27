@@ -1,10 +1,13 @@
-public static class CancelItemWorkGuideEndpoint{
-    public static void MapCancelItemWorkGuide(this IEndpointRouteBuilder app){
-        app.MapPut("/cancelItem/{id}", async (RecepcionDbContext db, int id) =>
+public static class CancelItemWorkGuideEndpoint
+{
+    public static void MapCancelItemWorkGuide(this IEndpointRouteBuilder app)
+    {
+        app.MapPut("/cancelItem/{id}", async (RecepcionDbContext db, int id, IAppLogger<string> logger) =>
         {
             var workGuideItem = await db.WorkGuideDetails.FindAsync(id);
             if (workGuideItem == null)
             {
+                logger.LogWarning("Item no encontrado" + id.ToString(), "CancelItemWorkGuideEndpoint");
                 var responseValidation = new ApiResponse<string>()
                 {
                     Data = "",
@@ -17,6 +20,7 @@ public static class CancelItemWorkGuideEndpoint{
 
             if (workGuideItem.EstadoRegistro == "I")
             {
+                logger.LogWarning("El item ya se encuentra anulado" + id.ToString(), "CancelItemWorkGuideEndpoint");
                 var responseValidation = new ApiResponse<string>()
                 {
                     Data = "",

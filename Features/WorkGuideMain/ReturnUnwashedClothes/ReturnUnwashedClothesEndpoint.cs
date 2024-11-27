@@ -4,11 +4,12 @@ public static class ReturnUnwashedClothesEndpoint
 {
     public static void MapReturnUnwashedClothes(this IEndpointRouteBuilder app)
     {
-        app.MapPut("/returnUnwashedClothes/{id}", async (RecepcionDbContext db, int id, RequestDevolucionDataDto request) =>
+        app.MapPut("/returnUnwashedClothes/{id}", async (RecepcionDbContext db, int id, RequestDevolucionDataDto request, IAppLogger<string> logger) =>
         {
             var workGuideItem = await db.WorkGuideDetails.FindAsync(id);
             if (workGuideItem == null)
             {
+                logger.LogWarning("Item no encontrado", "ReturnUnwashedClothesEndpoint");
                 var responseValidation = new ApiResponse<string>()
                 {
                     Data = "",
@@ -21,6 +22,7 @@ public static class ReturnUnwashedClothesEndpoint
 
             if (workGuideItem.EstadoSituacion == "D")
             {
+                logger.LogWarning("El item ya se encuentra devuelto", "ReturnUnwashedClothesEndpoint");
                 var responseValidation = new ApiResponse<string>()
                 {
                     Data = "",
@@ -42,6 +44,7 @@ public static class ReturnUnwashedClothesEndpoint
                 var workGuide = await db.WorkGuideMains.FindAsync(workGuideItem.WorkGuideMainId);
                 if (workGuide == null)
                 {
+                    logger.LogWarning("No se encontro guia de trabajo", "ReturnUnwashedClothesEndpoint");
                     var responseValidation = new ApiResponse<string>()
                     {
                         Data = "",
@@ -61,6 +64,7 @@ public static class ReturnUnwashedClothesEndpoint
                 var cashBoxMain = await db.CashBoxMains.FirstOrDefaultAsync(x => x.UserId == request.UserId && x.EstadoRegistro == "A" && x.EstadoCaja == "A");
                 if (cashBoxMain == null)
                 {
+                    logger.LogWarning("No se encontro caja abierta para el usuario", "ReturnUnwashedClothesEndpoint");
                     var responseValidation = new ApiResponse<string>()
                     {
                         Data = "",
@@ -75,6 +79,7 @@ public static class ReturnUnwashedClothesEndpoint
                 var customer = await db.Customers.FindAsync(workGuide.CustomerId);
                 if (customer == null)
                 {
+                    logger.LogWarning("No se encontro el cliente", "ReturnUnwashedClothesEndpoint");
                     var responseValidation = new ApiResponse<string>()
                     {
                         Data = "",
@@ -88,6 +93,7 @@ public static class ReturnUnwashedClothesEndpoint
                 var product = await db.ProdServices.FindAsync(workGuideItem.ProductId);
                 if (product == null)
                 {
+                    logger.LogWarning("No se encontro el producto", "ReturnUnwashedClothesEndpoint");
                     var responseValidation = new ApiResponse<string>()
                     {
                         Data = "",
