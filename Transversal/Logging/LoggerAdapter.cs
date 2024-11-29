@@ -13,8 +13,8 @@ namespace Dls.Erp.Transversal.Logging
         }
         public void LogError(string message, params object[] args)
         {
-            _logger.LogError(message, args);
-            WatchLogger.Log(message);
+            _logger.LogError(message, args);            
+            WatchLogger.LogError(message);
         }
 
         public void LogInformacion(string message, params object[] args)
@@ -26,7 +26,7 @@ namespace Dls.Erp.Transversal.Logging
         public void LogWarning(string message, params object[] args)
         {
             _logger.LogWarning(message, args);
-            WatchLogger.Log(message);
+            WatchLogger.LogWarning(message);
         }
     }
 }
