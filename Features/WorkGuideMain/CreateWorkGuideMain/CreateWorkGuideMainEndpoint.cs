@@ -12,7 +12,7 @@ public static class CreateWorkGuideMainEndpoint
                 logger.LogWarning("Request vacio", "CreateWorkGuideMainEndpoint");
                 return Results.BadRequest("Request vacio");
             }
-            DateTime fechaOperacion = DateTime.Now;
+            DateTime fechaOperacion = TimeZoneInfo.ConvertTime(DateTime.Now, TimeZoneInfo.FindSystemTimeZoneById("SA Pacific Standard Time"));
             var workGuideMain = new WorkGuideMain
             {
                 SerieGuia = wgmCreateDto.SerieGuia,
