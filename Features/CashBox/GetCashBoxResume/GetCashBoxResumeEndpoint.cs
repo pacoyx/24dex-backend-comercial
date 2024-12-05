@@ -26,14 +26,20 @@ public static class GetCashBoxResume{
                     Usuario = g.Key.Name,
                     TipoPago = g.Key.TipoPago,
                     TotalAdelanto = g.Sum(d => d.d.Adelanto),
-                    TotalImporte = g.Sum(d => d.d.Importe)
+                    TotalImporte = g.Sum(d => d.d.Importe),
+                    Detalle = g.Select(d => new { 
+                        d.d.Adelanto, d.d.Importe, d.d.TipoPago, 
+                        d.d.CustomerId, d.d.Customer })
                 })
                 .OrderBy(x => x.Usuario)
                 .ToListAsync();
 
 
             var response = new ApiResponse<IEnumerable<GetCashBoxResumeResponseDto>>{
-                Data = summary.Select(x => new GetCashBoxResumeResponseDto(x.Usuario, x.TipoPago, x.TotalAdelanto, x.TotalImporte)),
+                Data = summary.Select(x => new GetCashBoxResumeResponseDto(x.Usuario, x.TipoPago, x.TotalAdelanto, x.TotalImporte, 
+                    x.Detalle.Select(d => new GetCashBoxResumeDetalleResponseDto(
+                        d.Adelanto, d.Importe, d.TipoPago, d.CustomerId, d.Customer)).ToList()
+                        )),
                 Message = "Resume de caja",
                 StatusCode = 200,
                 Success = true

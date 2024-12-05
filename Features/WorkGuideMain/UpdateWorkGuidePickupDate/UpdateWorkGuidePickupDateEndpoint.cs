@@ -22,14 +22,15 @@ public static class UpdateWorkGuidePickupDateEndpoint
                 return Results.NotFound(responseErr);
             }
 
+            DateTime fechaProceso = TimeZoneInfo.ConvertTime(DateTime.Now, TimeZoneInfo.FindSystemTimeZoneById("SA Pacific Standard Time"));
             var workGuideDetails = await db.WorkGuideDetails.Where(wgd => wgd.WorkGuideMainId == id).ToListAsync();
             foreach (var detail in workGuideDetails)
             {
-                detail.FechaRecojo = DateTime.Now;
+                detail.FechaRecojo = fechaProceso;
                 detail.EstadoSituacion = "E";
             }
 
-            workGuide.FechaRecojo = DateTime.Now;
+            workGuide.FechaRecojo = fechaProceso;
             workGuide.EstadoSituacion = "E";
             await db.SaveChangesAsync();
 

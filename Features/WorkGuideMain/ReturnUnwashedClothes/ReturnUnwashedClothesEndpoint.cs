@@ -33,8 +33,10 @@ public static class ReturnUnwashedClothesEndpoint
                 return Results.BadRequest(responseValidation);
             }
 
+
+            DateTime fechaProceso = TimeZoneInfo.ConvertTime(DateTime.Now, TimeZoneInfo.FindSystemTimeZoneById("SA Pacific Standard Time"));
             workGuideItem.EstadoSituacion = "D";
-            workGuideItem.FechaDevolucion = DateTime.Now;
+            workGuideItem.FechaDevolucion = fechaProceso;
 
 
             // si el monto es mayor a 0 se registra en ExpenseBox
@@ -109,7 +111,7 @@ public static class ReturnUnwashedClothesEndpoint
                 {
                     CategoryGasto = "Devolucion de ropa sin lavar",
                     PersonalAutoriza = "Sistema",
-                    FechaGasto = DateTime.Now,
+                    FechaGasto = fechaProceso,
                     Importe = (decimal)request.Monto,
                     DetallesEgreso = customer.FirtsName + " " + customer.LastName + " | Guia: " + workGuide.SerieGuia + "-" + workGuide.NumeroGuia + " | Producto: " + product.Description,
                     EstadoRegistro = "A",

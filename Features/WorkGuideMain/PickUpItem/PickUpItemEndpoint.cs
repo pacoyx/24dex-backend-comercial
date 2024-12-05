@@ -141,8 +141,9 @@ public static class PickUpItemEndpoint
                 }                   
             }
 
+            DateTime fechaProceso = TimeZoneInfo.ConvertTime(DateTime.Now, TimeZoneInfo.FindSystemTimeZoneById("SA Pacific Standard Time"));
             workGuideItem.EstadoSituacion = "E";
-            workGuideItem.FechaRecojo = DateTime.Now;
+            workGuideItem.FechaRecojo = fechaProceso;
             await db.SaveChangesAsync();
 
             var response = new ApiResponse<string>()

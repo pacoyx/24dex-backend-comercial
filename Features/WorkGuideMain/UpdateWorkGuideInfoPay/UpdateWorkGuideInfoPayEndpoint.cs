@@ -21,6 +21,8 @@ public static class UpdateWorkGuideInfoPayEndpoint
                 return Results.NotFound(responseErr);
             }
 
+            DateTime fechaProceso = TimeZoneInfo.ConvertTime(DateTime.Now, TimeZoneInfo.FindSystemTimeZoneById("SA Pacific Standard Time"));
+
             var workGuideDetails = await db.WorkGuideDetails.Where(wgd => wgd.WorkGuideMainId == id).ToListAsync();
             foreach (var detail in workGuideDetails)
             {
@@ -53,7 +55,7 @@ public static class UpdateWorkGuideInfoPayEndpoint
 
 
             workGuide.TipoPagoCancelacion = request.TipoPago;            
-            workGuide.FechaPago = DateTime.Now;
+            workGuide.FechaPago = fechaProceso;
             workGuide.EstadoPago = request.EstadoPago;
             workGuide.Saldo = 0;
 
