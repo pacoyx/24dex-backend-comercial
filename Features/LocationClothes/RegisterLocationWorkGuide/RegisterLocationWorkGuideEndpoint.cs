@@ -48,11 +48,11 @@ public static class RegisterLocationClothesEndpoint
 
             if (workGuideDetailId == null)
             {
-                logger.LogWarning("WorkGuideDetail not found", "RegisterLocationClothesEndpoint");
+                logger.LogWarning("Detalle de guia no encontrado", "RegisterLocationClothesEndpoint");
                 var responseValDetail = new ApiResponse<string>
                 {
                     Data = "",
-                    Message = "WorkGuideDetail not found",
+                    Message = "Detalle de guia no encontrado",
                     StatusCode = StatusCodes.Status404NotFound,
                     Success = false
                 };
@@ -76,11 +76,11 @@ public static class RegisterLocationClothesEndpoint
 
             if (ubicacion == null)
             {
-                logger.LogWarning("Location not found", "RegisterLocationClothesEndpoint");
+                logger.LogWarning("Ubicacion no encontrado", "RegisterLocationClothesEndpoint");
                 var responseValLocation = new ApiResponse<string>
                 {
                     Data = "",
-                    Message = "Location not found",
+                    Message = "Ubicacion no encontrado",
                     StatusCode = StatusCodes.Status404NotFound,
                     Success = false
                 };
@@ -96,7 +96,7 @@ public static class RegisterLocationClothesEndpoint
             var response = new ApiResponse<string>
             {
                 Data = "",
-                Message = "Location created",
+                Message = "Ubicacion registrada",
                 StatusCode = StatusCodes.Status201Created,
                 Success = true
             };
