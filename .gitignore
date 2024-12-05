@@ -35,6 +35,7 @@ Desktop.ini
 # Publish output
 publish/
 bin/
+bin/*
 obj/
 
 # Recycle Bin used on file shares

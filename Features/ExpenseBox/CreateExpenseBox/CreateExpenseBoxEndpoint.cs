@@ -16,11 +16,13 @@ public static class CreateExpenseBoxEndpoint
                 return Results.NotFound("No se encontro caja registrada para el usuario");
             }
 
+            DateTime fechaOperacion = TimeZoneInfo.ConvertTime(DateTime.Now, TimeZoneInfo.FindSystemTimeZoneById("SA Pacific Standard Time"));
+
             var expenseBox = new ExpenseBox
             {
                 CategoryGasto = dto.CategoriaGasto,
                 PersonalAutoriza = dto.PersonalAutoriza,
-                FechaGasto = DateTime.Now,
+                FechaGasto = fechaOperacion,
                 Importe = dto.Importe,
                 DetallesEgreso = dto.DetallesEgreso,
                 EstadoRegistro = dto.EstadoRegistro,
