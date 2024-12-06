@@ -42,7 +42,6 @@ public static class GetCashBoxResume
                 .OrderBy(x => x.Usuario)
                 .ToListAsync();
 
-
             var response = new ApiResponse<IEnumerable<GetCashBoxResumeResponseDto>>
             {
                 Data = summary.Select(x => new GetCashBoxResumeResponseDto(x.Usuario, x.TipoPago, x.TotalAdelanto, x.TotalImporte,
