@@ -7,9 +7,11 @@ public record GetCashBoxResumeResponseDto(
 );
 
 public record GetCashBoxResumeDetalleResponseDto(
-    decimal AdelantoUsuario,
+    decimal Adelanto,
     decimal Importe,
     string TipoPago,
     int? CustomerId,
-    Customer? Cliente
+    string Cliente,
+    string serie,
+    string numero
 );
