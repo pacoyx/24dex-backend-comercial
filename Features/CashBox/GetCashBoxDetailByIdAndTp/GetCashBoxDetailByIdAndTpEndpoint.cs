@@ -2,7 +2,6 @@ using Microsoft.EntityFrameworkCore;
 
 public static class GetCashBoxDetailByIdAndTpEndpoint
 {
-
     public static void MapGetCashBoxDetailByIdAndTp(this IEndpointRouteBuilder app)
     {
         app.MapGet("/detail/{cajaId}/{tp}", async (int cajaId, string tp, RecepcionDbContext db) =>
@@ -13,19 +12,19 @@ public static class GetCashBoxDetailByIdAndTpEndpoint
             }
 
             // buscar cashboxMain por userId
-            var cashBoxMain = await db.CashBoxMains
-                .AsNoTracking()
-                .Where(cb => cb.Id == cajaId && cb.EstadoRegistro == "A")
-                .FirstOrDefaultAsync();
+            // var cashBoxMain = await db.CashBoxMains
+            //     .AsNoTracking()
+            //     .Where(cb => cb.Id == cajaId && cb.EstadoRegistro == "A")
+            //     .FirstOrDefaultAsync();
 
-            if (cashBoxMain == null)
-            {
-                return Results.NotFound("No se encontró 'Caja Abierta' para el usuario");
-            }
+            // if (cashBoxMain == null)
+            // {
+            //     return Results.NotFound("No se encontró 'Caja Abierta' para el usuario");
+            // }
 
             var cashBoxDetail = await db.CashBoxDetails.AsNoTracking()
                 .Include(cbd => cbd.Customer)
-                .Where(cbd => cbd.CashBoxMainId == cashBoxMain.Id && cbd.TipoPago == tp)
+                .Where(cbd => cbd.CashBoxMainId == cajaId && cbd.TipoPago == tp)
                 .ToListAsync();
             if (cashBoxDetail == null)
             {
@@ -39,7 +38,8 @@ public static class GetCashBoxDetailByIdAndTpEndpoint
                 cbd.CustomerId,
                 cbd.Customer != null ? cbd.Customer.FirtsName + ' ' +cbd.Customer.LastName : cbd.Observaciones,
                 cbd.SerieComprobante,
-                cbd.NumComprobante
+                cbd.NumComprobante,
+                "processando..."
             )).ToList();
 
             var response = new ApiResponse<List<GetCashBoxDetalleByIdyTpResponseDto>>{
