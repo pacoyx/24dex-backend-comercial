@@ -4,10 +4,11 @@ public static class CreateCashBoxEndpoint
     {
         app.MapPost("/", async (RequestCashBoxCreateDto requestCashBoxCreateDto, RecepcionDbContext db,IAppLogger<string> logger) =>
         {
+            DateTime fechaProceso = TimeZoneInfo.ConvertTime(DateTime.Now, TimeZoneInfo.FindSystemTimeZoneById("SA Pacific Standard Time"));
             var cashBox = new CashBoxMain
             {
-                FechaCaja = DateTime.Now,
-                FechaHoraApertura = DateTime.Now,
+                FechaCaja = fechaProceso,
+                FechaHoraApertura = fechaProceso,
                 FechaHoraCierre = null,
                 EstadoCaja = "A",
                 SaldoInicial = requestCashBoxCreateDto.SaldoInicial,
