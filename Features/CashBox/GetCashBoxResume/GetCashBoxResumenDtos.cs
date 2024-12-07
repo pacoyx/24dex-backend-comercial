@@ -1,9 +1,10 @@
 public record GetCashBoxResumeResponseDto(
+    int CajaId,
     string Usuario,
     string TipoPago,
     decimal TotalAdelanto,
-    decimal TotalImporte,
-    IEnumerable<GetCashBoxResumeDetalleResponseDto> Detalle
+    decimal TotalImporte
+    // IEnumerable<GetCashBoxResumeDetalleResponseDto> Detalle
 );
 
 public record GetCashBoxResumeDetalleResponseDto(
