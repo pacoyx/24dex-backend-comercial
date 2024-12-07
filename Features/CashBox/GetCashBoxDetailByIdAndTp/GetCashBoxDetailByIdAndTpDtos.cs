@@ -5,5 +5,5 @@ public record GetCashBoxDetalleByIdyTpResponseDto(
     int? CustomerId,
     string Cliente,
     string serie,
-    string numero
+    string numero    
 );

@@ -39,8 +39,7 @@ public static class GetCashBoxDetailByIdAndTpEndpoint
                 cbd.CustomerId,
                 cbd.Customer != null ? cbd.Customer.FirtsName + ' ' +cbd.Customer.LastName : cbd.Observaciones,
                 cbd.SerieComprobante,
-                cbd.NumComprobante,
-                cbd.FechaComprobante.ToString("dd/MM/yyyy HH:mm")
+                cbd.NumComprobante
             )).ToList();
 
             var response = new ApiResponse<List<GetCashBoxDetalleByIdyTpResponseDto>>{
