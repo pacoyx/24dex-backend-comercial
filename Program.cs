@@ -1,4 +1,5 @@
 using System.Text;
+using _24dex_backend_comercial;
 using Dls.Erp.Transversal.Logging;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
@@ -32,6 +33,10 @@ builder.Services.AddControllers()
     {
         options.SerializerSettings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore;        
     });
+
+builder.Services.AddProblemDetails()
+                .AddExceptionHandler<GlobalExceptionHandler>(); ;
+
 
 builder.Services.AddAuthentication(options =>
 {
@@ -72,12 +77,18 @@ if (app.Environment.IsDevelopment())
 }
 
 
-
+//middlewares
 app.UseHttpsRedirection();
 app.UseCors("AllowAngularApp");
 app.UseAuthentication();
 app.UseAuthorization();
 
+// errores
+app.UseStatusCodePages();
+app.UseExceptionHandler();
+
+
+// routes
 app.MapLoginUser();
 app.MapExpenseBox();
 app.MapHealth();
