@@ -1,5 +1,6 @@
 using System.Text;
 using _24dex_backend_comercial;
+using Azure.Monitor.OpenTelemetry.AspNetCore;
 using Dls.Erp.Transversal.Logging;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
@@ -60,9 +61,8 @@ builder.Services.AddAuthentication(options =>
 builder.Services.AddAuthorization();
 builder.Services.AddScoped<JwtService>();
 builder.Services.AddScoped(typeof(IAppLogger<>), typeof(LoggerAdapter<>));
-
 builder.Services.AddWatchDog(builder.Configuration);
-
+builder.Services.AddOpenTelemetry().UseAzureMonitor();
 
 
 
