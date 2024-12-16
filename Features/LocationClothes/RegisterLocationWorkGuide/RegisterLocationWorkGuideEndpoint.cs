@@ -4,103 +4,94 @@ public static class RegisterLocationClothesEndpoint
     {
         app.MapPost("/RegisterWorkGuide", async (RecepcionDbContext context, CreateLocationWorkGuideRequestDto request, IAppLogger<string> logger) =>
         {
-
-            var numeroGuia = request.NumeroGuia.Substring(0, request.NumeroGuia.Length - 1);
-            var letraGuia = request.NumeroGuia.Substring(request.NumeroGuia.Length - 1);
-
-            if (string.IsNullOrEmpty(numeroGuia) || string.IsNullOrEmpty(letraGuia))
+            if (request.NumeroGuia == null || request.NumeroGuia.Count() == 0)
             {
-                logger.LogWarning("NumeroGuia ó LetraGuia esta vacio", "RegisterLocationClothesEndpoint");
+                logger.LogInformacion("NumeroGuia esta vacio", "RegisterLocationClothesEndpoint");
                 var responseVal = new ApiResponse<string>
                 {
                     Data = "",
-                    Message = "NumeroGuia ó LetraGuia esta vacio",
+                    Message = "NumeroGuia esta vacio",
                     StatusCode = StatusCodes.Status400BadRequest,
                     Success = false
                 };
                 return Results.BadRequest(responseVal);
             }
 
+            List<string> errores = [];
+            
 
-            var workGuideId = context.WorkGuideMains
-                .Where(wg => wg.NumeroGuia == numeroGuia)
-                .Select(wg => wg.Id)
-                .FirstOrDefault();
-
-            if (workGuideId == 0)
+            foreach (var item in request.NumeroGuia)
             {
-                logger.LogWarning("Numero de Guia no encontrado", "RegisterLocationClothesEndpoint");
-                var responseValMain = new ApiResponse<string>
+                var numeroGuia = item.Substring(0, item.Length - 1);
+                var letraGuia = item.Substring(item.Length - 1);
+                if (string.IsNullOrEmpty(numeroGuia) || string.IsNullOrEmpty(letraGuia))
                 {
-                    Data = "",
-                    Message = "Numero de Guia no encontrado",
-                    StatusCode = StatusCodes.Status404NotFound,
-                    Success = false
-                };
-                return Results.NotFound(responseValMain);
-            }
+                    logger.LogInformacion("NumeroGuia ó LetraGuia esta vacio", "RegisterLocationClothesEndpoint");                    
+                    errores.Add($"NumeroGuia ó LetraGuia esta vacio {numeroGuia} {letraGuia}");
+                    continue;
+                }
 
+                var workGuideId = context.WorkGuideMains
+                    .Where(wg => wg.NumeroGuia == numeroGuia)
+                    .Select(wg => wg.Id)
+                    .FirstOrDefault();
 
-            var workGuideDetailId = context.WorkGuideDetails
-                .Where(wgd => wgd.WorkGuideMainId == workGuideId && wgd.Identificador == letraGuia)
-                // .Select(wgd => wgd.Id)
-                .FirstOrDefault();
-
-            if (workGuideDetailId == null)
-            {
-                logger.LogWarning("Detalle de guia no encontrado", "RegisterLocationClothesEndpoint");
-                var responseValDetail = new ApiResponse<string>
+                if (workGuideId == 0)
                 {
-                    Data = "",
-                    Message = "Detalle de guia no encontrado",
-                    StatusCode = StatusCodes.Status404NotFound,
-                    Success = false
-                };
-                return Results.NotFound(responseValDetail);
-            }
+                    logger.LogInformacion("Numero de Guia Cabecera no encontrado", "RegisterLocationClothesEndpoint");
+                    errores.Add ($"Numero de Guia Cabecera no encontrado {numeroGuia}");
+                    continue;
+                }
 
+                var workGuideDetailId = context.WorkGuideDetails
+                    .Where(wgd => wgd.WorkGuideMainId == workGuideId && wgd.Identificador == letraGuia)                 
+                    .FirstOrDefault();
 
-            var location = new LocationWorkGuide
-            {
-                LocationClothesId = request.LocationClothesId,
-                WorkGuideId = workGuideId,
-                WorkGuideDetailId = workGuideDetailId.Id,
-                Comments = request.Comments,
-                NumeroGuia = request.NumeroGuia
-            };
-
-            var ubicacion = context.LocationClothes
-                .Where(lc => lc.Id == request.LocationClothesId)
-                .Select(lc => lc.Name)
-                .FirstOrDefault();
-
-            if (ubicacion == null)
-            {
-                logger.LogWarning("Ubicacion no encontrado", "RegisterLocationClothesEndpoint");
-                var responseValLocation = new ApiResponse<string>
+                if (workGuideDetailId == null)
                 {
-                    Data = "",
-                    Message = "Ubicacion no encontrado",
-                    StatusCode = StatusCodes.Status404NotFound,
-                    Success = false
+                    logger.LogInformacion("Detalle de guia no encontrado", "RegisterLocationClothesEndpoint");
+                    errores.Add($"Detalle de guia no encontrado {letraGuia}");
+                    continue;
+                }
+
+
+                var location = new LocationWorkGuide
+                {
+                    LocationClothesId = request.LocationClothesId,
+                    WorkGuideId = workGuideId,
+                    WorkGuideDetailId = workGuideDetailId.Id,
+                    Comments = request.Comments,
+                    NumeroGuia = item
                 };
-                return Results.NotFound(responseValLocation);
+
+                var ubicacion = context.LocationClothes
+                    .Where(lc => lc.Id == request.LocationClothesId)
+                    .Select(lc => lc.Name)
+                    .FirstOrDefault();
+
+                if (ubicacion == null)
+                {
+                    logger.LogInformacion("Ubicacion maestro no encontrado", "RegisterLocationClothesEndpoint");
+                    errores.Add($"Ubicacion maestro no encontrado {request.LocationClothesId}");
+                    continue;
+                }
+
+                workGuideDetailId.Ubicacion = ubicacion;
+                context.LocationWorkGuides.Add(location);
+                await context.SaveChangesAsync();
             }
-
-            workGuideDetailId.Ubicacion = ubicacion;
-
-
-            context.LocationWorkGuides.Add(location);
-            await context.SaveChangesAsync();
 
             var response = new ApiResponse<string>
             {
                 Data = "",
                 Message = "Ubicacion registrada",
                 StatusCode = StatusCodes.Status201Created,
-                Success = true
+                Success = true,
+                Errors = errores.ToList()
             };
-            logger.LogInformacion("Registro Ubicacion de Prendas created: " + location.Id);
+            logger.LogInformacion("Proceso registro ubicacion guias [OK]");
+            logger.LogInformacion($"Errores: {errores.Count()}");
+            logger.LogInformacion($"Errores: {string.Join(",", errores)}");
             return Results.Ok(response);
         });
     }

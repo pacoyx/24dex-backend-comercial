@@ -10,5 +10,6 @@ public static class CustomerEndpoints
         group.MapDeleteCustomer();
         group.MapSearchCustomer();
         group.MapUpdateCustomerPhone();
+        group.MapSearchCustomerPaginator();
     }
 }

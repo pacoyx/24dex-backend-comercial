@@ -1,6 +1,6 @@
 public record CreateLocationWorkGuideRequestDto
 (
     int LocationClothesId,
-    string NumeroGuia,    
+    IEnumerable<string> NumeroGuia,    
     string Comments
 );

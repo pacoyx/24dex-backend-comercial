@@ -62,7 +62,7 @@ builder.Services.AddAuthorization();
 builder.Services.AddScoped<JwtService>();
 builder.Services.AddScoped(typeof(IAppLogger<>), typeof(LoggerAdapter<>));
 builder.Services.AddWatchDog(builder.Configuration);
-builder.Services.AddOpenTelemetry().UseAzureMonitor();
+// builder.Services.AddOpenTelemetry().UseAzureMonitor();
 
 
 
