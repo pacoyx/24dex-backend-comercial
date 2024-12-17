@@ -7,4 +7,5 @@ public class LocationWorkGuide : AuditInfo
     public string? Comments { get; set; } = string.Empty;
     public string NumeroGuia { get; set; } = string.Empty;
     public LocationClothes? LocationClothes { get; set; } 
+    public bool IsSystem { get; set; }
 }

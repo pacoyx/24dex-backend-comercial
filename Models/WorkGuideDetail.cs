@@ -13,8 +13,8 @@ public class WorkGuideDetail
     public decimal Total { get; set; }
     public string Observaciones { get; set; } = "";
     [MaxLength(1)]
-    public string TipoLavado { get; set; } = ""; // A:Agua; S:Seco
-    [MaxLength(1)]
+    public string TipoLavado { get; set; } = ""; // A:Agua; S:Seco    
+    [MaxLength(250)]
     public string Ubicacion { get; set; } = ""; // L:lavanderia; P:Planta; A:Almacen
     [MaxLength(1)]
     public string EstadoTrabajo { get; set; } = ""; // P: Pendiente, E: En Proceso, F: Finalizado
