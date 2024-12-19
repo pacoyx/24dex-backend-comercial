@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("24dex-backend-comercial")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+506cc742fded4b326e1b07dfea4467629bdf51ea")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+8b0c89128d3f85e082aee730e080b856320bba3f")]
 [assembly: System.Reflection.AssemblyProductAttribute("24dex-backend-comercial")]
 [assembly: System.Reflection.AssemblyTitleAttribute("24dex-backend-comercial")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
