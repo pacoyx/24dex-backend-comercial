@@ -26,4 +26,45 @@ public class RecepcionDbContext : DbContext
     public DbSet<AlertMsg> AlertMsgs { get; set; }
     public DbSet<LocationClothes> LocationClothes { get; set; }
     public DbSet<LocationWorkGuide> LocationWorkGuides { get; set; }
+
+
+    public override int SaveChanges()
+    {
+        UpdateAuditFields();
+        return base.SaveChanges();
+    }
+
+    public override Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
+    {
+        UpdateAuditFields();
+        return base.SaveChangesAsync(cancellationToken);
+    }
+
+    private void UpdateAuditFields()
+    {
+        DateTime fechaOperacion = TimeZoneInfo.ConvertTime(DateTime.Now, TimeZoneInfo.FindSystemTimeZoneById("SA Pacific Standard Time"));
+
+        var entries = ChangeTracker.Entries()
+            .Where(e => e.Entity is BaseAuditableEntity && (e.State == EntityState.Added || e.State == EntityState.Modified));
+
+        foreach (var entry in entries)
+        {
+            var auditableEntity = (BaseAuditableEntity)entry.Entity;
+            var currentUser = "system"; // Aquí puedes obtener el usuario actual de tu contexto de autenticación
+            
+
+            if (entry.State == EntityState.Added)
+            {
+                auditableEntity.Created = fechaOperacion;
+                auditableEntity.CreatedBy = currentUser;
+            }
+            else
+            {
+                Entry(auditableEntity).Property(x => x.Created).IsModified = false;
+                Entry(auditableEntity).Property(x => x.CreatedBy).IsModified = false;
+                auditableEntity.LastModified = fechaOperacion;
+                auditableEntity.LastModifiedBy = currentUser;
+            }
+        }
+    }
 }

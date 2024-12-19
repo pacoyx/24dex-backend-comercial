@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace DexterCompany.Models
 {
-    public class ProdService
+    public class ProdService: BaseAuditableEntity
     {
         public int Id { get; set; }
         [MaxLength(100)]
