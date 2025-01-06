@@ -2,6 +2,7 @@ using System.Text;
 using _24dex_backend_comercial;
 using Azure.Monitor.OpenTelemetry.AspNetCore;
 using Dls.Erp.Transversal.Logging;
+using HealthChecks.UI.Client;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
@@ -63,7 +64,7 @@ builder.Services.AddScoped<JwtService>();
 builder.Services.AddScoped(typeof(IAppLogger<>), typeof(LoggerAdapter<>));
 builder.Services.AddWatchDog(builder.Configuration);
 // builder.Services.AddOpenTelemetry().UseAzureMonitor();
-
+builder.Services.AddHealthCheck(builder.Configuration);
 
 
 
@@ -82,6 +83,12 @@ app.UseHttpsRedirection();
 app.UseCors("AllowAngularApp");
 app.UseAuthentication();
 app.UseAuthorization();
+app.MapHealthChecksUI();
+app.MapHealthChecks("/health", new Microsoft.AspNetCore.Diagnostics.HealthChecks.HealthCheckOptions()
+{
+    Predicate = _ => true,
+    ResponseWriter = UIResponseWriter.WriteHealthCheckUIResponse
+});
 
 // errores
 app.UseStatusCodePages();

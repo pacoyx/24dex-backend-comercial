@@ -6,5 +6,22 @@ public record GetCashBoxDetalleByIdyTpResponseDto(
     string Cliente,
     string serie,
     string numero,
-    string fechaHora    
+    string fechaHora
+);
+public record GetExpeseBoxByIdCashResponseDto(
+    DateTime FechaGasto,
+    decimal Importe,
+    string DetallesEgreso
+);
+
+public record GetInfoCashMain(
+    DateTime FechaHoraApertura,
+    decimal SaldoInicial,
+    decimal SaldoFinal,
+    string EstadoCaja
+);
+
+public record GetCashBoxDetailByIdAndTpResponseDto(
+    List<GetCashBoxDetalleByIdyTpResponseDto> CashBoxDetail,
+    List<GetExpeseBoxByIdCashResponseDto> ExpenseBox    
 );
