@@ -13,5 +13,6 @@ public static class CashBoxEndpoints{
         group.MapDeleteCashBoxDetail();
         group.MapGetCashBoxResume();
         group.MapGetCashBoxDetailByIdAndTp();
+        group.MapGetCashBoxResumeAllUser();
     }
 }

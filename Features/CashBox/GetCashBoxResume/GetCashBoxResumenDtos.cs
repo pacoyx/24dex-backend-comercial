@@ -16,3 +16,15 @@ public record GetCashBoxResumeDetalleResponseDto(
     string serie,
     string numero
 );
+
+public record GetInfoCashMain(
+    int cajaId,
+    string Usuario,
+    DateTime FechaHoraApertura,
+    decimal SaldoInicial,
+    decimal SaldoFinal,
+    decimal TotalIngreso,
+    decimal TotalSalida,
+    string EstadoCaja,
+    int userId
+);

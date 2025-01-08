@@ -14,12 +14,7 @@ public record GetExpeseBoxByIdCashResponseDto(
     string DetallesEgreso
 );
 
-public record GetInfoCashMain(
-    DateTime FechaHoraApertura,
-    decimal SaldoInicial,
-    decimal SaldoFinal,
-    string EstadoCaja
-);
+
 
 public record GetCashBoxDetailByIdAndTpResponseDto(
     List<GetCashBoxDetalleByIdyTpResponseDto> CashBoxDetail,
