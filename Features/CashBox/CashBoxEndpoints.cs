@@ -1,5 +1,5 @@
 public static class CashBoxEndpoints{
-    public static void MapCashBox(this WebApplication app){
+    public static void MapCashBox(this IEndpointRouteBuilder app){
         var group = app.MapGroup("/api/cashBox");
         group.MapCreateCashBox();
         group.MapCreateCashBoxDetail();

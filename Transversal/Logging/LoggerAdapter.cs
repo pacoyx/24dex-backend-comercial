@@ -1,5 +1,5 @@
 using Microsoft.Extensions.Logging;
-using WatchDog;
+// using WatchDog;
 
 namespace Dls.Erp.Transversal.Logging
 {
@@ -14,19 +14,19 @@ namespace Dls.Erp.Transversal.Logging
         public void LogError(string message, params object[] args)
         {
             _logger.LogError(message, args);            
-            WatchLogger.LogError(message);
+            // WatchLogger.LogError(message);
         }
 
         public void LogInformacion(string message, params object[] args)
         {
             _logger.LogInformation(message, args);
-            WatchLogger.Log(message);
+            // WatchLogger.Log(message);
         }
 
         public void LogWarning(string message, params object[] args)
         {
             _logger.LogWarning(message, args);
-            WatchLogger.LogWarning(message);
+            // WatchLogger.LogWarning(message);
         }
     }
 }

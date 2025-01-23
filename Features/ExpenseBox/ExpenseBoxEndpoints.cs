@@ -1,6 +1,6 @@
 public static class ExpenseBoxEndpoints
 {
-    public static void MapExpenseBox(this WebApplication app)
+    public static void MapExpenseBox(this IEndpointRouteBuilder app)
     {
         var group = app.MapGroup("/api/expenseBox");
         group.MapCreateExpenseBox();

@@ -1,5 +1,5 @@
 public static class WorkGuideMainEndpoints{
-    public static void MapWorkGuideMain(this WebApplication app){
+    public static void MapWorkGuideMain(this IEndpointRouteBuilder app){
         var group = app.MapGroup("/api/workGuideMain");
         group.MapCreateWorkGuideMain();
         group.MapGetWorkGuideMain();

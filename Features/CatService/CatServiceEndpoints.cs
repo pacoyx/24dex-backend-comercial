@@ -1,5 +1,5 @@
 public static class CatServiceEndpoints{
-    public static void MapCatService(this WebApplication app){
+    public static void MapCatService(this IEndpointRouteBuilder app){
         var group = app.MapGroup("/api/catService");
         group.MapCreateCatService();
         group.MapGetCatService();

@@ -1,5 +1,5 @@
 public static class ProdServiceEndpoints{
-    public static void MapProdService(this WebApplication app){
+    public static void MapProdService(this IEndpointRouteBuilder app){
         var group = app.MapGroup("/api/prodService");
         group.MapCreateProdService();
         group.MapGetProdService();
