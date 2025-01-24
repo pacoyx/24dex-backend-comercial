@@ -14,5 +14,6 @@ public static class CashBoxEndpoints{
         group.MapGetCashBoxResume();
         group.MapGetCashBoxDetailByIdAndTp();
         group.MapGetCashBoxResumeAllUser();
+        group.MapSplitPayCash();
     }
 }

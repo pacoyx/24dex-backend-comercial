@@ -28,3 +28,15 @@ public record RequestCashBoxDetailCreateOtherInDto
     int userId,
     int? CustomerId
 );
+
+public record RequestSplitPayCash
+(
+    int CashBoxDetailId,
+    List<SplitPayCashDetail> SplitPayCashDetail
+);
+
+public record SplitPayCashDetail
+(    
+    decimal Importe,
+    string TipoPago 
+);
