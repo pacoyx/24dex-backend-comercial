@@ -2,6 +2,7 @@ using HealthChecks.UI.Client;
 
 var builder = WebApplication.CreateBuilder(args);
 builder.Services.ConfigureServices(builder.Configuration);
+builder.Services.AddServicesDi();
 var app = builder.Build();
 
 if (app.Environment.IsDevelopment())

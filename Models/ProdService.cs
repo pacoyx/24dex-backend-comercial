@@ -1,5 +1,6 @@
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using Microsoft.Identity.Client;
 
 namespace DexterCompany.Models
 {
@@ -18,6 +19,6 @@ namespace DexterCompany.Models
         [MaxLength(1)] 
         public string IsPeso { get; set; } = "N";
         [MaxLength(1)] 
-        public string IsLavado { get; set; } = "N";
+        public string IsLavado { get; set; } = "N";             
     }
 }

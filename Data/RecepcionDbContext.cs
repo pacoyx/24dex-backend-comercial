@@ -26,6 +26,7 @@ public class RecepcionDbContext : DbContext
     public DbSet<AlertMsg> AlertMsgs { get; set; }
     public DbSet<LocationClothes> LocationClothes { get; set; }
     public DbSet<LocationWorkGuide> LocationWorkGuides { get; set; }
+    public DbSet<ServiceAccessFast> ServiceAccessFasts { get; set; }
 
 
     public override int SaveChanges()

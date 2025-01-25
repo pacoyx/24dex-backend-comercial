@@ -33,7 +33,7 @@ public static class CreateCashBoxDetailEndpoint
                     Importe = cashBoxDetail.Importe > 0 ? item.Importe : 0,
                     Adelanto = cashBoxDetail.Adelanto > 0 ? item.Importe : 0,
                     TipoPago = item.TipoPago,
-                    DescripcionPago = "Referencia de pago original ID #" + cashBoxDetail.Id,
+                    DescripcionPago = "Ref. pago original ID #" + cashBoxDetail.Id,
                     Observaciones = cashBoxDetail.Observaciones,
                     EstadoRegistro = cashBoxDetail.EstadoRegistro,
                     CustomerId = cashBoxDetail.CustomerId,
@@ -56,7 +56,7 @@ public static class CreateCashBoxDetailEndpoint
                 Success = true
             };
             return Results.Ok(response);
-        });
+        }).RequireAuthorization();
     }
 
     public static void MapCreateCashBoxDetail(this IEndpointRouteBuilder app)
