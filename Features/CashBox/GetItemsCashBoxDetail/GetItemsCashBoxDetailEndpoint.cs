@@ -24,7 +24,7 @@ public static class GetItemsCashBoxDetail
 
             var cashBoxDetail = await db.CashBoxDetails.AsNoTracking()
                 .Include(cbd => cbd.Customer)
-                .Where(cbd => cbd.CashBoxMainId == cashBoxMain.Id)
+                .Where(cbd => cbd.CashBoxMainId == cashBoxMain.Id && cbd.EstadoRegistro == "A")
                 .ToListAsync();
             if (cashBoxDetail == null)
             {
