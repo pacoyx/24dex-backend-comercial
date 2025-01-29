@@ -17,5 +17,6 @@ public static class RouteExtensions
         app.MapCashBox();
         app.MapReport();
         app.MapLocationClothes();
+        app.MapUser();
     }
 }
