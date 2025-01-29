@@ -34,6 +34,6 @@ public static class GetUserEndpoint
                 Success = true
             };
             return Results.Ok(response);            
-        });
+        }).RequireAuthorization();
     }
 }

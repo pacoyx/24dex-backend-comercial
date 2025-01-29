@@ -23,6 +23,6 @@ public static class GetUsersEndpoint
                 Success = true
             };
             return Results.Ok(response);
-        });
+        }).RequireAuthorization();
     }
 }

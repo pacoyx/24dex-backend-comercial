@@ -33,6 +33,6 @@ public static class CreateUserEndpoint
                 Success = true
             };
             return Results.Ok(response);
-        });
+        }).RequireAuthorization();
     }
 }

@@ -27,6 +27,6 @@ public static class DeleteUserEndpoint
                 Success = true
             };
             return Results.Ok(response);
-        });
+        }).RequireAuthorization();
     }
 }

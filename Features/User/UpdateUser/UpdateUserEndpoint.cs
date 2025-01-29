@@ -31,6 +31,6 @@ public static class UpdateUserEndpoint{
                 Success = true
             };
             return Results.Ok(response);
-        });
+        }).RequireAuthorization();
     }
 }
