@@ -19,10 +19,19 @@ public class UpdateUserService : IUpdateUserService
 
         user.Name = updateUserRequestDto.Name;
         user.UserName = updateUserRequestDto.UserName;
-        user.Password = _encryptService.HashPassword(updateUserRequestDto.Password);
         user.Email = updateUserRequestDto.Email;
         user.Role = updateUserRequestDto.Role;
         user.Status = updateUserRequestDto.Status;
+
+        if (updateUserRequestDto.Password.Length > 0)
+        {
+            var keyPwh = _encryptService.HashPassword(updateUserRequestDto.Password);
+            var salt = keyPwh.Split(":")[0];
+            var password = keyPwh.Split(":")[1];
+
+            user.Password = password;
+            user.HashPassword = salt;
+        }
 
         await _context.SaveChangesAsync();
         return user;

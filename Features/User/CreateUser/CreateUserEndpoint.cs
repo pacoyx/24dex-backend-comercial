@@ -24,10 +24,10 @@ public static class CreateUserEndpoint
             }
  
             var user = await userService.Create(userDto);
-            var responseUser = new CreateUserResponseDto(user.Name, user.UserName, user.Role);
-            var response = new ApiResponse<CreateUserResponseDto>()
-            {
-                Data = responseUser,
+            var responseUser = new CreateUserResponseDto(user.Id, user.Name, user.UserName, user.Role);
+            var response = new ApiResponse<string>()
+            {                
+                Data = responseUser.id.ToString(),
                 Message = "User created successfully",
                 StatusCode = 201,
                 Success = true

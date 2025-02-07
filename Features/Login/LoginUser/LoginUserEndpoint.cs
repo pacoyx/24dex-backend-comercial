@@ -10,23 +10,42 @@ public static class LoginUserEndpoint
                 LoginUserDto loginDto, 
                 RecepcionDbContext context, 
                 JwtService jwtService, 
-                IAppLogger<string> logger) =>
+                IAppLogger<string> logger, IEncryptService HashingService) =>
         {
             if (context.Users == null)
             {
                 return Results.Problem("Users table is not available", statusCode: 500);
             }
 
+
             var user = await context.Users
                                     .AsNoTracking()
-                                    .FirstOrDefaultAsync(u => u.UserName == loginDto.Username && u.Password == loginDto.Password);
-
-            
+                                    .FirstOrDefaultAsync(u => u.UserName == loginDto.Username );
             if (user == null)
             {
-                logger.LogWarning("Usuario fallo login: " + loginDto.Username);
+                logger.LogInformacion("Usuario no encontrado: " + loginDto.Username);
                 return Results.Unauthorized();
             }
+            logger.LogInformacion("Usuario encontrado: " + loginDto.Username);
+            logger.LogInformacion("Usuario password: " + loginDto.Password);
+            logger.LogInformacion("Usuario salt: " + user.HashPassword);
+
+            var passwordhHash = HashingService.VerifyPassword(loginDto.Password, $"{user.HashPassword}:{user.Password}");
+            if (!passwordhHash)
+            {
+                logger.LogWarning("Usuario fallo login password: " + loginDto.Username);
+                return Results.Unauthorized();
+            }
+
+
+            // var user = await context.Users
+            //                         .AsNoTracking()
+            //                         .FirstOrDefaultAsync(u => u.UserName == loginDto.Username && u.Password == loginDto.Password);            
+            // if (user == null)
+            // {
+            //     logger.LogWarning("Usuario fallo login: " + loginDto.Username);
+            //     return Results.Unauthorized();
+            // }
 
             var branchSalesUser = await context.BrachSalesUsers
                                             .Include(bsu => bsu.BranchSales)

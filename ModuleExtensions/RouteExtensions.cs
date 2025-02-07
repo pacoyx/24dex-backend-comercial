@@ -18,5 +18,6 @@ public static class RouteExtensions
         app.MapReport();
         app.MapLocationClothes();
         app.MapUser();
+        app.MapCompany();
     }
 }

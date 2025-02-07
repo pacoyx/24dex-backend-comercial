@@ -9,6 +9,13 @@ public static class ServicesDiExtensions{
         services.AddScoped<IGetUserService, GetUserService>();
         services.AddScoped<IUpdateUserService, UpdateUserService>();
 
+        services.AddScoped<ICreateCompanyService, CreateCompanyService>();
+        services.AddScoped<IDeleteCompanyService, DeleteCompanyService>();
+        services.AddScoped<IGetCompaniesService, GetCompaniesService>();
+        services.AddScoped<IGetCompanyService, GetCompanyService>();
+        services.AddScoped<IUpdateCompanyService, UpdateCompanyService>();
+        services.AddScoped<IGetCompanyByUserService, GetCompanyByUserService>();
+
         services.AddScoped<IEncryptService, EncryptService>();
     }
 }
