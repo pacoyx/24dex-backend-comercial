@@ -5,4 +5,5 @@ public class ClothingItem
     public decimal Price { get; set; }
     public string Status { get; set; } = "";
     public string TypRef { get; set; } = "";
+    public int UserRef { get; set; }
 }

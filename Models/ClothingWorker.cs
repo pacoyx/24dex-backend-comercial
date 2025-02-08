@@ -5,4 +5,5 @@ public class ClothingWorker
     public string LastName { get; set; } = "";
     public string DocumentNumber { get; set; } = "";
     public string Status { get; set; } = "";
+    public int UserRef { get; set; }
 }

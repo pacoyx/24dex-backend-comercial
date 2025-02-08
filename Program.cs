@@ -1,10 +1,21 @@
 using HealthChecks.UI.Client;
-using Microsoft.Extensions.Primitives;
+using FluentValidation.AspNetCore;
+using FluentValidation;
 
+var currentAssembly = typeof(Program).Assembly;
 var builder = WebApplication.CreateBuilder(args);
 builder.WebHost.UseKestrel(options => options.AddServerHeader = false);
 builder.Services.ConfigureServices(builder.Configuration);
 builder.Services.AddServicesDi();
+
+
+builder.Services
+    // Plumbing/Dependencies
+    .AddAutoMapper(currentAssembly)
+    .AddMediatR(o => o.RegisterServicesFromAssembly(currentAssembly))
+    .AddFluentValidationAutoValidation()
+    .AddValidatorsFromAssembly(currentAssembly);
+
 var app = builder.Build();
 
 if (app.Environment.IsDevelopment())

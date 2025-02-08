@@ -6,4 +6,5 @@ public class Ticket
     public  string Status { get; set; } = "";
     public ICollection<TicketClothe> TicketClothes { get; set; } = new List<TicketClothe>();
     public ClothingWorker? ClothingWorker { get; set; }
+    public int UserRef { get; set; }
 }

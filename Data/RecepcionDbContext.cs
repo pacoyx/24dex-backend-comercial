@@ -29,6 +29,19 @@ public class RecepcionDbContext : DbContext
     public DbSet<ServiceAccessFast> ServiceAccessFasts { get; set; }
     public DbSet<Company> Companies { get; set; }
 
+    public DbSet<ClothingItem>  ClothingItems { get; set; }
+    public DbSet<ClothingObservations>  ClothingObservations { get; set; }
+    public DbSet<ClothingWorker>  ClothingWorkers { get; set; }
+    public DbSet<CollectionGuide>  CollectionGuides { get; set; }
+    public DbSet<CollectionGuideTicket>  CollectionGuideTickets { get; set; }
+    public DbSet<ObservationSection>  ObservationSections { get; set; }
+    public DbSet<Ticket>  Tickets { get; set; }
+    public DbSet<TicketClothe>  TicketClothes { get; set; }
+    public DbSet<TypeObservation>  TypeObservations { get; set; }
+    
+    
+
+
 
     public override int SaveChanges()
     {
