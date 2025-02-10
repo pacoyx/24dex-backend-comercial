@@ -21,7 +21,12 @@ public static class ServiceExtensions
 
         // Add services to the container.
         services.AddEndpointsApiExplorer();
-        services.AddSwaggerGen();
+        services.AddSwaggerGen(c =>
+        {
+            c.SwaggerDoc("v1", new Microsoft.OpenApi.Models.OpenApiInfo { Title = "My API", Version = "v1" });
+            // Personalizar schemaId para evitar conflictos
+            c.CustomSchemaIds(type => type.FullName!.Replace("+", "."));
+        });
 
         services.AddDbContext<RecepcionDbContext>(options =>
             options.UseSqlServer(configuration.GetConnectionString("DefaultConnection")));

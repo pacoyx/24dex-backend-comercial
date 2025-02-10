@@ -8,6 +8,5 @@ public record CreateTicketClothesDto(
 public record CreateTicketObservationsDto(
     int TypeObservationId,
     int ObservationSectionId,
-    string Observations,
-    string Status
+    string Observations    
 );

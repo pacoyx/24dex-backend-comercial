@@ -20,5 +20,8 @@ public static class RouteExtensions
         app.MapUser();
         app.MapCompany();
         app.MapTicket();
+        app.MapCollectionGuide();
+        app.MapClothingWorkerEndpoints();
+        app.MapClothingItemEndpoints();
     }
 }

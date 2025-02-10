@@ -7,6 +7,7 @@ public class CreateTicket
     public class Command : IRequest<Result>
     {
         public int ClothingWorkerId { get; set; }
+        public int UserRef { get; set; }
          
         public IEnumerable<CreateTicketClothesDto> TicketClothes { get; set; } = new List<CreateTicketClothesDto>();
     }
