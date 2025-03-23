@@ -67,7 +67,7 @@ public class GetClothingWorkerById
                 Data = clothingWorker,
                 Message = "Worker found",
                 StatusCode = 200,
-                Success = false
+                Success = true
             };
             return new Result(responseOk);
         }

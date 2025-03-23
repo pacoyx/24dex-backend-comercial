@@ -2,7 +2,7 @@ using Microsoft.AspNetCore.Builder;
 
 public static class RouteExtensions
 {
-    public static void MapRoutes(this IEndpointRouteBuilder app)
+    public static void MapRoutes(this WebApplication app)
     {
         app.MapLogin();
         app.MapExpenseBox();

@@ -12,7 +12,12 @@ public static class SearchCustomerEndpoint
             }
 
             var customers = await context.Customers.AsNoTracking()
-                .Where(x => ((x.FirtsName != null && x.FirtsName.Contains(name)) || (x.LastName != null && x.LastName.Contains(name))) && x.Status == "A")
+                
+                //.Where(x => ((x.FirtsName != null && x.FirtsName.Contains(name)) || (x.LastName != null && x.LastName.Contains(name))) && x.Status == "A")
+
+                .Where(x => (x.FirtsName + " " + x.LastName).Contains(name) && x.Status == "A")
+                
+                
                 .Select(x => new ResponseSearchCustomerDto(
                     x.Id,
                     (x.FirtsName != null ? x.FirtsName.Substring(0, 1).ToUpper() : "") +

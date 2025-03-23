@@ -17,6 +17,24 @@ public static class ServiceExtensions
 {
     public static void ConfigureServices(this IServiceCollection services, IConfiguration configuration)
     {
+
+        services.AddOutputCache(
+            options =>
+            {
+                // Configuración global del caché (opcional)
+                options.DefaultExpirationTimeSpan = TimeSpan.FromMinutes(10); // Expiración por defecto
+                // options.SizeLimit = 100; // Límite de tamaño del caché (en MB)
+
+
+                options.AddPolicy("IgnoreAuthorization", builder =>
+                {
+                    builder.Expire(TimeSpan.FromMinutes(10)) // Expiración de 10 minutos
+                    .SetVaryByQuery("id"); // Variar por el parámetro "id"
+                    // .NoCacheHeaders("Authorization"); // Ignorar la cabecera "Authorization"
+                });
+
+            });
+
         services.Configure<JwtSettings>(configuration.GetSection("Jwt"));
 
         // Add services to the container.
@@ -26,6 +44,26 @@ public static class ServiceExtensions
             c.SwaggerDoc("v1", new Microsoft.OpenApi.Models.OpenApiInfo { Title = "My API", Version = "v1" });
             // Personalizar schemaId para evitar conflictos
             c.CustomSchemaIds(type => type.FullName!.Replace("+", "."));
+
+
+            // Definir tags manualmente
+            c.TagActionsBy(api => new[] { api.GroupName }); // Agrupa por el nombre del grupo
+            c.DocInclusionPredicate((name, api) => true); // Incluir todos los endpoints
+
+            // Configurar Swagger para reconocer los grupos de endpoints
+            // c.DocInclusionPredicate((docName, apiDesc) =>
+            // {
+            //     if (docName == "v1")
+            //         return true;
+
+            //     var groupName = apiDesc.GroupName;
+            //     return groupName != null && groupName.Equals(docName, StringComparison.OrdinalIgnoreCase);
+            // });
+
+            // c.TagActionsBy(apiDesc =>
+            // {
+            //     return new[] { apiDesc.GroupName ?? "default" };
+            // });
         });
 
         services.AddDbContext<RecepcionDbContext>(options =>
@@ -75,6 +113,7 @@ public static class ServiceExtensions
         // builder.Services.AddWatchDog(builder.Configuration);
         // builder.Services.AddOpenTelemetry().UseAzureMonitor();
         services.AddHealthCheck(configuration);
+
 
 
         // Configurar OpenTelemetry

@@ -1,8 +1,8 @@
 public static class UpdateProdServiceEndpoint
 {
-    public static void MapUpdateProdService(this IEndpointRouteBuilder app)
+    public static RouteHandlerBuilder  MapUpdateProdService(this IEndpointRouteBuilder app)
     {
-        app.MapPut("/{id}", async (int id, UpdateProdServiceDto updateProdServiceDto, RecepcionDbContext context ) =>
+       return app.MapPut("/{id}", async (int id, UpdateProdServiceDto updateProdServiceDto, RecepcionDbContext context ) =>
         {
             var prodService = await context.ProdServices.FindAsync(id);
             if (prodService == null)

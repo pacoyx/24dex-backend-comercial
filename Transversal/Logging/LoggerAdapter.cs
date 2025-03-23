@@ -1,4 +1,5 @@
 using Microsoft.Extensions.Logging;
+using Serilog;
 // using WatchDog;
 
 namespace Dls.Erp.Transversal.Logging
@@ -13,7 +14,7 @@ namespace Dls.Erp.Transversal.Logging
         }
         public void LogError(string message, params object[] args)
         {
-            _logger.LogError(message, args);            
+            _logger.LogError(message, args);
             // WatchLogger.LogError(message);
         }
 
@@ -27,6 +28,18 @@ namespace Dls.Erp.Transversal.Logging
         {
             _logger.LogWarning(message, args);
             // WatchLogger.LogWarning(message);
+        }
+
+        public void LogMessageWithEventAndId(string message, int eventId, string identifier,string dataLog)
+        {
+            var customProperties = new Dictionary<string, object>
+            {
+                { "Identifier", identifier },
+                { "DataLog", dataLog },
+            };
+
+            // _logger.LogInformation(eventId, message, customProperties);
+            Log.Information("Message: {Message}, Identifier: {Identifier}, EventId: {EventId}, DataLog: {DataLog}", message, identifier, eventId, dataLog);
         }
     }
 }

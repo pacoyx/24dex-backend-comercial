@@ -6,13 +6,14 @@ public static class CreateExpenseBoxEndpoint
     public static void MapCreateExpenseBox(this IEndpointRouteBuilder app)
     {
         app.MapPost("/", async (CreateExpenseBoxDto dto, RecepcionDbContext context, IAppLogger<string> logger) =>
-        {         
+        {
             var cashBoxMain = await context.CashBoxMains
                 .Where(x => x.UserId == dto.UserId && x.EstadoRegistro == "A" && x.EstadoCaja == "A")
                 .FirstOrDefaultAsync();
 
-            if (cashBoxMain == null){
-                logger.LogWarning("No se encontro caja registrada para el usuario", "CreateExpenseBoxEndpoint");
+            if (cashBoxMain == null)
+            {
+                logger.LogInformacion("No se encontro caja registrada para el usuario", "CreateExpenseBoxEndpoint");
                 return Results.NotFound("No se encontro caja registrada para el usuario");
             }
 
@@ -32,7 +33,8 @@ public static class CreateExpenseBoxEndpoint
             await context.ExpenseBoxMains.AddAsync(expenseBox);
             await context.SaveChangesAsync();
 
-            var response = new ApiResponse<ExpenseBox>{
+            var response = new ApiResponse<ExpenseBox>
+            {
                 Data = expenseBox,
                 Message = "Gasto creado",
                 StatusCode = 200,
@@ -40,7 +42,14 @@ public static class CreateExpenseBoxEndpoint
                 Success = true
             };
 
+            // logger.LogInformacion("Gasto creado: " + Newtonsoft.Json.JsonConvert.SerializeObject(expenseBox), "CreateExpenseBoxEndpoint");
+
+            string identifier = Guid.NewGuid().ToString();
+            int eventId = 1001;
+            string message = "Gasto registrado por el usuario " + dto.UserId;
+            logger.LogMessageWithEventAndId(message, eventId, identifier, Newtonsoft.Json.JsonConvert.SerializeObject(expenseBox));
+
             return Results.Ok(response);
-        });
+        }).WithTags("ExpenseBox");
     }
 }

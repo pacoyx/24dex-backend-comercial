@@ -12,11 +12,44 @@ public static class CreateWorkGuideMainEndpoint
                 logger.LogWarning("Request vacio", "CreateWorkGuideMainEndpoint");
                 return Results.BadRequest("Request vacio");
             }
+
+            //obtener el ultimo correlativo de la guia de servicio
+            var numbersDocument = await db.NumbersDocuments
+                .FirstOrDefaultAsync(nd => nd.BranchId == wgmCreateDto.BranchStoreId
+                                           && nd.TypeDoc == wgmCreateDto.TypeDocument
+                                           && nd.SerieDoc == wgmCreateDto.SerieGuia);
+            if (numbersDocument == null)
+            {
+                logger.LogWarning("No se encontró correlativo de guia de servicio", "CreateWorkGuideMainEndpoint");
+                return Results.BadRequest("No se encontró correlativo de guia de servicio");
+            }
+
+            
+
+
+            //validar si el correlativo de la guia de servicio es igual al enviado
+            if (numbersDocument.NumberDoc != int.Parse(wgmCreateDto.NumeroGuia))
+            {
+                logger.LogWarning("El correlativo de la guia de servicio no coincide", "CreateWorkGuideMainEndpoint");
+                return Results.BadRequest("El correlativo de la guia de servicio no coincide");
+            }
+
+            //validar si el cliente existe
+            var customer = await db.Customers.FirstOrDefaultAsync(c => c.Id == wgmCreateDto.CustomerId);
+            if (customer == null)
+            {
+                logger.LogWarning("No se encontró cliente", "CreateWorkGuideMainEndpoint");
+                return Results.BadRequest("No se encontró cliente");
+            }
+
+
+
+
             DateTime fechaOperacion = TimeZoneInfo.ConvertTime(DateTime.Now, TimeZoneInfo.FindSystemTimeZoneById("SA Pacific Standard Time"));
             var workGuideMain = new WorkGuideMain
             {
                 SerieGuia = wgmCreateDto.SerieGuia,
-                NumeroGuia = wgmCreateDto.NumeroGuia,
+                NumeroGuia = numbersDocument.NumberDoc.ToString(), //wgmCreateDto.NumeroGuia,
                 FechaOperacion = fechaOperacion,
                 FechaHoraEntrega = fechaOperacion.AddDays(2), // Add 2 days to the current date
                 MensajeAlertas = wgmCreateDto.MensajeAlertas,
@@ -56,14 +89,10 @@ public static class CreateWorkGuideMainEndpoint
 
             var jsonString = JsonSerializer.Serialize(workGuideMain);            
 
-            // actualiza el correlativo de la guia de servicio
-            var numbersDocument = await db.NumbersDocuments
-                .FirstOrDefaultAsync(nd => nd.BranchId == wgmCreateDto.BranchStoreId
-                                           && nd.TypeDoc == wgmCreateDto.TypeDocument
-                                           && nd.SerieDoc == wgmCreateDto.SerieGuia);
+            // actualiza el correlativo de la guia de servicio            
             if (numbersDocument != null)
             {
-                numbersDocument.NumberDoc = int.Parse(wgmCreateDto.NumeroGuia) + 1;
+                numbersDocument.NumberDoc = numbersDocument.NumberDoc + 1;
                 db.NumbersDocuments.Update(numbersDocument);
             }
 

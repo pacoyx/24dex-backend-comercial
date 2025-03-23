@@ -26,9 +26,7 @@ public static class LoginUserEndpoint
                 logger.LogInformacion("Usuario no encontrado: " + loginDto.Username);
                 return Results.Unauthorized();
             }
-            logger.LogInformacion("Usuario encontrado: " + loginDto.Username);
-            logger.LogInformacion("Usuario password: " + loginDto.Password);
-            logger.LogInformacion("Usuario salt: " + user.HashPassword);
+            
 
             var passwordhHash = HashingService.VerifyPassword(loginDto.Password, $"{user.HashPassword}:{user.Password}");
             if (!passwordhHash)

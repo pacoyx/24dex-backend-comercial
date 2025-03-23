@@ -1,6 +1,10 @@
 public static class ProdServiceEndpoints{
-    public static void MapProdService(this IEndpointRouteBuilder app){
+    public static RouteGroupBuilder MapProdService(this IEndpointRouteBuilder app){
         var group = app.MapGroup("/api/prodService");
+        
+        
+        // group.CacheOutput();
+
         group.MapCreateProdService();
         group.MapGetProdService();
         group.MapGetProdServices();
@@ -10,5 +14,9 @@ public static class ProdServiceEndpoints{
         group.MapGetProdServiceSearchByDescription();
         group.MapGetIdServicePeso();
         group.MapGetServicesAccessFast();
+    
+
+
+        return group;
     }
 }

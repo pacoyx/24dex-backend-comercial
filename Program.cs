@@ -1,12 +1,29 @@
 using HealthChecks.UI.Client;
 using FluentValidation.AspNetCore;
 using FluentValidation;
+using Serilog;
+
+
 
 var currentAssembly = typeof(Program).Assembly;
 var builder = WebApplication.CreateBuilder(args);
 builder.WebHost.UseKestrel(options => options.AddServerHeader = false);
 builder.Services.ConfigureServices(builder.Configuration);
 builder.Services.AddServicesDi();
+
+builder.Services.AddApplicationInsightsTelemetry();
+
+// Configurar Serilog
+Log.Logger = new LoggerConfiguration()
+    .ReadFrom.Configuration(builder.Configuration)
+    .CreateLogger();
+
+builder.Services.AddSerilog();
+// builder.Services.AddSerilog(lc => lc    
+//     .ReadFrom.Configuration(builder.Configuration));
+
+
+
 
 
 builder.Services
@@ -37,15 +54,18 @@ app.MapHealthChecks("/health", new Microsoft.AspNetCore.Diagnostics.HealthChecks
 });
 
 // secutity headers
-app.RemoveInsecureHeaders();
+// app.RemoveInsecureHeaders();
+// app.UseEmojiMiddleware();
 
 // errores
 app.UseStatusCodePages();
 app.UseExceptionHandler();
+app.UseOutputCache();
 
-app.UseEmojiMiddleware();
 
 // routes
-app.MapRoutes();
+ app.MapRoutes();
+
+
 
 app.Run();

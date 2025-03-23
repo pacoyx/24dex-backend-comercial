@@ -1,12 +1,13 @@
 
 public static class GetServicesAccessFast
 {
-    public static void MapGetServicesAccessFast(this IEndpointRouteBuilder app)
+    public static RouteHandlerBuilder MapGetServicesAccessFast(this IEndpointRouteBuilder app)
     {
-        app.MapGet("/getServicesQuickAccess", async (IGetServicesAccessFastService servicesAccessFastService) =>
+       return app.MapGet("/getServicesQuickAccess", async (IGetServicesAccessFastService servicesAccessFastService) =>
         {
+            Console.WriteLine("consultando BD servicios de acceso rápido");
             var responseDto = await servicesAccessFastService.GetServicesAccessFastAsync();
-            
+
             var response = new ApiResponse<IEnumerable<GetServicesAccessFastResponseDto>>
             {
                 Success = true,
@@ -16,6 +17,8 @@ public static class GetServicesAccessFast
             };
 
             return Results.Ok(response);
-        }).RequireAuthorization();
+        })
+        .CacheOutput(); // Configurar caché para 60 segundos
+        // .RequireAuthorization();
     }
 }
