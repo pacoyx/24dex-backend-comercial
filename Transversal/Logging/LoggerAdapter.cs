@@ -32,12 +32,6 @@ namespace Dls.Erp.Transversal.Logging
 
         public void LogMessageWithEventAndId(string message, int eventId, string identifier,string dataLog)
         {
-            var customProperties = new Dictionary<string, object>
-            {
-                { "Identifier", identifier },
-                { "DataLog", dataLog },
-            };
-
             // _logger.LogInformation(eventId, message, customProperties);
             Log.Information("Message: {Message}, Identifier: {Identifier}, EventId: {EventId}, DataLog: {DataLog}", message, identifier, eventId, dataLog);
         }

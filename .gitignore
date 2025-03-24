@@ -36,6 +36,7 @@ Desktop.ini
 publish/
 bin/
 obj/
+Logs/
 
 # Recycle Bin used on file shares
 $RECYCLE.BIN/
