@@ -1,8 +1,10 @@
+using Microsoft.EntityFrameworkCore;
+
 public static class CloseCashBoxEndpoint
 {
     public static void MapCloseCashBox(this IEndpointRouteBuilder app)
     {
-        app.MapPut("/close/{id}", async (int id, RequestCashBoxCloseDto requestCashBoxCloseDto, RecepcionDbContext db) =>
+        app.MapPut("/close/{id}", async (int id, RequestCashBoxCloseDto requestCashBoxCloseDto, RecepcionDbContext db,IAppLogger<string> logger) =>
         {
             if (id == 0)
             {
@@ -41,8 +43,7 @@ public static class CloseCashBoxEndpoint
             {
                 return Results.NotFound();
             }
-            Console.WriteLine("Estado de caja: " + cashBox.EstadoCaja);
-
+            
             if (cashBox.EstadoCaja == "C")
             {
                 return Results.BadRequest("La caja ya fue cerrada");
@@ -56,6 +57,16 @@ public static class CloseCashBoxEndpoint
             cashBox.ObservacionesCierre = requestCashBoxCloseDto.ObservacionesCierre;
 
             await db.SaveChangesAsync();
+
+
+            var user = await db.Users.FirstOrDefaultAsync(x => x.Id == cashBox.UserId);
+            if (user == null)
+            {
+                logger.LogInformacion($"Usuario con {cashBox.UserId} no encontrado");
+            }
+            string identifier = Guid.NewGuid().ToString();
+            logger.LogMessageWithEventAndId($"Caja Cerrada por {user!.UserName}", 1004, identifier, cashBox.Id.ToString());
+
 
             var response = new ApiResponse<string>(){
                 Data = "Caja cerrada",

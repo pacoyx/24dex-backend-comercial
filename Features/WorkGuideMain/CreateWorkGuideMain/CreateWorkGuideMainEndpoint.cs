@@ -1,5 +1,7 @@
+
 using System.Text.Json;
 using Microsoft.EntityFrameworkCore;
+
 
 public static class CreateWorkGuideMainEndpoint
 {
@@ -7,32 +9,31 @@ public static class CreateWorkGuideMainEndpoint
     {
         app.MapPost("/", async (WgmCreateDto wgmCreateDto, RecepcionDbContext db, IAppLogger<string> logger) =>
         {
+
             if (wgmCreateDto == null)
             {
                 logger.LogWarning("Request vacio", "CreateWorkGuideMainEndpoint");
                 return Results.BadRequest("Request vacio");
             }
 
+            var TYPE_PROCESS = "RECEP";
+
             //obtener el ultimo correlativo de la guia de servicio
             var numbersDocument = await db.NumbersDocuments
                 .FirstOrDefaultAsync(nd => nd.BranchId == wgmCreateDto.BranchStoreId
-                                           && nd.TypeDoc == wgmCreateDto.TypeDocument
-                                           && nd.SerieDoc == wgmCreateDto.SerieGuia);
+                                        && nd.TypeProcess == TYPE_PROCESS);
             if (numbersDocument == null)
             {
                 logger.LogWarning("No se encontró correlativo de guia de servicio", "CreateWorkGuideMainEndpoint");
                 return Results.BadRequest("No se encontró correlativo de guia de servicio");
             }
 
-            
-
-
             //validar si el correlativo de la guia de servicio es igual al enviado
-            if (numbersDocument.NumberDoc != int.Parse(wgmCreateDto.NumeroGuia))
-            {
-                logger.LogWarning("El correlativo de la guia de servicio no coincide", "CreateWorkGuideMainEndpoint");
-                return Results.BadRequest("El correlativo de la guia de servicio no coincide");
-            }
+            // if (numbersDocument.NumberDoc != int.Parse(wgmCreateDto.NumeroGuia))
+            // {
+            //     logger.LogWarning("El correlativo de la guia de servicio no coincide", "CreateWorkGuideMainEndpoint");
+            //     return Results.BadRequest("El correlativo de la guia de servicio no coincide");
+            // }
 
             //validar si el cliente existe
             var customer = await db.Customers.FirstOrDefaultAsync(c => c.Id == wgmCreateDto.CustomerId);
@@ -43,12 +44,12 @@ public static class CreateWorkGuideMainEndpoint
             }
 
 
-
+            string identifierLog = Guid.NewGuid().ToString();
 
             DateTime fechaOperacion = TimeZoneInfo.ConvertTime(DateTime.Now, TimeZoneInfo.FindSystemTimeZoneById("SA Pacific Standard Time"));
             var workGuideMain = new WorkGuideMain
             {
-                SerieGuia = wgmCreateDto.SerieGuia,
+                SerieGuia = numbersDocument.SerieDoc,
                 NumeroGuia = numbersDocument.NumberDoc.ToString(), //wgmCreateDto.NumeroGuia,
                 FechaOperacion = fechaOperacion,
                 FechaHoraEntrega = fechaOperacion.AddDays(2), // Add 2 days to the current date
@@ -87,14 +88,12 @@ public static class CreateWorkGuideMainEndpoint
                 }).ToList()
             };
 
-            var jsonString = JsonSerializer.Serialize(workGuideMain);            
-
-            // actualiza el correlativo de la guia de servicio            
-            if (numbersDocument != null)
+            var user = await db.Users.FirstOrDefaultAsync(x => x.Id == wgmCreateDto.UserId);
+            if (user == null)
             {
-                numbersDocument.NumberDoc = numbersDocument.NumberDoc + 1;
-                db.NumbersDocuments.Update(numbersDocument);
+                logger.LogInformacion($"Usuario con {wgmCreateDto.UserId} no encontrado");
             }
+
 
             // registrar el adelanto en caja
             if (wgmCreateDto.Acuenta > 0)
@@ -107,9 +106,9 @@ public static class CreateWorkGuideMainEndpoint
                 }
                 var cashBoxDetail = new CashBoxDetail
                 {
-                    TipoComprobante = wgmCreateDto.TypeDocument,
-                    SerieComprobante = wgmCreateDto.SerieGuia,
-                    NumComprobante = wgmCreateDto.NumeroGuia,
+                    TipoComprobante = numbersDocument!.TypeDoc,
+                    SerieComprobante = numbersDocument!.SerieDoc,
+                    NumComprobante = numbersDocument!.NumberDoc.ToString(),
                     FechaComprobante = fechaOperacion,
                     Importe = 0,
                     Adelanto = wgmCreateDto.Acuenta,
@@ -122,13 +121,75 @@ public static class CreateWorkGuideMainEndpoint
                 };
 
                 await db.CashBoxDetails.AddAsync(cashBoxDetail);
+
+                var dataCaja = new
+                {
+                    cajaId = cashBoxMain.Id,
+                    fecha = fechaOperacion,
+                    clienteId = wgmCreateDto.CustomerId,
+                    comprobante = numbersDocument!.TypeDoc + " " + numbersDocument!.SerieDoc + " " + numbersDocument!.NumberDoc,
+                    tipoPago = wgmCreateDto.TipoPago,
+                    monto = wgmCreateDto.Acuenta,
+                };
+
+                var cajaString = JsonSerializer.Serialize(dataCaja);
+                logger.LogMessageWithEventAndId($"Adelanto de caja, por {user!.UserName}", 1001, identifierLog, cajaString);
             }
 
             await db.WorkGuideMains.AddAsync(workGuideMain);
-            await db.SaveChangesAsync();
-            var resp = new { IdWorkGuide = workGuideMain.Id };
-            return Results.Ok(resp);
 
+            // actualiza el correlativo de la guia de servicio            
+            if (numbersDocument != null)
+            {
+                numbersDocument.NumberDoc = numbersDocument.NumberDoc + 1;
+                db.NumbersDocuments.Update(numbersDocument);
+            }
+
+            await db.SaveChangesAsync();
+
+            var resp = new WgmCreateResponseDto(            
+                 workGuideMain.Id,
+                 numbersDocument!.TypeDoc,
+                 workGuideMain.SerieGuia,
+                 workGuideMain.NumeroGuia,
+                 workGuideMain.FechaOperacion,
+                 workGuideMain.FechaHoraEntrega
+            );
+
+
+            var dataGuiaLog = new
+            {
+                idGuia = workGuideMain.Id,
+                comprobante = workGuideMain.SerieGuia + " " + workGuideMain.NumeroGuia,
+                fechaOperacion = workGuideMain.FechaOperacion,
+                clienteId = workGuideMain.CustomerId,
+                total = workGuideMain.Total,
+                acuenta = workGuideMain.Acuenta,
+                saldo = workGuideMain.Saldo,
+                detalles = workGuideMain.WorkGuideDetails.Select(x => new
+                {
+                    productoId = x.ProductId,
+                    cantidad = x.Cant,
+                    precio = x.Precio,
+                    total = x.Total,
+                    observaciones = x.Observaciones
+                })
+            };
+            var guiaString = JsonSerializer.Serialize(dataGuiaLog);
+            logger.LogMessageWithEventAndId($"Guia creada por {user!.UserName} ", 1001, identifierLog, guiaString);
+
+
+
+            var response = new ApiResponse<WgmCreateResponseDto>
+            {
+                Data = resp,
+                Success = true,
+                Message = "",
+                StatusCode = 200
+            };
+
+
+            return Results.Ok(response);
         });
     }
 }

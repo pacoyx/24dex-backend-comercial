@@ -45,7 +45,7 @@ public static class CreateExpenseBoxEndpoint
             // logger.LogInformacion("Gasto creado: " + Newtonsoft.Json.JsonConvert.SerializeObject(expenseBox), "CreateExpenseBoxEndpoint");
 
             string identifier = Guid.NewGuid().ToString();
-            int eventId = 1001;
+            int eventId = 1003;
             string message = "Gasto registrado por el usuario " + dto.UserId;
             logger.LogMessageWithEventAndId(message, eventId, identifier, Newtonsoft.Json.JsonConvert.SerializeObject(expenseBox));
 

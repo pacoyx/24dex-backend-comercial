@@ -2,7 +2,7 @@
 public record WgmCreateDto
 (
      string SerieGuia,
-     string NumeroGuia,     
+     string NumeroGuia,
      string MensajeAlertas,
      string Observaciones,
      string TipoPago,
@@ -18,9 +18,9 @@ public record WgmCreateDto
      int BranchStoreId,
      string TypeDocument,
      int UserId,
-     string EstadoPago,     
+     string EstadoPago,
      string EstadoRegistro,
-     string EstadoSituacion     
+     string EstadoSituacion
 );
 
 public record WgdCreateDto(
@@ -36,4 +36,15 @@ public record WgdCreateDto(
      string EstadoSituacion,
      string EstadoPago,
      string Identificador
+);
+
+
+public record WgmCreateResponseDto
+(
+     int IdWorkGuide,
+     string tipoDocumento,
+     string serieDocumento,
+     string numeroDocumento,
+     DateTime fechaOperacion,
+     DateTime fechaHoraEntrega
 );

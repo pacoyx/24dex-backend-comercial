@@ -7,7 +7,20 @@ public static class GetBranchesSales
         app.MapGet("/", async (RecepcionDbContext context) =>
         {
             var branchesSales = await context.BranchSales.AsNoTracking().ToListAsync();
-            return Results.Ok(branchesSales);
+
+            var response = new ApiResponse<List<BranchSalesComboResponse>>
+            {
+                Data = branchesSales.Select(bs => new BranchSalesComboResponse
+                (
+                    bs.Id,
+                    bs.Description
+                )).ToList(),
+                Message = "Lista de sucursales de ventas",
+                StatusCode = 200,
+                Success = true
+            };
+
+            return Results.Ok(response);
         });
     }
 }

@@ -78,4 +78,8 @@ public static class WorkGuideByDateEndpoint
         })
         .WithName("GetWorkGuidesByDate");
     }
+
+
+
+    
 }

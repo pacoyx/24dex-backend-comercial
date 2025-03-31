@@ -26,13 +26,13 @@ public static class ServiceExtensions
                 // options.SizeLimit = 100; // Límite de tamaño del caché (en MB)
 
 
-                options.AddPolicy("IgnoreAuthorization", builder =>
-                {
-                    builder.Expire(TimeSpan.FromMinutes(10)) // Expiración de 10 minutos
-                    .SetVaryByQuery("id"); // Variar por el parámetro "id"
-                    // .NoCacheHeaders("Authorization"); // Ignorar la cabecera "Authorization"
-                });
-
+                // options.AddPolicy("IgnoreAuthorization", builder =>
+                // {
+                //     builder.Expire(TimeSpan.FromMinutes(10)) // Expiración de 10 minutos
+                //     .SetVaryByQuery("id"); // Variar por el parámetro "id"
+                //     // .NoCacheHeaders("Authorization"); // Ignorar la cabecera "Authorization"
+                // });
+            
             });
 
         services.Configure<JwtSettings>(configuration.GetSection("Jwt"));

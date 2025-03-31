@@ -5,5 +5,6 @@ public static class ReportEndpoints
         var group = app.MapGroup("/api/reports");
         group.MapWorkGuideByDate();
         group.MapWorkGuideByCustomers();
+        group.MapDashboardCash();
     }
 }

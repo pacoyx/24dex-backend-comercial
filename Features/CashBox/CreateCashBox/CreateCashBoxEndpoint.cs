@@ -1,8 +1,10 @@
+using Microsoft.EntityFrameworkCore;
+
 public static class CreateCashBoxEndpoint
 {
     public static void MapCreateCashBox(this IEndpointRouteBuilder app)
     {
-        app.MapPost("/", async (RequestCashBoxCreateDto requestCashBoxCreateDto, RecepcionDbContext db,IAppLogger<string> logger) =>
+        app.MapPost("/", async (RequestCashBoxCreateDto requestCashBoxCreateDto, RecepcionDbContext db, IAppLogger<string> logger) =>
         {
             DateTime fechaProceso = TimeZoneInfo.ConvertTime(DateTime.Now, TimeZoneInfo.FindSystemTimeZoneById("SA Pacific Standard Time"));
             var cashBox = new CashBoxMain
@@ -25,7 +27,15 @@ public static class CreateCashBoxEndpoint
             await db.CashBoxMains.AddAsync(cashBox);
             await db.SaveChangesAsync();
 
-            logger.LogInformacion("Caja creada", "CreateCashBoxEndpoint");
+            
+            var user = await db.Users.FirstOrDefaultAsync(x => x.Id == requestCashBoxCreateDto.UserId);
+            if (user == null)
+            {
+                logger.LogInformacion($"Usuario con {requestCashBoxCreateDto.UserId} no encontrado");
+            }
+            string identifier = Guid.NewGuid().ToString();
+            logger.LogMessageWithEventAndId($"Caja Creada por {user!.UserName} ", 1004, identifier, cashBox.Id.ToString());
+
             var response = new ApiResponse<int>()
             {
                 Success = true,

@@ -3,9 +3,9 @@ public static class GetServicesAccessFast
 {
     public static RouteHandlerBuilder MapGetServicesAccessFast(this IEndpointRouteBuilder app)
     {
-       return app.MapGet("/getServicesQuickAccess", async (IGetServicesAccessFastService servicesAccessFastService) =>
+       return app.MapGet("/getServicesQuickAccess", async (IGetServicesAccessFastService servicesAccessFastService,IAppLogger<string> logger) =>
         {
-            Console.WriteLine("consultando BD servicios de acceso rápido");
+            logger.LogInformacion("consultando BD servicios de acceso rápido");
             var responseDto = await servicesAccessFastService.GetServicesAccessFastAsync();
 
             var response = new ApiResponse<IEnumerable<GetServicesAccessFastResponseDto>>
