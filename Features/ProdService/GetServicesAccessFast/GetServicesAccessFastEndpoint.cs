@@ -3,22 +3,26 @@ public static class GetServicesAccessFast
 {
     public static RouteHandlerBuilder MapGetServicesAccessFast(this IEndpointRouteBuilder app)
     {
-       return app.MapGet("/getServicesQuickAccess", async (IGetServicesAccessFastService servicesAccessFastService,IAppLogger<string> logger) =>
-        {
-            logger.LogInformacion("consultando BD servicios de acceso rápido");
-            var responseDto = await servicesAccessFastService.GetServicesAccessFastAsync();
+        return app.MapGet("/getServicesQuickAccess", async (IGetServicesAccessFastService servicesAccessFastService, IAppLogger<string> logger, HttpContext context) =>
+         {
 
-            var response = new ApiResponse<IEnumerable<GetServicesAccessFastResponseDto>>
-            {
-                Success = true,
-                Data = responseDto,
-                StatusCode = StatusCodes.Status200OK,
-                Message = "ServicesAccessFast retrieved successfully"
-            };
+             var jwt = context.Request.Headers["Authorization"].FirstOrDefault();
+             Console.WriteLine($"JWT recibido: {jwt}");
 
-            return Results.Ok(response);
-        })
-        .CacheOutput(); // Configurar caché para 60 segundos
-        // .RequireAuthorization();
+             logger.LogInformacion("consultando BD servicios de acceso rápido");
+             var responseDto = await servicesAccessFastService.GetServicesAccessFastAsync();
+
+             var response = new ApiResponse<IEnumerable<GetServicesAccessFastResponseDto>>
+             {
+                 Success = true,
+                 Data = responseDto,
+                 StatusCode = StatusCodes.Status200OK,
+                 Message = "ServicesAccessFast retrieved successfully"
+             };
+
+             return Results.Ok(response);
+         })
+         .RequireAuthorization()
+         .CacheOutput("JWT_Aware_Cache");
     }
 }

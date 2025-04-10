@@ -1,5 +1,6 @@
-public static class ServicesDiExtensions{
-    
+public static class ServicesDiExtensions
+{
+
     public static void AddServicesDi(this IServiceCollection services)
     {
         services.AddScoped<IGetServicesAccessFastService, GetServicesAccessFastService>();
@@ -17,5 +18,12 @@ public static class ServicesDiExtensions{
         services.AddScoped<IGetCompanyByUserService, GetCompanyByUserService>();
 
         services.AddScoped<IEncryptService, EncryptService>();
+
+        services.AddScoped<ICreateUnitMeasurementService, CreateUnitMeasurementService>();
+        services.AddScoped<IGetUnitMeasurementsService, GetUnitMeasurementsService>();
+        services.AddScoped<IGetCategoriesProdService, GetCategoriesProdService>();
+        services.AddScoped<ICreateCategoryProdService, CreateCategoryProdService>();
+        services.AddScoped<IGetProductsService, GetProductsService>();
+        services.AddScoped<ICreateProductService, CreateProductService>();
     }
 }

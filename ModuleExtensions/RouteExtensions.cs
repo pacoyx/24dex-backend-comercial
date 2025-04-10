@@ -23,5 +23,8 @@ public static class RouteExtensions
         app.MapCollectionGuide();
         app.MapClothingWorkerEndpoints();
         app.MapClothingItemEndpoints();
+        app.MapUnitMeasurement();
+        app.MapCategoryProd();
+        app.MapProduct();
     }
 }

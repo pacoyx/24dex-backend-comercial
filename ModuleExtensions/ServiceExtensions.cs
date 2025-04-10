@@ -23,16 +23,23 @@ public static class ServiceExtensions
             {
                 // Configuración global del caché (opcional)
                 options.DefaultExpirationTimeSpan = TimeSpan.FromMinutes(10); // Expiración por defecto
-                // options.SizeLimit = 100; // Límite de tamaño del caché (en MB)
+                                                                              // options.SizeLimit = 100; // Límite de tamaño del caché (en MB)
 
 
-                // options.AddPolicy("IgnoreAuthorization", builder =>
+                // options.AddPolicy("VaryByAuthorization", builder =>
                 // {
                 //     builder.Expire(TimeSpan.FromMinutes(10)) // Expiración de 10 minutos
-                //     .SetVaryByQuery("id"); // Variar por el parámetro "id"
-                //     // .NoCacheHeaders("Authorization"); // Ignorar la cabecera "Authorization"
+                //             .SetVaryByHeader("Authorization"); // Aquí incluyes el heade
                 // });
-            
+
+
+                options.AddPolicy("JWT_Aware_Cache", builder =>
+                {
+                    builder.Expire(TimeSpan.FromMinutes(10))
+                            .SetVaryByQuery("*")
+                            .AddPolicy<JwtCachePolicy>(); // 👈 Política personalizada
+                });
+
             });
 
         services.Configure<JwtSettings>(configuration.GetSection("Jwt"));

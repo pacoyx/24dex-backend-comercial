@@ -40,7 +40,13 @@ public class RecepcionDbContext : DbContext
     public DbSet<TypeObservation>  TypeObservations { get; set; }
     
     
-
+    public DbSet<UnitMeasurement> UnitMeasurements { get; set; }
+    public DbSet<Product> Products { get; set; }
+    public DbSet<CategoryProd> CategoryProds { get; set; }
+    public DbSet<PurchaseInvoice> PurchaseInvoices { get; set; }
+    public DbSet<PurchaseInvoiceDetails> PurchaseInvoiceDetails { get; set; } 
+    public DbSet<Supplier> Suppliers { get; set; }
+    
 
 
     public override int SaveChanges()

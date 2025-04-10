@@ -11,7 +11,7 @@ builder.WebHost.UseKestrel(options => options.AddServerHeader = false);
 builder.Services.ConfigureServices(builder.Configuration);
 builder.Services.AddServicesDi();
 
-builder.Services.AddApplicationInsightsTelemetry();
+// builder.Services.AddApplicationInsightsTelemetry();
 
 // Configurar Serilog
 Log.Logger = new LoggerConfiguration()
@@ -19,11 +19,6 @@ Log.Logger = new LoggerConfiguration()
     .CreateLogger();
 
 builder.Services.AddSerilog();
-// builder.Services.AddSerilog(lc => lc    
-//     .ReadFrom.Configuration(builder.Configuration));
-
-
-
 
 
 builder.Services
@@ -41,11 +36,16 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
-//middlewares
+// Middlewares de seguridad y autenticación
 app.UseHttpsRedirection();
 app.UseCors("AllowAngularApp");
 app.UseAuthentication();
 app.UseAuthorization();
+
+// OutputCache debe estar ANTES de los endpoints
+app.UseOutputCache();
+
+// Health Checks
 app.MapHealthChecksUI();
 app.MapHealthChecks("/health", new Microsoft.AspNetCore.Diagnostics.HealthChecks.HealthCheckOptions()
 {
@@ -60,11 +60,11 @@ app.MapHealthChecks("/health", new Microsoft.AspNetCore.Diagnostics.HealthChecks
 // errores
 app.UseStatusCodePages();
 app.UseExceptionHandler();
-app.UseOutputCache();
 
 
-// routes
- app.MapRoutes();
+
+// Rutas (endpoints)
+app.MapRoutes();
 
 
 
