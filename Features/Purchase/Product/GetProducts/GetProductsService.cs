@@ -55,4 +55,46 @@ public class GetProductsService : IGetProductsService
             Status = product.Status
         }).ToList();
     }
+
+    async public Task<GetProductsResponsePaginatorDto> GetProductsPaginatorAsync(int pageNumber, int pageSize, string name)
+    {
+
+        var query = _context.Products.AsNoTracking();
+        var totalRows = await query.CountAsync();
+
+        if (name != null && !string.IsNullOrWhiteSpace(name))
+        {
+            query = query.Where(x => x.Name.Contains(name));
+        }
+
+        var products = await query
+            .OrderBy(p => p.Name)
+            .Skip((pageNumber - 1) * pageSize)
+            .Take(pageSize)
+            .ToListAsync();
+
+        if (products == null || !products.Any())
+        {
+            Logger.LogWarning("No products found for the given page.");
+            return new GetProductsResponsePaginatorDto(0, new List<GetProductsResponseDto>());
+        }
+
+        var responsePaginator = new GetProductsResponsePaginatorDto(
+            totalRows,
+            products.Select(p => new GetProductsResponseDto
+            {
+                Id = p.Id,
+                Name = p.Name,
+                Description = p.Description,
+                Price = p.Price,
+                Stock = p.Stock,
+                UnitMeasurementId = p.UnitMeasurementId,
+                CategoryProdId = p.CategoryProdId,
+                Status = p.Status
+            }).ToList()
+        );
+
+        return responsePaginator;
+
+    }
 }

@@ -1,3 +1,8 @@
+public record GetProductsResponsePaginatorDto(
+    int TotalCount,
+    List<GetProductsResponseDto> Products
+    );
+
 public record GetProductsResponseDto
 {
     public int Id { get; set; }

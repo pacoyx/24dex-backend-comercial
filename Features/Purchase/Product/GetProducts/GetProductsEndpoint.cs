@@ -48,6 +48,25 @@ public static class GetProductsEndpoint
         .Produces(StatusCodes.Status404NotFound)
         .Produces(StatusCodes.Status500InternalServerError);
 
+        group.MapGet("/search/paginator/{pageNumber:int}/{pageSize:int}", async (int pageNumber, int pageSize, string nameProduct, IGetProductsService getProductsService) =>
+        {
+            var products = await getProductsService.GetProductsPaginatorAsync(pageNumber, pageSize, nameProduct);
+            var response = new ApiResponse<GetProductsResponsePaginatorDto>
+            {
+                Success = true,
+                Data = products,
+                StatusCode = StatusCodes.Status200OK,
+                Message = "get products paginator"
+            };
+
+            return Results.Ok(response);
+        })
+        .WithName("GetProductsPaginator")
+        .Produces<GetProductsResponsePaginatorDto>(StatusCodes.Status200OK)
+        .Produces(StatusCodes.Status500InternalServerError);
+
+
+
         return group;
     }
 }

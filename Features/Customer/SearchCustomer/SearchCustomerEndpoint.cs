@@ -55,7 +55,7 @@ public static class SearchCustomerEndpoint
             }
 
             var query = context.Customers.AsNoTracking()
-            .Where(x => ((x.FirtsName != null && x.FirtsName.Contains(name)) || (x.LastName != null && x.LastName.Contains(name))) && x.Status == "A");
+            .Where(x => (x.FirtsName != null && x.FirtsName.Contains(name)) || (x.LastName != null && x.LastName.Contains(name)));
 
             var totalRecords = await query.CountAsync();
             var customers = await query

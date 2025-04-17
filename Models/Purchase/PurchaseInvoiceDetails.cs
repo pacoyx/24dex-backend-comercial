@@ -7,7 +7,7 @@ public class PurchaseInvoiceDetails
     public int PurchaseInvoiceId { get; set; }
     public int ProductId { get; set; }
     [Column(TypeName = "decimal(18,2)")]
-    public int Quantity { get; set; }
+    public decimal Quantity { get; set; }
     [Column(TypeName = "decimal(18,2)")]
     public decimal Price { get; set; }
     [Column(TypeName = "decimal(18,2)")]
