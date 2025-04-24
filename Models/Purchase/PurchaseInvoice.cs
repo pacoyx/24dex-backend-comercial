@@ -21,7 +21,18 @@ public class PurchaseInvoice
     [Column(TypeName = "decimal(18,2)")]
     public decimal Total { get; set; }
     [MaxLength(1)]
-    public string Status { get; set; } = "A"; // e.g., "Active", "Inactive"
+    public string Status { get; set; } = "A";
+    [MaxLength(3)]
+    public string CurrencyId { get; set; } = "";
+    [Column(TypeName = "decimal(18,4)")]
+    public decimal ExchangeRate { get; set; } = 1.0m; 
+    [MaxLength(200)]
+    public string Comments { get; set; } = "";
+    [Column(TypeName = "decimal(18,2)")]
+    public decimal Subtotal { get; set; }
+    [Column(TypeName = "decimal(18,2)")]
+    public decimal Igv { get; set; }
+
 
     // Navigation properties
     public ICollection<PurchaseInvoiceDetails>? PurchaseInvoiceDetails { get; set; }

@@ -16,3 +16,9 @@ public record GetSupplierResponsePaginatorDto(
     int TotalCount,
     List<GetSupplierResponseDto> Suppliers
     );
+
+
+public record GetSupplierSearchPatronResponseDto(
+int Id,
+string Name
+);

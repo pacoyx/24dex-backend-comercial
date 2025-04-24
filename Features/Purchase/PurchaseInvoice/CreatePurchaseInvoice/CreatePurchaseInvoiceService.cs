@@ -1,4 +1,6 @@
 
+using Serilog;
+
 public class CreatePurchaseInvoiceService : ICreatePurchaseInvoiceService
 {
     private readonly RecepcionDbContext _context;
@@ -10,8 +12,19 @@ public class CreatePurchaseInvoiceService : ICreatePurchaseInvoiceService
         Logger = logger;
     }
 
-    public Task<PurchaseInvoiceResponseDto> CreatePurchaseInvoiceAsync(PurchaseInvoiceRequestDto request)
+    public async Task<PurchaseInvoiceResponseDto> CreatePurchaseInvoiceAsync(PurchaseInvoiceRequestDto request)
     {
+
+        // Convert the incoming date to UTC and then to the desired timezone
+        // var invoiceIssueDateUnspecified = DateTime.SpecifyKind(request.InvoiceIssueDate, DateTimeKind.Unspecified);
+        // var invoiceIssueDateUtc = TimeZoneInfo.ConvertTimeToUtc(invoiceIssueDateUnspecified, TimeZoneInfo.FindSystemTimeZoneById("SA Pacific Standard Time"));
+        var invoiceIssueDateLocal = TimeZoneInfo.ConvertTimeFromUtc(request.InvoiceIssueDate.ToUniversalTime(), TimeZoneInfo.FindSystemTimeZoneById("SA Pacific Standard Time"));
+        invoiceIssueDateLocal = invoiceIssueDateLocal.Date; // Set time to 00:00:00
+
+        Logger.LogInformacion("fecha emision 3 " + invoiceIssueDateLocal);  
+        
+        
+        
         DateTime fechaOperacion = TimeZoneInfo.ConvertTime(DateTime.Now, TimeZoneInfo.FindSystemTimeZoneById("SA Pacific Standard Time"));
         var purchaseInvoice = new PurchaseInvoice
         {
@@ -27,6 +40,11 @@ public class CreatePurchaseInvoiceService : ICreatePurchaseInvoiceService
             Total = request.Total,
             Status = "A", 
             PurchaseDate = fechaOperacion,
+            CurrencyId = request.CurrencyId,
+            ExchangeRate = request.ExchangeRate,
+            Comments = request.Comments,
+            Subtotal = request.Subtotal,
+            Igv = request.Igv,
             PurchaseInvoiceDetails = request.PurchaseInvoiceDetails?
             .Select(detail => new PurchaseInvoiceDetails
             {
@@ -37,12 +55,12 @@ public class CreatePurchaseInvoiceService : ICreatePurchaseInvoiceService
             }).ToList()
         };
 
-        _context.PurchaseInvoices.Add(purchaseInvoice);
-        _context.SaveChanges();
-
-        return Task.FromResult(new PurchaseInvoiceResponseDto
+        await _context.PurchaseInvoices.AddAsync(purchaseInvoice);
+        await _context.SaveChangesAsync();
+        
+        return new PurchaseInvoiceResponseDto
         {
             Id = purchaseInvoice.Id
-        });
+        };
     }
 }

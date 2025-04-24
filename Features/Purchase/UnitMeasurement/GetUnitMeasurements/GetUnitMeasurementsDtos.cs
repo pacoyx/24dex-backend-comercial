@@ -11,4 +11,5 @@ public record GetUnitMeasurementsComboResponseDto
 {
     public int Id { get; set; }
     public string CodeUm { get; set; } = string.Empty;    
+    public string Name { get; set; } = string.Empty;
 }

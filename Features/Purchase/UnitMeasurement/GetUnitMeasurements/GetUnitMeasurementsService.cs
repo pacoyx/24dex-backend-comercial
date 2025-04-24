@@ -33,7 +33,8 @@ public class GetUnitMeasurementsService : IGetUnitMeasurementsService
         .Select(x => new GetUnitMeasurementsComboResponseDto
         {
             Id = x.Id,
-            CodeUm = x.CodeUm
+            CodeUm = x.CodeUm,
+            Name = x.Name
         }).ToListAsync();
 
         return unitMeasurements;

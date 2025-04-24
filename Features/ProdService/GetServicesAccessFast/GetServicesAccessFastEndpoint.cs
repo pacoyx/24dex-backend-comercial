@@ -22,7 +22,7 @@ public static class GetServicesAccessFast
 
              return Results.Ok(response);
          })
-         .RequireAuthorization()
-         .CacheOutput("JWT_Aware_Cache");
+        //  .RequireAuthorization()
+         .CacheOutput();
     }
 }

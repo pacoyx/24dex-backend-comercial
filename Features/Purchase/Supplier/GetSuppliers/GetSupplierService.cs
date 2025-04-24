@@ -95,4 +95,24 @@ public class GetSupplierService : IGetSupplierService
 
         return response;
     }
+
+    public async Task<IEnumerable<GetSupplierSearchPatronResponseDto>> GetSuppliersByPatronAsync(string patronName)
+    {        
+        var suppliers = await _context.Suppliers
+            .AsNoTracking()
+            .Where(s => s.Name.Contains(patronName))
+            .OrderBy(s => s.Name)
+            .ToListAsync();
+
+        if (suppliers == null || !suppliers.Any())
+        {
+            Logger.LogWarning($"No suppliers found for patron name: {patronName}.");
+            return Enumerable.Empty<GetSupplierSearchPatronResponseDto>();
+        }
+
+        var response = suppliers.Select(s => new GetSupplierSearchPatronResponseDto(s.Id, s.Name)).ToList();
+
+        return response;
+
+    }
 }

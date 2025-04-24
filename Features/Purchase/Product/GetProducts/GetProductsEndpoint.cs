@@ -65,7 +65,32 @@ public static class GetProductsEndpoint
         .Produces<GetProductsResponsePaginatorDto>(StatusCodes.Status200OK)
         .Produces(StatusCodes.Status500InternalServerError);
 
+        group.MapGet("/search/byPatron/{productNamePatron}", async (string productNamePatron, IGetProductsService getProductsService) =>
+        {
+            if (string.IsNullOrWhiteSpace(productNamePatron))
+            {
+                return Results.BadRequest(new ApiResponse<IEnumerable<GetProductsByPatronResponseDto>>
+                {
+                    Success = false,
+                    StatusCode = StatusCodes.Status400BadRequest,
+                    Message = "Product name patron cannot be empty"
+                });
+            }
 
+            var products = await getProductsService.GetProductsByPatronAsync(productNamePatron);
+            var response = new ApiResponse<IEnumerable<GetProductsByPatronResponseDto>>
+            {
+                Success = true,
+                Data = products,
+                StatusCode = StatusCodes.Status200OK,
+                Message = "get products by patron"
+            };
+
+            return Results.Ok(response);
+        })
+        .WithName("GetProductsByPatron")
+        .Produces<IEnumerable<GetProductsByPatronResponseDto>>(StatusCodes.Status200OK)
+        .Produces(StatusCodes.Status500InternalServerError);
 
         return group;
     }

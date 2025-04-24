@@ -23,11 +23,15 @@ public static class ServicesDiExtensions
         services.AddScoped<IGetUnitMeasurementsService, GetUnitMeasurementsService>();
         services.AddScoped<IGetCategoriesProdService, GetCategoriesProdService>();
         services.AddScoped<ICreateCategoryProdService, CreateCategoryProdService>();
+        
         services.AddScoped<IGetProductsService, GetProductsService>();
         services.AddScoped<ICreateProductService, CreateProductService>();
+        services.AddScoped<IUpdateProductService, UpdateProductService>();
+
         services.AddScoped<ICreateSupplierService, CreateSupplierService>();
         services.AddScoped<IUpdateSupplierService, UpdateSupplierService>();
         services.AddScoped<IGetSupplierService, GetSupplierService>();
+        
         services.AddScoped<ICreatePurchaseInvoiceService, CreatePurchaseInvoiceService>();
         services.AddScoped<IGetPuchasesInvoiceService, GetPuchasesInvoiceService>();    
     }

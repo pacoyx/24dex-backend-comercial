@@ -77,5 +77,31 @@ public static class GetSupplierEndpoint
         .Produces<GetSupplierResponsePaginatorDto>(StatusCodes.Status200OK)
         .Produces(StatusCodes.Status404NotFound)
         .WithTags("Suppliers");
+
+
+        app.MapGet("/search/byPatron/{patronName}", async (IGetSupplierService getSupplierService, string patronName) =>
+        {
+
+            if (string.IsNullOrWhiteSpace(patronName))
+            {
+                return Results.BadRequest("The name is required");
+            }
+
+            var supplier = await getSupplierService.GetSuppliersByPatronAsync(patronName);
+            var response = new ApiResponse<IEnumerable<GetSupplierSearchPatronResponseDto>>
+            {
+                Success = true,
+                Data = supplier,
+                StatusCode = StatusCodes.Status200OK,
+                Message = "get suppliers by patron"
+            };
+
+            return Results.Ok(response);
+
+        })
+        .WithName("GetSuppliersByPatron")
+        .Produces<GetSupplierSearchPatronResponseDto>(StatusCodes.Status200OK)
+        .Produces(StatusCodes.Status404NotFound)
+        .WithTags("Suppliers");
     }
 }

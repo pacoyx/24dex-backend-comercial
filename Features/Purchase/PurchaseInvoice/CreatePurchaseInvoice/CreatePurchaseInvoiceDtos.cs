@@ -9,14 +9,28 @@ public record PurchaseInvoiceRequestDto
     public string TypePayment { get; set; } = string.Empty; // contado / credito    
     public int DaysCredit { get; set; } = 0; // Number of days for credit payment
     public string PaymentMethod { get; set; } = string.Empty; // e.g., "Cash", "Credit Card"
+    public string CurrencyId { get; set; } = "";    
+    public decimal ExchangeRate { get; set; } = 1.0m;     
+    public string Comments { get; set; } = "";    
+    public decimal Subtotal { get; set; }    
+    public decimal Igv { get; set; }
     public decimal Total { get; set; }
-    public ICollection<PurchaseInvoiceDetailsDto>? PurchaseInvoiceDetails { get; set; }
+    public ICollection<PurchaseInvoiceDetailsRequestDto>? PurchaseInvoiceDetails { get; set; }
 }
 
 public record PurchaseInvoiceResponseDto
 {
     public int Id { get; set; }
 }
+
+public record PurchaseInvoiceDetailsRequestDto
+{
+    public int ProductId { get; set; }
+    public decimal Quantity { get; set; }
+    public decimal Price { get; set; }
+    public decimal Total { get; set; }    
+}
+
 
 public record PurchaseInvoiceDetailsDto
 {

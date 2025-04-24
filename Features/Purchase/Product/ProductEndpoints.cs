@@ -6,7 +6,7 @@ public static class ProductEndpoints
 
         group.MapGetProducts();
         group.MapCreateProduct();
-        // group.MapUpdateProduct();
+        group.MapUpdateProduct();
         // group.MapDeleteProduct();
 
         return group;

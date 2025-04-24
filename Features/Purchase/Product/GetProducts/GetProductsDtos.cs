@@ -14,3 +14,12 @@ public record GetProductsResponseDto
     public int CategoryProdId { get; set; }
     public string Status { get; set; } = "A";
 }
+
+public record GetProductsByPatronResponseDto
+{
+    public int Id { get; set; }
+    public string Name { get; set; } = string.Empty; 
+    public decimal Price { get; set; } 
+    public int UnitMeasurementId { get; set; }        
+    public string UnitMeasurementDescription { get; set; } = string.Empty;
+}

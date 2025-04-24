@@ -1,6 +1,6 @@
 public static class CreateProductEndpoint
 {
-    public static RouteGroupBuilder MapCreateProduct(this RouteGroupBuilder group)
+    public static IEndpointRouteBuilder MapCreateProduct(this IEndpointRouteBuilder group)
     {
         group.MapPost("/", async (CreateProductRequestDto request, ICreateProductService service) =>
         {

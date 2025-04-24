@@ -97,4 +97,24 @@ public class GetProductsService : IGetProductsService
         return responsePaginator;
 
     }
+
+    public async Task<IEnumerable<GetProductsByPatronResponseDto>> GetProductsByPatronAsync(string productNamePatron)
+    {
+        var products = await _context.Products
+            .AsNoTracking()
+            .Where(p => p.Name.Contains(productNamePatron))
+            .OrderBy(p => p.Name)
+            .Select(p => new GetProductsByPatronResponseDto
+            {
+                Id = p.Id,
+                Name = p.Name,
+                Price = p.Price,
+                UnitMeasurementId = p.UnitMeasurementId,
+                UnitMeasurementDescription = p.UnitMeasurement!.Abbreviation
+            })
+            .ToListAsync();
+
+        return products;
+    }
+
 }

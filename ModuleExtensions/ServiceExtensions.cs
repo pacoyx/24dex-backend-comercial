@@ -22,7 +22,7 @@ public static class ServiceExtensions
             options =>
             {
                 // Configuración global del caché (opcional)
-                options.DefaultExpirationTimeSpan = TimeSpan.FromMinutes(10); // Expiración por defecto
+                options.DefaultExpirationTimeSpan = TimeSpan.FromMinutes(60); // Expiración por defecto
                                                                               // options.SizeLimit = 100; // Límite de tamaño del caché (en MB)
 
 
@@ -33,12 +33,12 @@ public static class ServiceExtensions
                 // });
 
 
-                options.AddPolicy("JWT_Aware_Cache", builder =>
-                {
-                    builder.Expire(TimeSpan.FromMinutes(10))
-                            .SetVaryByQuery("*")
-                            .AddPolicy<JwtCachePolicy>(); // 👈 Política personalizada
-                });
+                // options.AddPolicy("JWT_Aware_Cache", builder =>
+                // {
+                //     builder.Expire(TimeSpan.FromMinutes(10))
+                //             .SetVaryByQuery("*")
+                //             .AddPolicy<JwtCachePolicy>(); // 👈 Política personalizada
+                // });
 
             });
 

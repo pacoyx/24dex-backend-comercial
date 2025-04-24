@@ -16,4 +16,8 @@ public class Product
     public int CategoryProdId { get; set; }
     [MaxLength(1)]
     public string Status { get; set; } = "A";
+
+    //navegacion properties
+    public virtual UnitMeasurement? UnitMeasurement { get; set; }
+    public virtual CategoryProd? CategoryProduct { get; set; } = null!;
 }
