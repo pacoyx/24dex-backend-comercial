@@ -1,6 +1,6 @@
 public static class GetProductsEndpoint
 {
-    public static RouteGroupBuilder MapGetProducts(this RouteGroupBuilder group)
+    public static IEndpointRouteBuilder MapGetProducts(this IEndpointRouteBuilder group)
     {
         group.MapGet("/", async (IGetProductsService getProductsService) =>
         {

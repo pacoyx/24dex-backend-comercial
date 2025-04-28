@@ -21,8 +21,8 @@ public static class GetUnitMeasurementsEndpoint
         .Produces<ApiResponse<IEnumerable<GetUnitMeasurementsResponseDto>>>(StatusCodes.Status200OK)
         .Produces<ApiResponse<IEnumerable<GetUnitMeasurementsResponseDto>>>(StatusCodes.Status400BadRequest)
         .Produces<ApiResponse<IEnumerable<GetUnitMeasurementsResponseDto>>>(StatusCodes.Status500InternalServerError)
-        .RequireAuthorization()
-        .CacheOutput("JWT_Aware_Cache");
+        // .RequireAuthorization()
+        .CacheOutput();
     }
 
     public static RouteHandlerBuilder MapGetUnitMeasurementsShort(this IEndpointRouteBuilder app)
@@ -47,6 +47,6 @@ public static class GetUnitMeasurementsEndpoint
         .Produces<ApiResponse<IEnumerable<GetUnitMeasurementsResponseDto>>>(StatusCodes.Status400BadRequest)
         .Produces<ApiResponse<IEnumerable<GetUnitMeasurementsResponseDto>>>(StatusCodes.Status500InternalServerError)
         .RequireAuthorization()
-        .CacheOutput("JWT_Aware_Cache");
+        .CacheOutput();
     }
 }

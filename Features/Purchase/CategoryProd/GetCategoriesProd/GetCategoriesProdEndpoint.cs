@@ -14,8 +14,9 @@ public static class GetCategoriesProdEndpoint
             };
 
             return Results.Ok(response);
-        })
+        })        
         .WithName("GetCategoriesProd")
+        .CacheOutput()
         .Produces<List<GetCategoriesProdResponse>>(StatusCodes.Status200OK)
         .Produces(StatusCodes.Status500InternalServerError);
 

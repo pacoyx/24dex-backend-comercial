@@ -34,5 +34,6 @@ public static class ServicesDiExtensions
         
         services.AddScoped<ICreatePurchaseInvoiceService, CreatePurchaseInvoiceService>();
         services.AddScoped<IGetPuchasesInvoiceService, GetPuchasesInvoiceService>();    
+        services.AddScoped<IGetInvoicesByParamsService, GetInvoicesByParamsService>();
     }
 }

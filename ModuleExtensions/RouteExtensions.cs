@@ -28,5 +28,6 @@ public static class RouteExtensions
         app.MapProduct();
         app.MapSupplier();
         app.MapPurchaseInvoice();
+        app.MapPurchaseReports();
     }
 }
