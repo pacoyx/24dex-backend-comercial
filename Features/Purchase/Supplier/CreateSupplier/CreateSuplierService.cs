@@ -16,12 +16,12 @@ public class CreateSupplierService : ICreateSupplierService
         {
             Name = request.Name,
             Ruc = request.Ruc,
-            Address = request.Address,
-            Phone = request.Phone,
-            Email = request.Email,
-            Status = request.Status,
-            ContactName = request.ContactName,
-            ContactPhone = request.ContactPhone
+            Address = request.Address ?? string.Empty,
+            Phone = request.Phone ?? string.Empty,
+            Email = request.Email ?? string.Empty,
+            Status = request.Status ?? "A", 
+            ContactName = request.ContactName ?? string.Empty,
+            ContactPhone = request.ContactPhone ?? string.Empty
         };
 
         _context.Suppliers.Add(supplier);

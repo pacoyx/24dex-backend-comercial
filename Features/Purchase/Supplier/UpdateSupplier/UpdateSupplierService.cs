@@ -23,12 +23,12 @@ public class UpdateSupplierService : IUpdateSupplierService
 
         supplier.Name = request.Name;
         supplier.Ruc = request.Ruc;
-        supplier.Address = request.Address;
-        supplier.Phone = request.Phone;
-        supplier.Email = request.Email;
-        supplier.Status = request.Status;
-        supplier.ContactName = request.ContactName;
-        supplier.ContactPhone = request.ContactPhone;
+        supplier.Address = request.Address ?? string.Empty;
+        supplier.Phone = request.Phone ?? string.Empty;
+        supplier.Email = request.Email ?? string.Empty;
+        supplier.Status = request.Status ?? "A"; 
+        supplier.ContactName = request.ContactName ?? string.Empty;
+        supplier.ContactPhone = request.ContactPhone ?? string.Empty; 
 
         _context.SaveChanges();
 
