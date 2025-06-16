@@ -23,7 +23,7 @@ public static class UpdateWorkGuidePickupDateEndpoint
             }
 
             DateTime fechaProceso = TimeZoneInfo.ConvertTime(DateTime.Now, TimeZoneInfo.FindSystemTimeZoneById("SA Pacific Standard Time"));
-            var workGuideDetails = await db.WorkGuideDetails.Where(wgd => wgd.WorkGuideMainId == id).ToListAsync();
+            var workGuideDetails = await db.WorkGuideDetails.Where(wgd => wgd.WorkGuideMainId == id && wgd.EstadoSituacion == "P").ToListAsync();
             foreach (var detail in workGuideDetails)
             {
                 detail.FechaRecojo = fechaProceso;
