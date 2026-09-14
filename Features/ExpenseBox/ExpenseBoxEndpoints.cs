@@ -8,7 +8,8 @@ public static class ExpenseBoxEndpoints
         group.MapCreateExpenseBox();
         group.MapGetExpenseBox();
         group.MapGetExpensesBox();
+        group.MapGetExpensesBoxByDate();
         group.MapDeleteExpenseBox();
-        group.MapUpdateExpenseBox();        
+        group.MapUpdateExpenseBox();
     }
 }

@@ -6,5 +6,7 @@ public static class ReportEndpoints
         group.MapWorkGuideByDate();
         group.MapWorkGuideByCustomers();
         group.MapDashboardCash();
+        group.MapDashboardCashWeek();
+        group.MapDashboardCashMonth();
     }
 }

@@ -30,7 +30,8 @@ public static class GetExpensesBoxEndpoint
                 x.FechaGasto,
                 x.Importe,
                 x.DetallesEgreso,
-                x.EstadoRegistro
+                x.EstadoRegistro,
+                x.UsuarioRegistro
             ))
             .ToListAsync();
 

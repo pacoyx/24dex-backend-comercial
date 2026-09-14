@@ -12,12 +12,24 @@ public static class CreateBranchSalesEndpoint
             {
                 Description = createBranchSalesDto.Description,
                 Address = createBranchSalesDto.Address,
-                Status = createBranchSalesDto.Status
+                Status = createBranchSalesDto.Status,
+                Code =  createBranchSalesDto.Code,
+                CreatedAt = DateTime.Now,
+                DefaultPrinterId =  createBranchSalesDto.DefaultPrinterId
             };
 
             await context.BranchSales.AddAsync(branchSale);
             await context.SaveChangesAsync();
-            return Results.Ok(branchSale);
+
+            var response = new ApiResponse<string>
+            {
+                Data = branchSale.Id.ToString(),
+                Message = "Sucursal creada",
+                StatusCode = StatusCodes.Status201Created,
+                Success = true
+            };
+
+            return Results.Ok(response);
         });
     }
 }

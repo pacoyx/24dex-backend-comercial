@@ -1,3 +1,4 @@
+using _24dex_backend_comercial.Features.PrinterHub;
 using Microsoft.AspNetCore.Builder;
 
 public static class RouteExtensions
@@ -29,5 +30,19 @@ public static class RouteExtensions
         app.MapSupplier();
         app.MapPurchaseInvoice();
         app.MapPurchaseReports();
+        app.MapPrinter();
+        app.MapBrachSalesUser();
+        app.MapPrintingAdmin();
+        app.MapDiscoverPrinters();
+        app.MapGetPrintJob();
+        app.MapCompletePrintJob();
+        app.MapErrorPrintJob();
+        app.MapGetPendingPrintQueues();
+        app.MapCancelPrintQueue();
+        app.MapReprintPrintQueue();
+        app.MapWorkerNode();
+        app.MapInvoices();
+        app.MapAccountsReceivable();
+        app.MapCollectionSheets();
     }
 }

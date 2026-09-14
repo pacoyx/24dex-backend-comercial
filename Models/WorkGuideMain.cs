@@ -1,5 +1,7 @@
 using System.ComponentModel.DataAnnotations.Schema;
 using System.ComponentModel.DataAnnotations;
+using DexterCompany.Models;
+
 public class WorkGuideMain
 {
     public int Id { get; set; }
@@ -35,5 +37,7 @@ public class WorkGuideMain
     public int AlertMsgId { get; set; }
     public AlertMsg? AlertMsg { get; set; }
     public string TipoPagoCancelacion { get; set; } = ""; // E: Efectivo, T: Tarjeta, D: Deposito, QR: Codigo QR, SP: Sin Pago
+    public ICollection<PrintQueue> PrintQueues { get; set; }
+    = new List<PrintQueue>();
 
 }

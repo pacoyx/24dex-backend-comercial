@@ -2,10 +2,12 @@
 
 using System.Text;
 using _24dex_backend_comercial;
+using _24dex_backend_comercial.Features.PrinterHub;
 using Dls.Erp.Transversal.Logging;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
+using Microsoft.OpenApi.Models;
 using Newtonsoft.Json;
 
 using OpenTelemetry.Resources;
@@ -43,6 +45,7 @@ public static class ServiceExtensions
             });
 
         services.Configure<JwtSettings>(configuration.GetSection("Jwt"));
+        services.Configure<InvoiceSettings>(configuration.GetSection("Invoice"));
 
         // Add services to the container.
         services.AddEndpointsApiExplorer();
@@ -52,9 +55,43 @@ public static class ServiceExtensions
             // Personalizar schemaId para evitar conflictos
             c.CustomSchemaIds(type => type.FullName!.Replace("+", "."));
 
+            // Boton "Authorize" para pegar el JWT (sin esto, Swagger UI no sabe que existe auth Bearer)
+            c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
+            {
+                Description = "JWT Authorization header usando el esquema Bearer. Ejemplo: \"Bearer {token}\"",
+                Name = "Authorization",
+                In = ParameterLocation.Header,
+                Type = SecuritySchemeType.ApiKey,
+                Scheme = "Bearer"
+            });
+            c.AddSecurityRequirement(new OpenApiSecurityRequirement
+            {
+                {
+                    new OpenApiSecurityScheme
+                    {
+                        Reference = new OpenApiReference
+                        {
+                            Type = ReferenceType.SecurityScheme,
+                            Id = "Bearer"
+                        }
+                    },
+                    Array.Empty<string>()
+                }
+            });
 
-            // Definir tags manualmente
-            c.TagActionsBy(api => new[] { api.GroupName }); // Agrupa por el nombre del grupo
+
+            // Definir tags manualmente: api.GroupName siempre es null porque ningún endpoint
+            // llama a WithGroupName(...) (MapGroup no lo setea solo). Agrupamos por el segundo
+            // segmento de la ruta (api/{modulo}/...) en su lugar.
+            c.TagActionsBy(api =>
+            {
+                var segments = api.RelativePath?.Split('/', StringSplitOptions.RemoveEmptyEntries);
+                var tag = segments is { Length: > 1 } ? segments[1] : "General";
+                // refresh-token vive en /api/refresh-token, sin el prefijo /api/login/... que comparten
+                // el resto de los endpoints de autenticación, así que lo unimos a mano.
+                if (tag == "refresh-token") tag = "login";
+                return new[] { tag };
+            });
             c.DocInclusionPredicate((name, api) => true); // Incluir todos los endpoints
 
             // Configurar Swagger para reconocer los grupos de endpoints
@@ -120,7 +157,8 @@ public static class ServiceExtensions
         // builder.Services.AddWatchDog(builder.Configuration);
         // builder.Services.AddOpenTelemetry().UseAzureMonitor();
         services.AddHealthCheck(configuration);
-
+        services.AddSignalR();
+        services.AddSingleton<PrinterRegistry>();
 
 
         // Configurar OpenTelemetry

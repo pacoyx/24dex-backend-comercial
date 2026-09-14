@@ -1,5 +1,7 @@
 
 using System.Text.Json;
+using _24dex_backend_comercial.Features.WorkGuideMain.CreateWorkGuideMain;
+using DexterCompany.Models;
 using Microsoft.EntityFrameworkCore;
 
 
@@ -7,7 +9,7 @@ public static class CreateWorkGuideMainEndpoint
 {
     public static void MapCreateWorkGuideMain(this IEndpointRouteBuilder app)
     {
-        app.MapPost("/", async (WgmCreateDto wgmCreateDto, RecepcionDbContext db, IAppLogger<string> logger) =>
+        app.MapPost("/", async (WgmCreateDto wgmCreateDto, RecepcionDbContext db, IAppLogger<string> logger,IPrintNotifier printNotifier) =>
         {
 
             if (wgmCreateDto == null)
@@ -138,15 +140,33 @@ public static class CreateWorkGuideMainEndpoint
 
             await db.WorkGuideMains.AddAsync(workGuideMain);
 
-            // actualiza el correlativo de la guia de servicio            
-            if (numbersDocument != null)
+            // actualiza el correlativo de la guia de servicio
+            numbersDocument.NumberDoc = numbersDocument.NumberDoc + 1;
+            db.NumbersDocuments.Update(numbersDocument);
+            await db.SaveChangesAsync();
+            
+            
+            //envia a la cola de impresion
+            var branch = await db.BranchSales.SingleOrDefaultAsync(x => x.Id == wgmCreateDto.BranchStoreId);
+            if (branch == null)
             {
-                numbersDocument.NumberDoc = numbersDocument.NumberDoc + 1;
-                db.NumbersDocuments.Update(numbersDocument);
+                return Results.Problem("No tiene impresora configurada por defecto esta sucursal", "CreateWorkGuideMainEndpoint");
             }
 
+            var printQueue = new PrintQueue()
+            {
+                WorkGuideId = workGuideMain.Id,
+                PrinterId = branch.DefaultPrinterId,
+                Status = PrintStatus.Pending,
+                CreatedAt = DateTime.UtcNow,
+                DocumentType = numbersDocument.TypeDoc,
+            };
+            db.PrintQueues.Add(printQueue);
             await db.SaveChangesAsync();
-
+            await printNotifier.NotifyAsync(branch.DefaultPrinterId, printQueue.Id);
+            
+            
+            
             var resp = new WgmCreateResponseDto(            
                  workGuideMain.Id,
                  numbersDocument!.TypeDoc,
@@ -155,7 +175,6 @@ public static class CreateWorkGuideMainEndpoint
                  workGuideMain.FechaOperacion,
                  workGuideMain.FechaHoraEntrega
             );
-
 
             var dataGuiaLog = new
             {
@@ -178,8 +197,6 @@ public static class CreateWorkGuideMainEndpoint
             var guiaString = JsonSerializer.Serialize(dataGuiaLog);
             logger.LogMessageWithEventAndId($"Guia creada por {user!.UserName} ", 1001, identifierLog, guiaString);
 
-
-
             var response = new ApiResponse<WgmCreateResponseDto>
             {
                 Data = resp,
@@ -187,7 +204,6 @@ public static class CreateWorkGuideMainEndpoint
                 Message = "",
                 StatusCode = 200
             };
-
 
             return Results.Ok(response);
         });

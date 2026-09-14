@@ -1,3 +1,6 @@
+using _24dex_backend_comercial.Features.PrinterHub;
+using _24dex_backend_comercial.Features.WorkGuideMain.CreateWorkGuideMain;
+
 public static class ServicesDiExtensions
 {
 
@@ -35,5 +38,8 @@ public static class ServicesDiExtensions
         services.AddScoped<ICreatePurchaseInvoiceService, CreatePurchaseInvoiceService>();
         services.AddScoped<IGetPuchasesInvoiceService, GetPuchasesInvoiceService>();    
         services.AddScoped<IGetInvoicesByParamsService, GetInvoicesByParamsService>();
+        
+        services.AddScoped<IPrintNotifier, SignalRPrintNotifier>();
+        services.AddSingleton<PrinterRegistry>();
     }
 }

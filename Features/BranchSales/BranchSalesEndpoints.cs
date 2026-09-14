@@ -6,5 +6,7 @@ public static class BranchSalesEndpoints
         group.MapGetBranchSales();
         group.MapGetBranchesSales();
         group.MapCreateBranchSales();
+        group.MapUpdateBranchSales();
+        group.MapDeleteBranchSales();
     }
 }

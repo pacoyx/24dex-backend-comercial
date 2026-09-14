@@ -19,6 +19,8 @@ public static class CreateExpenseBoxEndpoint
 
             DateTime fechaOperacion = TimeZoneInfo.ConvertTime(DateTime.Now, TimeZoneInfo.FindSystemTimeZoneById("SA Pacific Standard Time"));
 
+            var usuarioActual = await context.Users.FindAsync(dto.UserId);
+
             var expenseBox = new ExpenseBox
             {
                 CategoryGasto = dto.CategoriaGasto,
@@ -28,6 +30,7 @@ public static class CreateExpenseBoxEndpoint
                 DetallesEgreso = dto.DetallesEgreso,
                 EstadoRegistro = dto.EstadoRegistro,
                 UserId = dto.UserId,
+                UsuarioRegistro = usuarioActual?.Name ?? "",
                 CashBoxMainId = cashBoxMain.Id
             };
             await context.ExpenseBoxMains.AddAsync(expenseBox);

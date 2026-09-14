@@ -9,7 +9,8 @@ public class ExpenseBox
     [Column(TypeName = "decimal(18,2)")]
     public decimal Importe { get; set; }
     public string DetallesEgreso { get; set; } = "";
-    public string EstadoRegistro { get; set; } = "";    
+    public string EstadoRegistro { get; set; } = "";
     public int UserId { get; set; }
+    public string UsuarioRegistro { get; set; } = "";
     public int CashBoxMainId { get; set; }
 }

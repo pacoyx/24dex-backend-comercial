@@ -1,3 +1,4 @@
+using _24dex_backend_comercial.Features.PrinterHub;
 using HealthChecks.UI.Client;
 using FluentValidation.AspNetCore;
 using FluentValidation;
@@ -52,6 +53,7 @@ app.MapHealthChecks("/health", new Microsoft.AspNetCore.Diagnostics.HealthChecks
     Predicate = _ => true,
     ResponseWriter = UIResponseWriter.WriteHealthCheckUIResponse
 });
+app.MapHub<PrintHub>("/printhub");
 
 // secutity headers
 // app.RemoveInsecureHeaders();

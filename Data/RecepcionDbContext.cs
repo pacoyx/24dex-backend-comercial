@@ -47,7 +47,53 @@ public class RecepcionDbContext : DbContext
     public DbSet<PurchaseInvoiceDetails> PurchaseInvoiceDetails { get; set; } 
     public DbSet<Supplier> Suppliers { get; set; }
     
+    
+    public DbSet<Printer> Printers { get; set; }
+    public DbSet<PrintQueue> PrintQueues { get; set; }
+    public DbSet<WorkerNode> WorkerNodes { get; set; }
 
+    public DbSet<Invoice> Invoices { get; set; }
+    public DbSet<InvoiceDetail> InvoiceDetails { get; set; }
+    public DbSet<InvoicePayment> InvoicePayments { get; set; }
+    public DbSet<PaymentMethod> PaymentMethods { get; set; }
+    public DbSet<CollectionSheet> CollectionSheets { get; set; }
+
+
+    protected override void OnModelCreating(ModelBuilder modelBuilder)
+    {
+        modelBuilder.Entity<BranchSales>()
+            .HasMany(x => x.WorkerNodes)
+            .WithOne(x => x.Branch)
+            .HasForeignKey(x => x.BranchId);
+
+        modelBuilder.Entity<WorkerNode>()
+            .HasMany(x => x.Printers)
+            .WithOne(x => x.WorkerNode)
+            .HasForeignKey(x => x.WorkerNodeId);
+
+        modelBuilder.Entity<PrintQueue>()
+            .HasOne(x => x.Printer)
+            .WithMany()
+            .HasForeignKey(x => x.PrinterId);
+
+        modelBuilder.Entity<WorkGuideMain>()
+            .HasMany(x => x.PrintQueues)
+            .WithOne(x => x.WorkGuideMain)
+            .HasForeignKey(x => x.WorkGuideId);
+        
+        modelBuilder.Entity<PrintQueue>()
+            .HasIndex(x => new
+            {
+                x.PrinterId,
+                x.Status
+            });
+
+        modelBuilder.ApplyConfiguration(new InvoiceConfiguration());
+        modelBuilder.ApplyConfiguration(new InvoiceDetailConfiguration());
+        modelBuilder.ApplyConfiguration(new InvoicePaymentConfiguration());
+        modelBuilder.ApplyConfiguration(new PaymentMethodConfiguration());
+        modelBuilder.ApplyConfiguration(new CollectionSheetConfiguration());
+    }
 
     public override int SaveChanges()
     {

@@ -5,5 +5,6 @@ public record GetExpensesBoxDtoResponse(
  DateTime FechaGasto,
  decimal Importe,
  string DetallesEgreso,
- string EstadoRegistro
+ string EstadoRegistro,
+ string UsuarioRegistro
     );
