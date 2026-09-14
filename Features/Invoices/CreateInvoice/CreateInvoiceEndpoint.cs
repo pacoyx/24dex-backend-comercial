@@ -83,6 +83,7 @@ public static class CreateInvoiceEndpoint
             };
 
             return Results.Created($"/api/invoices/{invoice.Id}", response);
-        });
+        })
+        .RequireAuthorization();
     }
 }

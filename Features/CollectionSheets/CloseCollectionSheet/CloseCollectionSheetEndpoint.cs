@@ -28,6 +28,7 @@ public static class CloseCollectionSheetEndpoint
                 StatusCode = StatusCodes.Status200OK,
                 Data = new { sheet.Id, sheet.Status, sheet.CloseDate }
             });
-        });
+        })
+        .RequireAuthorization();
     }
 }

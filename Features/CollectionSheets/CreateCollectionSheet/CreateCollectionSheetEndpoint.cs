@@ -46,6 +46,7 @@ public static class CreateCollectionSheetEndpoint
                 StatusCode = StatusCodes.Status201Created,
                 Data = response
             });
-        });
+        })
+        .RequireAuthorization();
     }
 }

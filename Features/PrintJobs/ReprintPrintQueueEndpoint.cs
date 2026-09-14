@@ -37,6 +37,7 @@ public static class ReprintPrintQueueEndpoint
                     queue.Id);
 
                 return Results.Ok();
-            });
+            })
+            .RequireAuthorization();
     }
 }

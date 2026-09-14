@@ -76,6 +76,7 @@ public static class AddPaymentToCollectionSheetEndpoint
                 StatusCode = StatusCodes.Status200OK,
                 Data = response
             });
-        });
+        })
+        .RequireAuthorization();
     }
 }

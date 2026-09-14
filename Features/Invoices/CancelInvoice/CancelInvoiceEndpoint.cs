@@ -32,6 +32,7 @@ public static class CancelInvoiceEndpoint
                 StatusCode = StatusCodes.Status200OK,
                 Data = new { invoice.Id, invoice.Status }
             });
-        });
+        })
+        .RequireAuthorization();
     }
 }

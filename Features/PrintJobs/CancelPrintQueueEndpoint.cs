@@ -27,6 +27,7 @@ public static class CancelPrintQueueEndpoint
                 await db.SaveChangesAsync();
 
                 return Results.Ok();
-            });
+            })
+            .RequireAuthorization();
     }
 }

@@ -44,5 +44,7 @@ public static class RouteExtensions
         app.MapInvoices();
         app.MapAccountsReceivable();
         app.MapCollectionSheets();
+        app.MapPaymentMethod();
+        app.MapTypeDocument();
     }
 }
