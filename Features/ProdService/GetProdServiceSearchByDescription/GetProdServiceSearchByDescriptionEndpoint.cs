@@ -10,12 +10,16 @@ public static class GetProdServiceSearchByDescriptionEndpoint
                                          .AsNoTracking()
                                          .Where(ps => ps.Name.Contains(description))
                                          .OrderBy(ps => ps.Name)
-                                         .Select(ps => new
-                                         {
-                                             ps.Id,
-                                             ps.Name,
-                                             ps.Price
-                                         })
+                                         .Join(context.CatServices,
+                                             ps => ps.CatServiceId,
+                                             cs => cs.Id,
+                                             (ps, cs) => new
+                                             {
+                                                 ps.Id,
+                                                 ps.Name,
+                                                 ps.Price,
+                                                 CategoryDescription = cs.Name
+                                             })
                                          .ToListAsync();
              return Results.Ok(prodServices);
          });

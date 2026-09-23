@@ -66,12 +66,14 @@ public static class CreateWorkGuideMainEndpoint
                 Acuenta = wgmCreateDto.Acuenta,
                 Saldo = wgmCreateDto.Saldo,
                 CustomerId = wgmCreateDto.CustomerId,
+                BranchId = wgmCreateDto.BranchStoreId,
 
                 EstadoPago = wgmCreateDto.EstadoPago,
                 FechaPago = wgmCreateDto.EstadoPago == "PA" ? fechaOperacion : null,
                 EstadoRegistro = wgmCreateDto.EstadoRegistro,
                 EstadoSituacion = wgmCreateDto.EstadoSituacion,
                 FechaRecojo = null,
+                UserId =  wgmCreateDto.UserId,
 
                 WorkGuideDetails = wgmCreateDto.WorkGuideDetailsDTO.Select(x => new WorkGuideDetail
                 {
@@ -160,6 +162,7 @@ public static class CreateWorkGuideMainEndpoint
                 Status = PrintStatus.Pending,
                 CreatedAt = DateTime.UtcNow,
                 DocumentType = numbersDocument.TypeDoc,
+                PrintCopy = wgmCreateDto.PrintCopy,
             };
             db.PrintQueues.Add(printQueue);
             await db.SaveChangesAsync();
@@ -167,13 +170,14 @@ public static class CreateWorkGuideMainEndpoint
             
             
             
-            var resp = new WgmCreateResponseDto(            
+            var resp = new WgmCreateResponseDto(
                  workGuideMain.Id,
                  numbersDocument!.TypeDoc,
                  workGuideMain.SerieGuia,
                  workGuideMain.NumeroGuia,
                  workGuideMain.FechaOperacion,
-                 workGuideMain.FechaHoraEntrega
+                 workGuideMain.FechaHoraEntrega,
+                 workGuideMain.WorkGuideDetails.Select(d => new WgdCreateResponseDto(d.Id, d.ProductId, d.Identificador))
             );
 
             var dataGuiaLog = new

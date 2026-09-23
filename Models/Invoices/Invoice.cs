@@ -13,6 +13,10 @@ public class Invoice
 
     public string Numero { get; set; } = string.Empty;
 
+    public string CurrencyId { get; set; } = "PEN";
+
+    public decimal ExchangeRate { get; set; } = 1.0m;
+
     public DateTime IssueDate { get; set; }
 
     public DateTime DueDate { get; set; }

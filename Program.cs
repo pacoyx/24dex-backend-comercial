@@ -4,7 +4,7 @@ using FluentValidation.AspNetCore;
 using FluentValidation;
 using Serilog;
 
-
+QuestPDF.Settings.License = QuestPDF.Infrastructure.LicenseType.Community;
 
 var currentAssembly = typeof(Program).Assembly;
 var builder = WebApplication.CreateBuilder(args);

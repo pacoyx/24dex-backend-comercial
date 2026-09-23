@@ -32,9 +32,15 @@ public class PurchaseInvoice
     public decimal Subtotal { get; set; }
     [Column(TypeName = "decimal(18,2)")]
     public decimal Igv { get; set; }
+    [Column(TypeName = "decimal(18,2)")]
+    public decimal AmountPaid { get; set; }
+    [Column(TypeName = "decimal(18,2)")]
+    public decimal Balance { get; set; }
+    public PurchaseInvoiceStatus PaymentStatus { get; set; } = PurchaseInvoiceStatus.Pending;
 
 
     // Navigation properties
     public ICollection<PurchaseInvoiceDetails>? PurchaseInvoiceDetails { get; set; }
     public Supplier? Supplier { get; set; }
+    public ICollection<PurchaseInvoicePayment> Payments { get; set; } = new List<PurchaseInvoicePayment>();
 }

@@ -37,5 +37,8 @@ public record PrintJobResponse(
     string Observaciones,
     string MensajeAlertas,
     int PrinterId,
+    string Usuario,
+    bool EsDelivery,
+    bool ImprimirCopia,
     List<PrintJobDetailResponse> Detalles
 );

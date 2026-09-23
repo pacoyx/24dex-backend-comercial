@@ -4,6 +4,8 @@ public record InvoiceSummaryResponse(
     string CustomerName,
     string Serie,
     string Numero,
+    string CurrencyId,
+    decimal ExchangeRate,
     DateTime IssueDate,
     DateTime DueDate,
     decimal Total,

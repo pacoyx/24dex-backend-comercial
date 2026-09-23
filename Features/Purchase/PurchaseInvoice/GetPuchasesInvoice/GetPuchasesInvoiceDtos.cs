@@ -13,6 +13,9 @@ public record GetPurchaseInvoiceResponseDto
     public string PaymentMethod { get; set; } = string.Empty;
     public decimal Total { get; set; }
     public string Status { get; set; } = string.Empty;
+    public decimal AmountPaid { get; set; }
+    public decimal Balance { get; set; }
+    public PurchaseInvoiceStatus PaymentStatus { get; set; }
     public DateTime PurchaseDate { get; set; } = DateTime.Now;
     public int SupplierId { get; set; }
     public string SupplierName { get; set; } = string.Empty;
@@ -31,16 +34,20 @@ public record GetPurchaseInvoiceByIdResponseDto
     public string PaymentMethod { get; set; } = string.Empty;
     public decimal Total { get; set; }
     public string Status { get; set; } = string.Empty;
+    public decimal AmountPaid { get; set; }
+    public decimal Balance { get; set; }
+    public PurchaseInvoiceStatus PaymentStatus { get; set; }
     public DateTime PurchaseDate { get; set; } = DateTime.Now;
     public int SupplierId { get; set; }
     public string SupplierName { get; set; } = string.Empty;
     public string SupplierRuc { get; set; } = string.Empty;
     public decimal Subtotal { get; set; }
-    public decimal Igv { get; set; }    
+    public decimal Igv { get; set; }
     public string CurrencyId { get; set; } = "";
     public decimal ExchangeRate { get; set; }
     public string Comments { get; set; } = "";
     public ICollection<GetPurchaseInvoiceByIdDetailsResponseDto> PurchaseInvoiceDetails { get; set; } = new Collection<GetPurchaseInvoiceByIdDetailsResponseDto>();
+    public ICollection<RegisterPurchasePaymentResponseDto> Payments { get; set; } = new Collection<RegisterPurchasePaymentResponseDto>();
 }
 
 

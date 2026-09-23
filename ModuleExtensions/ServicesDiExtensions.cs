@@ -36,10 +36,15 @@ public static class ServicesDiExtensions
         services.AddScoped<IGetSupplierService, GetSupplierService>();
         
         services.AddScoped<ICreatePurchaseInvoiceService, CreatePurchaseInvoiceService>();
-        services.AddScoped<IGetPuchasesInvoiceService, GetPuchasesInvoiceService>();    
+        services.AddScoped<IGetPuchasesInvoiceService, GetPuchasesInvoiceService>();
         services.AddScoped<IGetInvoicesByParamsService, GetInvoicesByParamsService>();
+        services.AddScoped<IRegisterPurchasePaymentService, RegisterPurchasePaymentService>();
+        services.AddScoped<IGetPurchasePaymentsService, GetPurchasePaymentsService>();
+        services.AddScoped<ICancelPurchaseInvoiceService, CancelPurchaseInvoiceService>();
         
         services.AddScoped<IPrintNotifier, SignalRPrintNotifier>();
         services.AddSingleton<PrinterRegistry>();
+
+        services.AddScoped<ISalesRegisterReportService, SalesRegisterReportService>();
     }
 }

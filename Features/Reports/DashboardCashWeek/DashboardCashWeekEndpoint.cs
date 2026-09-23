@@ -1,3 +1,4 @@
+using System.Globalization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -17,9 +18,41 @@ public static class DashboardCashWeekEndpoint
                 query = query.Where(g => g.BranchSalesId == sucursal);
             }
 
-            var data = await DashboardCashQueryHelper.BuildResponseAsync(query, dbContext);
+            var result = await query
+                .GroupBy(g => g.FechaCaja.Date)
+                .Select(group => new
+                {
+                    Fecha = group.Key,
+                    Detalles = group
+                        .SelectMany(g => g.CashBoxDetails!)
+                        .GroupBy(detail => detail.TipoPago)
+                        .Select(detailGroup => new
+                        {
+                            TipoPago = detailGroup.Key,
+                            MontoTotal = detailGroup.Sum(detail => detail.Adelanto + detail.Importe)
+                        })
+                        .ToList()
+                })
+                .ToListAsync();
 
-            var response = new ApiResponse<List<DashboardCashResponseDto>>
+            var cultura = new CultureInfo("es-ES");
+            var data = new List<DashboardCashWeekResponseDto>();
+            for (var fecha = fechaInicio.Date; fecha <= fechaFin.Date; fecha = fecha.AddDays(1))
+            {
+                var dia = result.FirstOrDefault(r => r.Fecha == fecha);
+                var detalles = dia?.Detalles
+                    .Select(d => new DashboardCashDetailDto(d.TipoPago, d.MontoTotal))
+                    .ToList() ?? new List<DashboardCashDetailDto>();
+
+                data.Add(new DashboardCashWeekResponseDto(
+                    fecha,
+                    cultura.TextInfo.ToTitleCase(fecha.ToString("dddd", cultura)),
+                    detalles.Sum(d => d.MontoTotal),
+                    detalles
+                ));
+            }
+
+            var response = new ApiResponse<List<DashboardCashWeekResponseDto>>
             {
                 Data = data,
                 Success = true,

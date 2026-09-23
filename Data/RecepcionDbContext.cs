@@ -46,6 +46,7 @@ public class RecepcionDbContext : DbContext
     public DbSet<PurchaseInvoice> PurchaseInvoices { get; set; }
     public DbSet<PurchaseInvoiceDetails> PurchaseInvoiceDetails { get; set; } 
     public DbSet<Supplier> Suppliers { get; set; }
+    public DbSet<PurchaseInvoicePayment> PurchaseInvoicePayments { get; set; }
     
     
     public DbSet<Printer> Printers { get; set; }
@@ -57,6 +58,11 @@ public class RecepcionDbContext : DbContext
     public DbSet<InvoicePayment> InvoicePayments { get; set; }
     public DbSet<PaymentMethod> PaymentMethods { get; set; }
     public DbSet<CollectionSheet> CollectionSheets { get; set; }
+
+    public DbSet<SneakerBrand> SneakerBrands { get; set; }
+    public DbSet<SneakerDetail> SneakerDetails { get; set; }
+    public DbSet<ItemInspection> ItemInspections { get; set; }
+    public DbSet<ItemPhoto> ItemPhotos { get; set; }
 
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -93,6 +99,16 @@ public class RecepcionDbContext : DbContext
         modelBuilder.ApplyConfiguration(new InvoicePaymentConfiguration());
         modelBuilder.ApplyConfiguration(new PaymentMethodConfiguration());
         modelBuilder.ApplyConfiguration(new CollectionSheetConfiguration());
+        modelBuilder.ApplyConfiguration(new SneakerBrandConfiguration());
+        modelBuilder.ApplyConfiguration(new SneakerDetailConfiguration());
+        modelBuilder.ApplyConfiguration(new ItemInspectionConfiguration());
+        modelBuilder.ApplyConfiguration(new ItemPhotoConfiguration());
+
+        modelBuilder.Entity<WorkGuideMain>()
+            .HasOne(x => x.Branch)
+            .WithMany()
+            .HasForeignKey(x => x.BranchId)
+            .OnDelete(DeleteBehavior.Restrict);
     }
 
     public override int SaveChanges()

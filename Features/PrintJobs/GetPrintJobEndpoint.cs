@@ -18,6 +18,8 @@ public static class GetPrintJobEndpoint
                         .Include(x => x.WorkGuideMain)
                             .ThenInclude(w => w.WorkGuideDetails)
                                 .ThenInclude(d => d.Product)
+                        .Include(x => x.WorkGuideMain)
+                            .ThenInclude(w => w.User)
                         .FirstOrDefaultAsync(x =>
                             x.Id == id);
 
@@ -27,6 +29,7 @@ public static class GetPrintJobEndpoint
                 }
 
                 var workGuide = printJob.WorkGuideMain;
+                var customer = printJob.WorkGuideMain.Customer;
 
                 var response = new PrintJobResponse(
                     printJob.Id,
@@ -38,8 +41,8 @@ public static class GetPrintJobEndpoint
                     workGuide.Customer != null
                         ? $"{workGuide.Customer.FirtsName} {workGuide.Customer.LastName}"
                         : string.Empty,
-                    workGuide.TelefonoContacto,
-                    workGuide.DireccionContacto,
+                    workGuide.Customer!.Phone!,
+                    workGuide.Customer!.Address!,
                     workGuide.TipoPago,
                     workGuide.DescripcionPago,
                     workGuide.Total,
@@ -48,6 +51,9 @@ public static class GetPrintJobEndpoint
                     workGuide.Observaciones,
                     workGuide.MensajeAlertas,
                     printJob.PrinterId,
+                    workGuide.User != null ? workGuide.User.UserName : string.Empty,
+                    workGuide.TipoRecepcion =="D",
+                    true,
                     workGuide.WorkGuideDetails.Select(d => new PrintJobDetailResponse(
                         d.ProductId,
                         d.Product != null ? d.Product.Name : string.Empty,

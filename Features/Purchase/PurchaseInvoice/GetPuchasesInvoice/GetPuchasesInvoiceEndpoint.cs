@@ -1,10 +1,17 @@
+using Microsoft.AspNetCore.Mvc;
+
 public static class GetPuchasesInvoiceEndpoint
 {
     public static IEndpointRouteBuilder MapGetPuchasesInvoice(this IEndpointRouteBuilder routes)
     {
-        routes.MapGet("/", async (IGetPuchasesInvoiceService service) =>
+        routes.MapGet("/", async (
+            [FromQuery] int? supplierId,
+            [FromQuery] DateTime? dateFrom,
+            [FromQuery] DateTime? dateTo,
+            [FromQuery] string? status,
+            IGetPuchasesInvoiceService service) =>
         {
-            var invoices = await service.GetPurchasesInvoiceAsync();
+            var invoices = await service.GetPurchasesInvoiceAsync(supplierId, dateFrom, dateTo, status);
             var response = new ApiResponse<IEnumerable<GetPurchaseInvoiceResponseDto>>
             {
                 Success = true,

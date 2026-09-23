@@ -27,6 +27,8 @@ public static class GetInvoiceEndpoint
                 invoice.DocumentTypeId,
                 invoice.Serie,
                 invoice.Numero,
+                invoice.CurrencyId,
+                invoice.ExchangeRate,
                 invoice.IssueDate,
                 invoice.DueDate,
                 invoice.SubTotal,

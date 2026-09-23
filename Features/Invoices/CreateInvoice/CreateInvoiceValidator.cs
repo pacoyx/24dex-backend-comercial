@@ -9,6 +9,8 @@ public class CreateInvoiceValidator : AbstractValidator<CreateInvoiceRequest>
         RuleFor(x => x.DocumentTypeId).GreaterThan(0);
         RuleFor(x => x.Serie).NotEmpty().MaximumLength(10);
         RuleFor(x => x.Numero).NotEmpty().MaximumLength(20);
+        RuleFor(x => x.CurrencyId).NotEmpty().MaximumLength(3);
+        RuleFor(x => x.ExchangeRate).GreaterThan(0);
         RuleFor(x => x.DueDate).GreaterThanOrEqualTo(x => x.IssueDate)
             .WithMessage("La fecha de vencimiento no puede ser anterior a la fecha de emisión.");
         RuleFor(x => x.Notes).MaximumLength(500);

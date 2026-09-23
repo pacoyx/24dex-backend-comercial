@@ -20,7 +20,8 @@ public record WgmCreateDto
      int UserId,
      string EstadoPago,
      string EstadoRegistro,
-     string EstadoSituacion
+     string EstadoSituacion,
+     int PrintCopy
 );
 
 public record WgdCreateDto(
@@ -46,5 +47,12 @@ public record WgmCreateResponseDto
      string serieDocumento,
      string numeroDocumento,
      DateTime fechaOperacion,
-     DateTime fechaHoraEntrega
+     DateTime fechaHoraEntrega,
+     IEnumerable<WgdCreateResponseDto> Details
+);
+
+public record WgdCreateResponseDto(
+     int Id,
+     int ProductId,
+     string Identificador
 );

@@ -46,6 +46,7 @@ public static class GetWorkGuideMainEndpoint
                 workGuideMain.EstadoSituacion,
                 workGuideMain.FechaRecojo,
                 workGuideMain.WorkGuideDetails.Select(d => new ResponseWgdDto(
+                    d.Id,
                     d.Cant,
                     d.Precio,
                     d.Total,

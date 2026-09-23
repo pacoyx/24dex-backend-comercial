@@ -9,5 +9,6 @@ public record class GetServicesAccessFastResponseDto(
     string ShortName,
     string IconName,
     string Status,
-    decimal Price
+    decimal Price,
+    string CategoryDescription
 );

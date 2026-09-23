@@ -12,6 +12,9 @@ public class InvoiceConfiguration : IEntityTypeConfiguration<Invoice>
         builder.Property(x => x.Numero).IsRequired().HasMaxLength(20);
         builder.Property(x => x.Notes).HasMaxLength(500);
 
+        builder.Property(x => x.CurrencyId).IsRequired().HasMaxLength(3);
+        builder.Property(x => x.ExchangeRate).HasPrecision(18, 4);
+
         builder.Property(x => x.SubTotal).HasPrecision(18, 2);
         builder.Property(x => x.Igv).HasPrecision(18, 2);
         builder.Property(x => x.Total).HasPrecision(18, 2);

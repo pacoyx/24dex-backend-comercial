@@ -30,6 +30,8 @@ public static class RouteExtensions
         app.MapSupplier();
         app.MapPurchaseInvoice();
         app.MapPurchaseReports();
+        app.MapAccountsPayable();
+        app.MapPurchaseDashboard();
         app.MapPrinter();
         app.MapBrachSalesUser();
         app.MapPrintingAdmin();
@@ -46,5 +48,7 @@ public static class RouteExtensions
         app.MapCollectionSheets();
         app.MapPaymentMethod();
         app.MapTypeDocument();
+        app.MapSneakers();
+        app.MapInspections();
     }
 }

@@ -8,5 +8,7 @@ public static class ReportEndpoints
         group.MapDashboardCash();
         group.MapDashboardCashWeek();
         group.MapDashboardCashMonth();
+        group.MapSalesRegister();
+        group.MapSneakerReport();
     }
 }

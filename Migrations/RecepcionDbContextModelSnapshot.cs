@@ -628,6 +628,9 @@ namespace _24dex_backend_comercial.Migrations
                     b.Property<string>("ErrorMessage")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<int>("PrintCopy")
+                        .HasColumnType("int");
+
                     b.Property<int>("PrinterId")
                         .HasColumnType("int");
 
@@ -805,6 +808,11 @@ namespace _24dex_backend_comercial.Migrations
                     b.Property<int>("BranchId")
                         .HasColumnType("int");
 
+                    b.Property<string>("CurrencyId")
+                        .IsRequired()
+                        .HasMaxLength(3)
+                        .HasColumnType("nvarchar(3)");
+
                     b.Property<int>("CustomerId")
                         .HasColumnType("int");
 
@@ -813,6 +821,10 @@ namespace _24dex_backend_comercial.Migrations
 
                     b.Property<DateTime>("DueDate")
                         .HasColumnType("datetime2");
+
+                    b.Property<decimal>("ExchangeRate")
+                        .HasPrecision(18, 4)
+                        .HasColumnType("decimal(18,4)");
 
                     b.Property<decimal>("Igv")
                         .HasPrecision(18, 2)
@@ -939,6 +951,79 @@ namespace _24dex_backend_comercial.Migrations
                     b.HasIndex("PaymentMethodId");
 
                     b.ToTable("InvoicePayments", (string)null);
+                });
+
+            modelBuilder.Entity("ItemInspection", b =>
+                {
+                    b.Property<long>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bigint");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("Id"));
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<bool>("HasFading")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("HasMissingParts")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("HasStains")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("HasTears")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("Notes")
+                        .HasMaxLength(500)
+                        .HasColumnType("nvarchar(500)");
+
+                    b.Property<int>("WorkGuideDetailId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("WorkGuideDetailId")
+                        .IsUnique();
+
+                    b.ToTable("ItemInspections", (string)null);
+                });
+
+            modelBuilder.Entity("ItemPhoto", b =>
+                {
+                    b.Property<long>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bigint");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("Id"));
+
+                    b.Property<string>("BlobUrl")
+                        .IsRequired()
+                        .HasMaxLength(1000)
+                        .HasColumnType("nvarchar(1000)");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("FileName")
+                        .IsRequired()
+                        .HasMaxLength(260)
+                        .HasColumnType("nvarchar(260)");
+
+                    b.Property<long>("ItemInspectionId")
+                        .HasColumnType("bigint");
+
+                    b.Property<string>("OriginalFileName")
+                        .HasMaxLength(260)
+                        .HasColumnType("nvarchar(260)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ItemInspectionId");
+
+                    b.ToTable("ItemPhotos", (string)null);
                 });
 
             modelBuilder.Entity("LocationClothes", b =>
@@ -1180,6 +1265,12 @@ namespace _24dex_backend_comercial.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
+                    b.Property<decimal>("AmountPaid")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<decimal>("Balance")
+                        .HasColumnType("decimal(18,2)");
+
                     b.Property<string>("Comments")
                         .IsRequired()
                         .HasMaxLength(200)
@@ -1224,6 +1315,9 @@ namespace _24dex_backend_comercial.Migrations
                         .IsRequired()
                         .HasMaxLength(100)
                         .HasColumnType("nvarchar(100)");
+
+                    b.Property<int>("PaymentStatus")
+                        .HasColumnType("int");
 
                     b.Property<DateTime>("PurchaseDate")
                         .HasColumnType("datetime2");
@@ -1296,6 +1390,41 @@ namespace _24dex_backend_comercial.Migrations
                     b.ToTable("PurchaseInvoiceDetails");
                 });
 
+            modelBuilder.Entity("PurchaseInvoicePayment", b =>
+                {
+                    b.Property<long>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bigint");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("Id"));
+
+                    b.Property<decimal>("Amount")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<string>("Observation")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("OperationNumber")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("PaymentDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("PaymentMethodId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("PurchaseInvoiceId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("PaymentMethodId");
+
+                    b.HasIndex("PurchaseInvoiceId");
+
+                    b.ToTable("PurchaseInvoicePayments");
+                });
+
             modelBuilder.Entity("ServiceAccessFast", b =>
                 {
                     b.Property<int>("Id")
@@ -1328,6 +1457,134 @@ namespace _24dex_backend_comercial.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("ServiceAccessFasts");
+                });
+
+            modelBuilder.Entity("SneakerBrand", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("SneakerBrands", (string)null);
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            IsActive = true,
+                            Name = "Nike"
+                        },
+                        new
+                        {
+                            Id = 2,
+                            IsActive = true,
+                            Name = "Adidas"
+                        },
+                        new
+                        {
+                            Id = 3,
+                            IsActive = true,
+                            Name = "Reebok"
+                        },
+                        new
+                        {
+                            Id = 4,
+                            IsActive = true,
+                            Name = "Puma"
+                        },
+                        new
+                        {
+                            Id = 5,
+                            IsActive = true,
+                            Name = "New Balance"
+                        },
+                        new
+                        {
+                            Id = 6,
+                            IsActive = true,
+                            Name = "Converse"
+                        },
+                        new
+                        {
+                            Id = 7,
+                            IsActive = true,
+                            Name = "Vans"
+                        },
+                        new
+                        {
+                            Id = 8,
+                            IsActive = true,
+                            Name = "Asics"
+                        },
+                        new
+                        {
+                            Id = 9,
+                            IsActive = true,
+                            Name = "Fila"
+                        },
+                        new
+                        {
+                            Id = 10,
+                            IsActive = true,
+                            Name = "Under Armour"
+                        });
+                });
+
+            modelBuilder.Entity("SneakerDetail", b =>
+                {
+                    b.Property<long>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bigint");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("Id"));
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<bool>("HasInsoles")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("HasLaces")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("Observations")
+                        .HasMaxLength(500)
+                        .HasColumnType("nvarchar(500)");
+
+                    b.Property<string>("PrimaryColor")
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
+                    b.Property<string>("SecondaryColor")
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
+                    b.Property<int?>("SneakerBrandId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("WorkGuideDetailId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("SneakerBrandId");
+
+                    b.HasIndex("WorkGuideDetailId")
+                        .IsUnique();
+
+                    b.ToTable("SneakerDetails", (string)null);
                 });
 
             modelBuilder.Entity("Supplier", b =>
@@ -1663,6 +1920,9 @@ namespace _24dex_backend_comercial.Migrations
                     b.Property<int?>("AlertMsgId1")
                         .HasColumnType("int");
 
+                    b.Property<int?>("BranchId")
+                        .HasColumnType("int");
+
                     b.Property<int>("CustomerId")
                         .HasColumnType("int");
 
@@ -1740,11 +2000,18 @@ namespace _24dex_backend_comercial.Migrations
                     b.Property<decimal>("Total")
                         .HasColumnType("decimal(18,2)");
 
+                    b.Property<int?>("UserId")
+                        .HasColumnType("int");
+
                     b.HasKey("Id");
 
                     b.HasIndex("AlertMsgId1");
 
+                    b.HasIndex("BranchId");
+
                     b.HasIndex("CustomerId");
+
+                    b.HasIndex("UserId");
 
                     b.ToTable("WorkGuideMains");
                 });
@@ -1933,6 +2200,28 @@ namespace _24dex_backend_comercial.Migrations
                     b.Navigation("PaymentMethod");
                 });
 
+            modelBuilder.Entity("ItemInspection", b =>
+                {
+                    b.HasOne("WorkGuideDetail", "WorkGuideDetail")
+                        .WithOne("ItemInspection")
+                        .HasForeignKey("ItemInspection", "WorkGuideDetailId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("WorkGuideDetail");
+                });
+
+            modelBuilder.Entity("ItemPhoto", b =>
+                {
+                    b.HasOne("ItemInspection", "ItemInspection")
+                        .WithMany("Photos")
+                        .HasForeignKey("ItemInspectionId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("ItemInspection");
+                });
+
             modelBuilder.Entity("LocationWorkGuide", b =>
                 {
                     b.HasOne("LocationClothes", "LocationClothes")
@@ -2008,6 +2297,43 @@ namespace _24dex_backend_comercial.Migrations
                     b.Navigation("PurchaseInvoice");
                 });
 
+            modelBuilder.Entity("PurchaseInvoicePayment", b =>
+                {
+                    b.HasOne("PaymentMethod", "PaymentMethod")
+                        .WithMany()
+                        .HasForeignKey("PaymentMethodId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("PurchaseInvoice", "PurchaseInvoice")
+                        .WithMany("Payments")
+                        .HasForeignKey("PurchaseInvoiceId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("PaymentMethod");
+
+                    b.Navigation("PurchaseInvoice");
+                });
+
+            modelBuilder.Entity("SneakerDetail", b =>
+                {
+                    b.HasOne("SneakerBrand", "Brand")
+                        .WithMany()
+                        .HasForeignKey("SneakerBrandId")
+                        .OnDelete(DeleteBehavior.Restrict);
+
+                    b.HasOne("WorkGuideDetail", "WorkGuideDetail")
+                        .WithOne("SneakerDetail")
+                        .HasForeignKey("SneakerDetail", "WorkGuideDetailId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Brand");
+
+                    b.Navigation("WorkGuideDetail");
+                });
+
             modelBuilder.Entity("Ticket", b =>
                 {
                     b.HasOne("ClothingWorker", "ClothingWorker")
@@ -2053,15 +2379,28 @@ namespace _24dex_backend_comercial.Migrations
                         .WithMany()
                         .HasForeignKey("AlertMsgId1");
 
+                    b.HasOne("BranchSales", "Branch")
+                        .WithMany()
+                        .HasForeignKey("BranchId")
+                        .OnDelete(DeleteBehavior.Restrict);
+
                     b.HasOne("Customer", "Customer")
                         .WithMany()
                         .HasForeignKey("CustomerId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.HasOne("User", "User")
+                        .WithMany()
+                        .HasForeignKey("UserId");
+
                     b.Navigation("AlertMsg");
 
+                    b.Navigation("Branch");
+
                     b.Navigation("Customer");
+
+                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("WorkerNode", b =>
@@ -2109,6 +2448,11 @@ namespace _24dex_backend_comercial.Migrations
                     b.Navigation("Payments");
                 });
 
+            modelBuilder.Entity("ItemInspection", b =>
+                {
+                    b.Navigation("Photos");
+                });
+
             modelBuilder.Entity("LocationClothes", b =>
                 {
                     b.Navigation("LocationWorkGuides");
@@ -2116,6 +2460,8 @@ namespace _24dex_backend_comercial.Migrations
 
             modelBuilder.Entity("PurchaseInvoice", b =>
                 {
+                    b.Navigation("Payments");
+
                     b.Navigation("PurchaseInvoiceDetails");
                 });
 
@@ -2142,6 +2488,13 @@ namespace _24dex_backend_comercial.Migrations
             modelBuilder.Entity("User", b =>
                 {
                     b.Navigation("BrachSalesUsers");
+                });
+
+            modelBuilder.Entity("WorkGuideDetail", b =>
+                {
+                    b.Navigation("ItemInspection");
+
+                    b.Navigation("SneakerDetail");
                 });
 
             modelBuilder.Entity("WorkGuideMain", b =>

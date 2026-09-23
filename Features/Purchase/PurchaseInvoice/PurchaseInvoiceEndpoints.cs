@@ -5,8 +5,11 @@ public static class PurchaseInvoiceEndpoints
         var group = app.MapGroup("/api/purchase-invoice");
 
  
-        group.MapCreatePurchaseInvoice();        
+        group.MapCreatePurchaseInvoice();
         group.MapGetPuchasesInvoice();
+        group.MapRegisterPurchasePayment();
+        group.MapGetPurchasePayments();
+        group.MapCancelPurchaseInvoice();
         // group.MapUpdatePurchaseInvoice();
         // group.MapDeletePurchaseInvoice();
 

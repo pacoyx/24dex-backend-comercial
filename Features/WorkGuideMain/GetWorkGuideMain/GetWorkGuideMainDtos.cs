@@ -29,6 +29,7 @@ public record ResponseWgmDto
 
 
 public record ResponseWgdDto(
+    int Id,
     decimal Cant,
     decimal Precio,
     decimal Total,

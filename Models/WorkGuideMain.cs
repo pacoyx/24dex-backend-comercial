@@ -25,6 +25,8 @@ public class WorkGuideMain
     public decimal Saldo { get; set; }
     public int CustomerId { get; set; }
     public Customer? Customer { get; set; }
+    public int? BranchId { get; set; }
+    public BranchSales? Branch { get; set; }
     public required IEnumerable<WorkGuideDetail> WorkGuideDetails { get; set; }
     [MaxLength(2)]
     public string EstadoPago { get; set; } = "";    // PE: Pendiente, PA: Pagado, AN: Anulado
@@ -39,5 +41,7 @@ public class WorkGuideMain
     public string TipoPagoCancelacion { get; set; } = ""; // E: Efectivo, T: Tarjeta, D: Deposito, QR: Codigo QR, SP: Sin Pago
     public ICollection<PrintQueue> PrintQueues { get; set; }
     = new List<PrintQueue>();
+    public int? UserId { get; set; }
+    public User? User { get; set; }
 
 }

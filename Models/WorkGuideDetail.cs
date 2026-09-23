@@ -33,4 +33,6 @@ public class WorkGuideDetail
     public DateTime? FechaDevolucion { get; set; }
     [MaxLength(1)]
     public string Identificador { get; set; } = "";
+    public ItemInspection? ItemInspection { get; set; }
+    public SneakerDetail? SneakerDetail { get; set; }
 }

@@ -16,6 +16,8 @@ public record InvoiceResponse(
     int DocumentTypeId,
     string Serie,
     string Numero,
+    string CurrencyId,
+    decimal ExchangeRate,
     DateTime IssueDate,
     DateTime DueDate,
     decimal SubTotal,

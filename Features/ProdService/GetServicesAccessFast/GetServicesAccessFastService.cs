@@ -24,7 +24,11 @@ public class GetServicesAccessFastService : IGetServicesAccessFastService
                .Join(_context.ProdServices,
                  saf => saf.ProdServiceID ,
                  ps => ps.Id,
-                 (saf, ps) => new { saf, ps.Price })
+                 (saf, ps) => new { saf, ps.Price, ps.CatServiceId })
+               .Join(_context.CatServices,
+                 saf => saf.CatServiceId,
+                 cs => cs.Id,
+                 (saf, cs) => new { saf.saf, saf.Price, cs.Name })
                .OrderBy(saf => saf.saf.Order)
                .Select(saf => new GetServicesAccessFastResponseDto
                (
@@ -33,7 +37,8 @@ public class GetServicesAccessFastService : IGetServicesAccessFastService
                    saf.saf.ShortName,
                    saf.saf.IconName,
                    saf.saf.Status,
-                   saf.Price
+                   saf.Price,
+                   saf.Name
                ))
                .ToListAsync();
         return datos;

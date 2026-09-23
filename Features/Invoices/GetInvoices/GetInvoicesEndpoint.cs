@@ -45,6 +45,8 @@ public static class GetInvoicesEndpoint
                     (x.Customer.FirtsName + " " + (x.Customer.LastName ?? "")).Trim(),
                     x.Serie,
                     x.Numero,
+                    x.CurrencyId,
+                    x.ExchangeRate,
                     x.IssueDate,
                     x.DueDate,
                     x.Total,

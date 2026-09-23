@@ -23,4 +23,5 @@ public class PrintQueue
     public WorkGuideMain WorkGuideMain { get; set; } = null!;
 
     public Printer Printer { get; set; } = null!;
+    public int PrintCopy { get; set; }
 }

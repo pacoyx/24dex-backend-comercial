@@ -37,3 +37,11 @@ public enum CollectionSheetStatus
     Closed = 2,
     Cancelled = 3
 }
+
+public enum PurchaseInvoiceStatus
+{
+    Pending = 1,
+    PartiallyPaid = 2,
+    Paid = 3,
+    Cancelled = 4
+}

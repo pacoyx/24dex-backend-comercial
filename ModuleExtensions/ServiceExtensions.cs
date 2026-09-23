@@ -46,6 +46,7 @@ public static class ServiceExtensions
 
         services.Configure<JwtSettings>(configuration.GetSection("Jwt"));
         services.Configure<InvoiceSettings>(configuration.GetSection("Invoice"));
+        services.Configure<SneakerSettings>(configuration.GetSection("Sneaker"));
 
         // Add services to the container.
         services.AddEndpointsApiExplorer();
