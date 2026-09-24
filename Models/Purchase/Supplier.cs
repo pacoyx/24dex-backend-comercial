@@ -22,4 +22,3 @@ public class Supplier{
     public string ContactPhone { get; set; } = string.Empty;
     
 }
-m
