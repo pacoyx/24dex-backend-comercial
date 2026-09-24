@@ -6,8 +6,8 @@ public static class CategoryProdEndpoints{
         group.MapGetCategoriesProd();
         group.MapGetCategoriesProdShort();
         // group.MapGetCategoryProd();
-        // group.MapDeleteCategoryProd();
-        // group.MapUpdateCategoryProd();
+        group.MapDeleteCategoryProd();
+        group.MapUpdateCategoryProd();
         // group.MapGetCategoryProdByCat();
         // group.MapGetCategoryProdSearchByDescription();
 

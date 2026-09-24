@@ -24,8 +24,12 @@ public static class ServicesDiExtensions
 
         services.AddScoped<ICreateUnitMeasurementService, CreateUnitMeasurementService>();
         services.AddScoped<IGetUnitMeasurementsService, GetUnitMeasurementsService>();
+        services.AddScoped<IUpdateUnitMeasurementService, UpdateUnitMeasurementService>();
+        services.AddScoped<IDeleteUnitMeasurementService, DeleteUnitMeasurementService>();
         services.AddScoped<IGetCategoriesProdService, GetCategoriesProdService>();
         services.AddScoped<ICreateCategoryProdService, CreateCategoryProdService>();
+        services.AddScoped<IUpdateCategoryProdService, UpdateCategoryProdService>();
+        services.AddScoped<IDeleteCategoryProdService, DeleteCategoryProdService>();
         
         services.AddScoped<IGetProductsService, GetProductsService>();
         services.AddScoped<ICreateProductService, CreateProductService>();

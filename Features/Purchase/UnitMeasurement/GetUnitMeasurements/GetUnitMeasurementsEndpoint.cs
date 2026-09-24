@@ -46,7 +46,6 @@ public static class GetUnitMeasurementsEndpoint
         .Produces<ApiResponse<IEnumerable<GetUnitMeasurementsResponseDto>>>(StatusCodes.Status200OK)
         .Produces<ApiResponse<IEnumerable<GetUnitMeasurementsResponseDto>>>(StatusCodes.Status400BadRequest)
         .Produces<ApiResponse<IEnumerable<GetUnitMeasurementsResponseDto>>>(StatusCodes.Status500InternalServerError)
-        .RequireAuthorization()
         .CacheOutput();
     }
 }

@@ -9,8 +9,8 @@ public static class UnitMeasurementEndpoints
         group.MapGetUnitMeasurements();
         group.MapGetUnitMeasurementsShort();
         // group.MapGetUnitMeasurement();
-        // group.MapDeleteUnitMeasurement();
-        // group.MapUpdateUnitMeasurement();
+        group.MapDeleteUnitMeasurement();
+        group.MapUpdateUnitMeasurement();
         // group.MapGetUnitMeasurementByCat();
         // group.MapGetUnitMeasurementSearchByDescription();
 

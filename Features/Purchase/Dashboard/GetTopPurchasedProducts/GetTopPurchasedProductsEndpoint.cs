@@ -6,16 +6,26 @@ public static class GetTopPurchasedProductsEndpoint
     {
         app.MapGet("/top-products", async (RecepcionDbContext db) =>
         {
-            var topProducts = await db.PurchaseInvoiceDetails
+            var topQuantities = await db.PurchaseInvoiceDetails
                 .AsNoTracking()
-                .Include(x => x.Product)
-                .Include(x => x.PurchaseInvoice)
                 .Where(x => x.PurchaseInvoice != null && x.PurchaseInvoice.PaymentStatus != PurchaseInvoiceStatus.Cancelled)
-                .GroupBy(x => new { x.ProductId, ProductName = x.Product != null ? x.Product.Name : string.Empty })
-                .Select(g => new TopPurchasedProductResponseDto(g.Key.ProductName, g.Sum(x => x.Quantity)))
+                .GroupBy(x => x.ProductId)
+                .Select(g => new { ProductId = g.Key, Quantity = g.Sum(x => x.Quantity) })
                 .OrderByDescending(x => x.Quantity)
                 .Take(10)
                 .ToListAsync();
+
+            var productIds = topQuantities.Select(x => x.ProductId).ToList();
+            var productNames = await db.Products
+                .AsNoTracking()
+                .Where(x => productIds.Contains(x.Id))
+                .ToDictionaryAsync(x => x.Id, x => x.Name);
+
+            var topProducts = topQuantities
+                .Select(x => new TopPurchasedProductResponseDto(
+                    productNames.TryGetValue(x.ProductId, out var name) ? name : string.Empty,
+                    x.Quantity))
+                .ToList();
 
             return Results.Ok(new ApiResponse<List<TopPurchasedProductResponseDto>>
             {
