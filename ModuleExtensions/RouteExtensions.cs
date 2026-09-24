@@ -44,6 +44,7 @@ public static class RouteExtensions
         app.MapReprintPrintQueue();
         app.MapWorkerNode();
         app.MapInvoices();
+        app.MapInvoiceDashboard();
         app.MapAccountsReceivable();
         app.MapCollectionSheets();
         app.MapPaymentMethod();
