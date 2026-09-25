@@ -76,6 +76,9 @@ public class SalesRegisterReportService : ISalesRegisterReportService
                 ExchangeRate = x.ExchangeRate,
                 AmountPaid = x.AmountPaid,
                 Balance = x.Balance,
+                PaymentMethod = x.PaymentMethod,
+                TypePayment = x.TypePayment,
+                DaysCredit = x.DaysCredit,
                 Status = x.Status.ToString()
             });
     }

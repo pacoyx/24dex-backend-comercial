@@ -13,6 +13,14 @@ public class CreateInvoiceValidator : AbstractValidator<CreateInvoiceRequest>
         RuleFor(x => x.ExchangeRate).GreaterThan(0);
         RuleFor(x => x.DueDate).GreaterThanOrEqualTo(x => x.IssueDate)
             .WithMessage("La fecha de vencimiento no puede ser anterior a la fecha de emisión.");
+        RuleFor(x => x.PaymentMethod).NotEmpty().MaximumLength(100);
+        RuleFor(x => x.TypePayment).NotEmpty().Must(x => x == "contado" || x == "credito")
+            .WithMessage("El tipo de pago debe ser 'contado' o 'credito'.");
+        RuleFor(x => x.DaysCredit).GreaterThanOrEqualTo(0);
+        RuleFor(x => x.DaysCredit)
+            .GreaterThan(0)
+            .When(x => x.TypePayment == "credito")
+            .WithMessage("Debe indicar los días de crédito cuando el tipo de pago es 'credito'.");
         RuleFor(x => x.Notes).MaximumLength(500);
 
         RuleFor(x => x.Details).NotEmpty()

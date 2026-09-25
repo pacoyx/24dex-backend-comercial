@@ -110,7 +110,7 @@ public class GetSupplierService : IGetSupplierService
             return Enumerable.Empty<GetSupplierSearchPatronResponseDto>();
         }
 
-        var response = suppliers.Select(s => new GetSupplierSearchPatronResponseDto(s.Id, s.Name)).ToList();
+        var response = suppliers.Select(s => new GetSupplierSearchPatronResponseDto(s.Id, s.Name, s.Ruc)).ToList();
 
         return response;
 

@@ -33,6 +33,12 @@ public class Invoice
 
     public InvoiceStatus Status { get; set; }
 
+    public string PaymentMethod { get; set; } = string.Empty; // e.g., "Cash", "Credit Card"
+
+    public string TypePayment { get; set; } = string.Empty; // contado / credito
+
+    public int DaysCredit { get; set; } = 0; // Number of days for credit
+
     public string? Notes { get; set; }
 
     public Customer Customer { get; set; } = null!;

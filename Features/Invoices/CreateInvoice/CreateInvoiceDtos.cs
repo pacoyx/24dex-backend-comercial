@@ -8,6 +8,9 @@ public record CreateInvoiceRequest(
     decimal ExchangeRate,
     DateTime IssueDate,
     DateTime DueDate,
+    string PaymentMethod,
+    string TypePayment,
+    int DaysCredit,
     string? Notes,
     List<CreateInvoiceDetailRequest> Details
 );
@@ -29,5 +32,8 @@ public record CreateInvoiceResponse(
     decimal SubTotal,
     decimal Igv,
     decimal Total,
+    string PaymentMethod,
+    string TypePayment,
+    int DaysCredit,
     InvoiceStatus Status
 );

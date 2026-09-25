@@ -36,6 +36,9 @@ public static class GetInvoiceEndpoint
                 invoice.Total,
                 invoice.AmountPaid,
                 invoice.Balance,
+                invoice.PaymentMethod,
+                invoice.TypePayment,
+                invoice.DaysCredit,
                 invoice.Status,
                 invoice.Notes,
                 invoice.Details.Select(d => new InvoiceDetailItemResponse(

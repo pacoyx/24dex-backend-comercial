@@ -52,6 +52,9 @@ public static class GetInvoicesEndpoint
                     x.Total,
                     x.AmountPaid,
                     x.Balance,
+                    x.PaymentMethod,
+                    x.TypePayment,
+                    x.DaysCredit,
                     x.Status
                 ))
                 .ToListAsync();

@@ -51,5 +51,18 @@ public static class RouteExtensions
         app.MapTypeDocument();
         app.MapSneakers();
         app.MapInspections();
+
+        app.MapArea();
+        app.MapPosition();
+        app.MapEmployee();
+        app.MapEmployeeDocument();
+        app.MapAttendance();
+        app.MapIncident();
+        app.MapExtraHour();
+        app.MapLoan();
+        app.MapPayrollPeriod();
+        app.MapPayroll();
+        app.MapHrDashboard();
+        app.MapHrReports();
     }
 }

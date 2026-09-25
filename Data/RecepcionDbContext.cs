@@ -64,6 +64,26 @@ public class RecepcionDbContext : DbContext
     public DbSet<ItemInspection> ItemInspections { get; set; }
     public DbSet<ItemPhoto> ItemPhotos { get; set; }
 
+    public DbSet<Area> Areas { get; set; }
+    public DbSet<Position> Positions { get; set; }
+    public DbSet<Employee> Employees { get; set; }
+    public DbSet<EmployeeEmergencyContact> EmployeeEmergencyContacts { get; set; }
+    public DbSet<EmployeeBankAccount> EmployeeBankAccounts { get; set; }
+    public DbSet<EmployeeSalaryHistory> EmployeeSalaryHistories { get; set; }
+
+    public DbSet<EmployeeDocumentType> EmployeeDocumentTypes { get; set; }
+    public DbSet<EmployeeDocument> EmployeeDocuments { get; set; }
+
+    public DbSet<Attendance> Attendances { get; set; }
+    public DbSet<AttendanceIncident> AttendanceIncidents { get; set; }
+    public DbSet<EmployeeExtraHour> EmployeeExtraHours { get; set; }
+
+    public DbSet<EmployeeLoan> EmployeeLoans { get; set; }
+
+    public DbSet<PayrollPeriod> PayrollPeriods { get; set; }
+    public DbSet<Payroll> Payrolls { get; set; }
+    public DbSet<PayrollDetail> PayrollDetails { get; set; }
+
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -103,6 +123,22 @@ public class RecepcionDbContext : DbContext
         modelBuilder.ApplyConfiguration(new SneakerDetailConfiguration());
         modelBuilder.ApplyConfiguration(new ItemInspectionConfiguration());
         modelBuilder.ApplyConfiguration(new ItemPhotoConfiguration());
+
+        modelBuilder.ApplyConfiguration(new AreaConfiguration());
+        modelBuilder.ApplyConfiguration(new PositionConfiguration());
+        modelBuilder.ApplyConfiguration(new EmployeeConfiguration());
+        modelBuilder.ApplyConfiguration(new EmployeeEmergencyContactConfiguration());
+        modelBuilder.ApplyConfiguration(new EmployeeBankAccountConfiguration());
+        modelBuilder.ApplyConfiguration(new EmployeeSalaryHistoryConfiguration());
+        modelBuilder.ApplyConfiguration(new EmployeeDocumentTypeConfiguration());
+        modelBuilder.ApplyConfiguration(new EmployeeDocumentConfiguration());
+        modelBuilder.ApplyConfiguration(new AttendanceConfiguration());
+        modelBuilder.ApplyConfiguration(new AttendanceIncidentConfiguration());
+        modelBuilder.ApplyConfiguration(new EmployeeExtraHourConfiguration());
+        modelBuilder.ApplyConfiguration(new EmployeeLoanConfiguration());
+        modelBuilder.ApplyConfiguration(new PayrollPeriodConfiguration());
+        modelBuilder.ApplyConfiguration(new PayrollConfiguration());
+        modelBuilder.ApplyConfiguration(new PayrollDetailConfiguration());
 
         modelBuilder.Entity<WorkGuideMain>()
             .HasOne(x => x.Branch)

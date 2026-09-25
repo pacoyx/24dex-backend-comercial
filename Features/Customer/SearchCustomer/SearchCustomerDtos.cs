@@ -23,3 +23,9 @@ public record ResponseSearchCustomerDto(
   string apellidos,
   string telefono
 );
+
+public record ResponseSearchCustomerByPatronDto(
+int Id,
+string Name,
+string Ruc
+);

@@ -56,6 +56,9 @@ public static class CreateInvoiceEndpoint
                 ExchangeRate = request.ExchangeRate,
                 IssueDate = request.IssueDate,
                 DueDate = request.DueDate,
+                PaymentMethod = request.PaymentMethod,
+                TypePayment = request.TypePayment,
+                DaysCredit = request.DaysCredit,
                 Notes = request.Notes,
                 SubTotal = subTotal,
                 Igv = igv,
@@ -83,6 +86,9 @@ public static class CreateInvoiceEndpoint
                     invoice.SubTotal,
                     invoice.Igv,
                     invoice.Total,
+                    invoice.PaymentMethod,
+                    invoice.TypePayment,
+                    invoice.DaysCredit,
                     invoice.Status)
             };
 

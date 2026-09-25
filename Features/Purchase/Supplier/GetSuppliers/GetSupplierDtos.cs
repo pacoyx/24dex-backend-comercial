@@ -20,5 +20,6 @@ public record GetSupplierResponsePaginatorDto(
 
 public record GetSupplierSearchPatronResponseDto(
 int Id,
-string Name
+string Name,
+string Ruc
 );

@@ -5,7 +5,7 @@ public static class SalesRegisterExcelBuilder
     private static readonly string[] Headers =
     {
         "Fecha", "Cliente", "Documento", "SubTotal", "IGV", "Total",
-        "Pagado", "Saldo", "Moneda", "Tipo Cambio", "Estado"
+        "Pagado", "Saldo", "Moneda", "Tipo Cambio", "Forma Pago", "Tipo Pago", "Días Crédito", "Estado"
     };
 
     public static byte[] Build(List<SalesRegisterRowDto> rows, SalesRegisterTotalsDto totals)
@@ -68,7 +68,11 @@ public static class SalesRegisterExcelBuilder
             sheet.Cell(currentRow, 10).Value = row.ExchangeRate;
             sheet.Cell(currentRow, 10).Style.NumberFormat.Format = "#,##0.0000";
 
-            sheet.Cell(currentRow, 11).Value = row.Status;
+            sheet.Cell(currentRow, 11).Value = row.PaymentMethod;
+            sheet.Cell(currentRow, 12).Value = row.TypePayment;
+            sheet.Cell(currentRow, 13).Value = row.DaysCredit;
+
+            sheet.Cell(currentRow, 14).Value = row.Status;
 
             currentRow++;
         }

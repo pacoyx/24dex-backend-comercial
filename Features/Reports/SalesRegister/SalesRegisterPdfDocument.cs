@@ -106,6 +106,9 @@ public class SalesRegisterPdfDocument : IDocument
                 columns.RelativeColumn(1.2f);
                 columns.RelativeColumn(0.8f);
                 columns.RelativeColumn(0.9f);
+                columns.RelativeColumn(1.3f);
+                columns.RelativeColumn(1f);
+                columns.RelativeColumn(0.8f);
                 columns.RelativeColumn(1.2f);
             });
 
@@ -121,6 +124,9 @@ public class SalesRegisterPdfDocument : IDocument
                 header.Cell().Element(HeaderCellStyle).AlignRight().Text("Saldo");
                 header.Cell().Element(HeaderCellStyle).Text("Moneda");
                 header.Cell().Element(HeaderCellStyle).AlignRight().Text("T. Cambio");
+                header.Cell().Element(HeaderCellStyle).Text("Forma Pago");
+                header.Cell().Element(HeaderCellStyle).Text("Tipo Pago");
+                header.Cell().Element(HeaderCellStyle).AlignRight().Text("Días Créd.");
                 header.Cell().Element(HeaderCellStyle).Text("Estado");
 
                 static IContainer HeaderCellStyle(IContainer c) =>
@@ -141,6 +147,9 @@ public class SalesRegisterPdfDocument : IDocument
                 table.Cell().Element(CellStyle).AlignRight().Text(row.Balance.ToString("N2"));
                 table.Cell().Element(CellStyle).Text(row.CurrencyId);
                 table.Cell().Element(CellStyle).AlignRight().Text(row.ExchangeRate.ToString("N4"));
+                table.Cell().Element(CellStyle).Text(row.PaymentMethod);
+                table.Cell().Element(CellStyle).Text(row.TypePayment);
+                table.Cell().Element(CellStyle).AlignRight().Text(row.DaysCredit.ToString());
                 table.Cell().Element(CellStyle).Text(row.Status);
             }
 

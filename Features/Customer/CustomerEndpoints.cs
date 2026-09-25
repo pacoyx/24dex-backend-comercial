@@ -9,6 +9,7 @@ public static class CustomerEndpoints
         group.MapUpdateCustomer();
         group.MapDeleteCustomer();
         group.MapSearchCustomer();
+        group.MapSearchCustomerByPatron();
         group.MapUpdateCustomerPhone();
         group.MapSearchCustomerPaginator();
     }

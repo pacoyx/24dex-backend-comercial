@@ -50,5 +50,46 @@ public static class ServicesDiExtensions
         services.AddSingleton<PrinterRegistry>();
 
         services.AddScoped<ISalesRegisterReportService, SalesRegisterReportService>();
+        services.AddScoped<IPurchaseRegisterReportService, PurchaseRegisterReportService>();
+
+        services.AddScoped<ICreateAreaService, CreateAreaService>();
+        services.AddScoped<IGetAreasService, GetAreasService>();
+        services.AddScoped<IUpdateAreaService, UpdateAreaService>();
+        services.AddScoped<IDeleteAreaService, DeleteAreaService>();
+
+        services.AddScoped<ICreatePositionService, CreatePositionService>();
+        services.AddScoped<IGetPositionsService, GetPositionsService>();
+        services.AddScoped<IUpdatePositionService, UpdatePositionService>();
+        services.AddScoped<IDeletePositionService, DeletePositionService>();
+
+        services.AddScoped<ICreateEmployeeService, CreateEmployeeService>();
+        services.AddScoped<IGetEmployeesService, GetEmployeesService>();
+        services.AddScoped<IGetEmployeeService, GetEmployeeService>();
+        services.AddScoped<IUpdateEmployeeService, UpdateEmployeeService>();
+        services.AddScoped<ITerminateEmployeeService, TerminateEmployeeService>();
+
+        services.AddScoped<ICreateEmployeeDocumentService, CreateEmployeeDocumentService>();
+        services.AddScoped<IGetEmployeeDocumentsService, GetEmployeeDocumentsService>();
+        services.AddScoped<IDeleteEmployeeDocumentService, DeleteEmployeeDocumentService>();
+        services.AddScoped<IGetEmployeeDocumentTypesService, GetEmployeeDocumentTypesService>();
+
+        services.AddScoped<IRegisterAttendanceService, RegisterAttendanceService>();
+        services.AddScoped<IGetAttendancesService, GetAttendancesService>();
+        services.AddScoped<IRegisterIncidentService, RegisterIncidentService>();
+        services.AddScoped<IGetIncidentsService, GetIncidentsService>();
+        services.AddScoped<IRegisterExtraHourService, RegisterExtraHourService>();
+        services.AddScoped<IGetExtraHoursService, GetExtraHoursService>();
+        services.AddScoped<IApproveExtraHourService, ApproveExtraHourService>();
+
+        services.AddScoped<IRegisterLoanService, RegisterLoanService>();
+        services.AddScoped<IGetLoansService, GetLoansService>();
+
+        services.AddScoped<ICreatePayrollPeriodService, CreatePayrollPeriodService>();
+        services.AddScoped<IGetPayrollPeriodsService, GetPayrollPeriodsService>();
+        services.AddScoped<IGeneratePayrollService, GeneratePayrollService>();
+        services.AddScoped<IGetPayrollService, GetPayrollService>();
+
+        services.AddScoped<IGetPayrollReportService, GetPayrollReportService>();
+        services.AddScoped<IGetLoanReportService, GetLoanReportService>();
     }
 }

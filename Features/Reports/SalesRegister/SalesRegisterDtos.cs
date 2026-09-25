@@ -22,6 +22,12 @@ public sealed class SalesRegisterRowDto
 
     public decimal Balance { get; set; }
 
+    public string PaymentMethod { get; set; } = string.Empty;
+
+    public string TypePayment { get; set; } = string.Empty;
+
+    public int DaysCredit { get; set; }
+
     public string Status { get; set; } = string.Empty;
 }
 

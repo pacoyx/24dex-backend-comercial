@@ -11,5 +11,8 @@ public record InvoiceSummaryResponse(
     decimal Total,
     decimal AmountPaid,
     decimal Balance,
+    string PaymentMethod,
+    string TypePayment,
+    int DaysCredit,
     InvoiceStatus Status
 );

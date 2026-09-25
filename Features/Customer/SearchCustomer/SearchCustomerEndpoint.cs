@@ -37,6 +37,41 @@ public static class SearchCustomerEndpoint
         });
     }
 
+    public static void MapSearchCustomerByPatron(this IEndpointRouteBuilder app)
+    {
+        app.MapGet("/search/byPatron/{patronName}", async (RecepcionDbContext context, string patronName) =>
+        {
+            if (string.IsNullOrWhiteSpace(patronName))
+            {
+                return Results.BadRequest("The name is required");
+            }
+
+            var customers = await context.Customers
+                .AsNoTracking()
+                .Where(x => (x.FirtsName + " " + (x.LastName ?? "")).Contains(patronName))
+                .OrderBy(x => x.FirtsName)
+                .Select(x => new ResponseSearchCustomerByPatronDto(
+                    x.Id,
+                    (x.FirtsName + " " + (x.LastName ?? "")).Trim(),
+                    x.DocPersonal ?? string.Empty
+                )).ToListAsync();
+
+            var response = new ApiResponse<List<ResponseSearchCustomerByPatronDto>>()
+            {
+                Data = customers,
+                Message = "get customers by patron",
+                Success = true,
+                StatusCode = StatusCodes.Status200OK
+            };
+
+            return Results.Ok(response);
+        })
+        .WithName("GetCustomersByPatron")
+        .Produces<List<ResponseSearchCustomerByPatronDto>>(StatusCodes.Status200OK)
+        .Produces(StatusCodes.Status400BadRequest)
+        .WithTags("Customers");
+    }
+
     public static void MapSearchCustomerPaginator(this IEndpointRouteBuilder app)
     {
         app.MapGet("/search/Paginator/{pageNumber}/{pageSize}", async (RecepcionDbContext context, string name, int pageNumber, int pageSize) =>
