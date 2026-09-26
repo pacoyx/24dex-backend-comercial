@@ -22,6 +22,14 @@ public static class UpdateCustomerEndpoint
             existing.Email = request.Email;
             existing.DocPersonal = request.DocPersonal;
             existing.Status = request.Status;
+            if (request.CustomerType.HasValue)
+            {
+                existing.CustomerType = request.CustomerType.Value;
+            }
+            if (request.InternalCode != null)
+            {
+                existing.InternalCode = request.InternalCode;
+            }
 
             context.Customers.Update(existing);
             await context.SaveChangesAsync();

@@ -18,4 +18,15 @@ public class Customer
     public string? DocPersonal { get; set; }
     [MaxLength(1)]
     public string Status { get; set; } = "A";
+
+    public CustomerType CustomerType { get; set; } = CustomerType.Individual;
+
+    [MaxLength(20)]
+    public string? InternalCode { get; set; }
+
+    public bool IsActive { get; set; } = true;
+
+    public CustomerBillingProfile? BillingProfile { get; set; }
+
+    public ICollection<CustomerContact> Contacts { get; set; } = new List<CustomerContact>();
 }

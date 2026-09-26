@@ -17,7 +17,10 @@ public static class CreateCustomerEndpoint
                 Phone = customerDto.Phone,
                 Email = customerDto.Email,
                 DocPersonal = customerDto.DocPersonal,
-                Status = customerDto.Status
+                Status = customerDto.Status,
+                CustomerType = customerDto.CustomerType ?? CustomerType.Individual,
+                InternalCode = customerDto.InternalCode,
+                IsActive = true
             };
 
             await context.Customers.AddAsync(customer);

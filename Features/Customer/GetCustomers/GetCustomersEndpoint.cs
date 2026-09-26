@@ -30,7 +30,9 @@ public static class GetCustomersEndpoint
                     c.Phone,
                     c.Email,
                     c.DocPersonal,
-                    c.Status
+                    c.Status,
+                    c.CustomerType,
+                    c.InternalCode
                 )).ToList()
             );
 

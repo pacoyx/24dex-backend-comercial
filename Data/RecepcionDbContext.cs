@@ -17,6 +17,8 @@ public class RecepcionDbContext : DbContext
     public DbSet<TypeDocument> TypeDocuments { get; set; }
     public DbSet<ProdService> ProdServices { get; set; }
     public DbSet<Customer> Customers { get; set; }
+    public DbSet<CustomerBillingProfile> CustomerBillingProfiles { get; set; }
+    public DbSet<CustomerContact> CustomerContacts { get; set; }
     public DbSet<WorkGuideMain> WorkGuideMains { get; set; }
     public DbSet<WorkGuideDetail> WorkGuideDetails { get; set; }
     public DbSet<ExpenseBox> ExpenseBoxMains { get; set; }
@@ -125,6 +127,9 @@ public class RecepcionDbContext : DbContext
         modelBuilder.ApplyConfiguration(new ItemInspectionConfiguration());
         modelBuilder.ApplyConfiguration(new ItemPhotoConfiguration());
         modelBuilder.ApplyConfiguration(new UserDocumentConfiguration());
+        modelBuilder.ApplyConfiguration(new CustomerConfiguration());
+        modelBuilder.ApplyConfiguration(new CustomerBillingProfileConfiguration());
+        modelBuilder.ApplyConfiguration(new CustomerContactConfiguration());
 
         modelBuilder.ApplyConfiguration(new AreaConfiguration());
         modelBuilder.ApplyConfiguration(new PositionConfiguration());

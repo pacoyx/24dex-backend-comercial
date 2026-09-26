@@ -11,5 +11,7 @@ string? Address,
 string? Phone,
 string? Email,
 string? DocPersonal,
-string? Status
+string? Status,
+CustomerType CustomerType,
+string? InternalCode
 );

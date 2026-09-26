@@ -10,6 +10,7 @@ public static class RouteExtensions
         app.MapHealth();
         app.MapBranchSales();
         app.MapCustomer();
+        app.MapCustomers();
         app.MapCatService();
         app.MapProdService();
         app.MapNumbersDocument();

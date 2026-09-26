@@ -6,5 +6,7 @@ public record UpdateCustomerRequestDto(
  string Phone,
  string Email,
  string DocPersonal,
- string Status
+ string Status,
+ CustomerType? CustomerType = null,
+ string? InternalCode = null
 );
