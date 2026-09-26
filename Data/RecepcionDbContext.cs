@@ -10,6 +10,7 @@ public class RecepcionDbContext : DbContext
     }
 
     public DbSet<User> Users { get; set; }
+    public DbSet<UserDocument> UserDocuments { get; set; }
     public DbSet<NumbersDocument> NumbersDocuments { get; set; }
     public DbSet<CatService> CatServices { get; set; }
     public DbSet<BranchSales> BranchSales { get; set; }
@@ -123,6 +124,7 @@ public class RecepcionDbContext : DbContext
         modelBuilder.ApplyConfiguration(new SneakerDetailConfiguration());
         modelBuilder.ApplyConfiguration(new ItemInspectionConfiguration());
         modelBuilder.ApplyConfiguration(new ItemPhotoConfiguration());
+        modelBuilder.ApplyConfiguration(new UserDocumentConfiguration());
 
         modelBuilder.ApplyConfiguration(new AreaConfiguration());
         modelBuilder.ApplyConfiguration(new PositionConfiguration());

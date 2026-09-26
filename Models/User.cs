@@ -17,4 +17,8 @@ public class User
     public string HashPassword { get; set; } = "";
     [MaxLength(200)]
     public string Email { get; set; } = "";
+    [MaxLength(20)]
+    public string Phone { get; set; } = "";
+    [MaxLength(500)]
+    public string PhotoUrl { get; set; } = "";
 }

@@ -8,5 +8,6 @@ public static class UserEndpoints
         group.MapDeleteUser();
         group.MapGetUsers();
         group.MapGetUser();
+        group.MapMyProfile();
     }
 }
