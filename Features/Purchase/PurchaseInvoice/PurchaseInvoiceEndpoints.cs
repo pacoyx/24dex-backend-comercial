@@ -2,7 +2,7 @@ public static class PurchaseInvoiceEndpoints
 {
     public static RouteGroupBuilder MapPurchaseInvoice(this IEndpointRouteBuilder app)
     {
-        var group = app.MapGroup("/api/purchase-invoice");
+        var group = app.MapGroup("/api/purchase-invoice").RequirePermission(PermissionCodes.Purchases);
 
  
         group.MapCreatePurchaseInvoice();

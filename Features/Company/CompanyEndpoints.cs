@@ -2,7 +2,7 @@ public static class CompanyEndpoints
 {
     public static void MapCompany(this IEndpointRouteBuilder app)
     {
-        var group = app.MapGroup("/api/company");
+        var group = app.MapGroup("/api/company").RequirePermission(PermissionCodes.Settings);
         group.MapCreateCompany();
         group.MapUpdateCompany();
         group.MapDeleteCompany();

@@ -16,17 +16,20 @@ public class JwtService
         _jwtSettings = jwtSettings.Value;
     }
 
-    public string GenerateToken(string userId, string userName)
+    public string GenerateToken(string userId, string userName, IEnumerable<string> roles, IEnumerable<string> permissions)
     {
         var securityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_jwtSettings.Key));
         var credentials = new SigningCredentials(securityKey, SecurityAlgorithms.HmacSha256);
 
-        var claims = new[]
+        var claims = new List<Claim>
         {
             new Claim(JwtRegisteredClaimNames.Sub, userId),
             new Claim(JwtRegisteredClaimNames.UniqueName, userName),
             new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString())
         };
+
+        claims.AddRange(roles.Select(r => new Claim("roles", r)));
+        claims.AddRange(permissions.Select(p => new Claim("permissions", p)));
 
         var token = new JwtSecurityToken(
             issuer: _jwtSettings.Issuer,

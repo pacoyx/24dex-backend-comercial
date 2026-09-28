@@ -2,7 +2,7 @@ public static class ExpensesEndpoints
 {
     public static void MapExpenses(this IEndpointRouteBuilder app)
     {
-        var group = app.MapGroup("/api/expenses").WithTags("Expenses");
+        var group = app.MapGroup("/api/expenses").WithTags("Expenses").RequirePermission(PermissionCodes.Expenses);
 
         group.MapCreateExpense();
         group.MapUpdateExpense();

@@ -70,5 +70,10 @@ public static class RouteExtensions
         app.MapExpenses();
         app.MapExpenseDashboard();
         app.MapExpenseReports();
+
+        app.MapRoles();
+        app.MapPermissions();
+        app.MapUserRoles();
+        app.MapAuth();
     }
 }

@@ -2,7 +2,7 @@ public static class PositionEndpoints
 {
     public static RouteGroupBuilder MapPosition(this IEndpointRouteBuilder app)
     {
-        var group = app.MapGroup("/api/hr/positions").WithTags("HR - Positions");
+        var group = app.MapGroup("/api/hr/positions").WithTags("HR - Positions").RequirePermission(PermissionCodes.Employees);
 
         group.MapCreatePosition();
         group.MapGetPositions();

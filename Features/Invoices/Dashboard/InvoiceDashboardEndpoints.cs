@@ -2,7 +2,7 @@ public static class InvoiceDashboardEndpoints
 {
     public static void MapInvoiceDashboard(this IEndpointRouteBuilder app)
     {
-        var group = app.MapGroup("/api/invoice-dashboard").WithTags("InvoiceDashboard");
+        var group = app.MapGroup("/api/invoice-dashboard").WithTags("InvoiceDashboard").RequirePermission(PermissionCodes.Invoices);
         group.MapGetInvoiceDashboardSummary();
         group.MapGetMonthlySales();
         group.MapGetInvoiceStatusSummary();

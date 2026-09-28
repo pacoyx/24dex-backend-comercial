@@ -1,6 +1,6 @@
 public static class WorkGuideMainEndpoints{
     public static void MapWorkGuideMain(this IEndpointRouteBuilder app){
-        var group = app.MapGroup("/api/workGuideMain");
+        var group = app.MapGroup("/api/workGuideMain").RequirePermission(PermissionCodes.Reception);
         group.MapCreateWorkGuideMain();
         group.MapGetWorkGuideMain();
         group.MapGetWorkGuidesMain();

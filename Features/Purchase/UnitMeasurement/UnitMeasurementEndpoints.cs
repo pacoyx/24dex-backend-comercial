@@ -3,7 +3,7 @@ public static class UnitMeasurementEndpoints
 
     public static RouteGroupBuilder MapUnitMeasurement(this IEndpointRouteBuilder app)
     {
-        var group = app.MapGroup("/api/unitMeasurement");
+        var group = app.MapGroup("/api/unitMeasurement").RequirePermission(PermissionCodes.Purchases);
 
         group.MapCreateUnitMeasurement();
         group.MapGetUnitMeasurements();

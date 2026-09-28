@@ -10,7 +10,9 @@ public record LoginUserResponseDto(
     string Role,
     string Status,
     int userId,
-    List<BranchSalesResponseDto> BranchSales
+    List<BranchSalesResponseDto> BranchSales,
+    List<string> Roles,
+    List<string> Permissions
 );
 
 public record BranchSalesResponseDto(

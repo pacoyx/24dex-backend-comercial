@@ -2,7 +2,7 @@
     {
         public static RouteGroupBuilder MapSupplier(this IEndpointRouteBuilder app)
         {
-            var group = app.MapGroup("/api/supplier");
+            var group = app.MapGroup("/api/supplier").RequirePermission(PermissionCodes.Suppliers);
 
             group.MapGetSupplier();
             group.MapCreateSupplier();

@@ -28,6 +28,6 @@ public static class CancelPrintQueueEndpoint
 
                 return Results.Ok();
             })
-            .RequireAuthorization();
+            .RequirePermission(PermissionCodes.Settings);
     }
 }

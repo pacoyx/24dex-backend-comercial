@@ -91,6 +91,11 @@ public class RecepcionDbContext : DbContext
     public DbSet<Expense> Expenses { get; set; }
     public DbSet<ExpenseAttachment> ExpenseAttachments { get; set; }
 
+    public DbSet<Role> Roles { get; set; }
+    public DbSet<Permission> Permissions { get; set; }
+    public DbSet<UserRole> UserRoles { get; set; }
+    public DbSet<RolePermission> RolePermissions { get; set; }
+
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -154,6 +159,11 @@ public class RecepcionDbContext : DbContext
         modelBuilder.ApplyConfiguration(new ExpenseCategoryConfiguration());
         modelBuilder.ApplyConfiguration(new ExpenseConfiguration());
         modelBuilder.ApplyConfiguration(new ExpenseAttachmentConfiguration());
+
+        modelBuilder.ApplyConfiguration(new RoleConfiguration());
+        modelBuilder.ApplyConfiguration(new PermissionConfiguration());
+        modelBuilder.ApplyConfiguration(new UserRoleConfiguration());
+        modelBuilder.ApplyConfiguration(new RolePermissionConfiguration());
 
         modelBuilder.Entity<WorkGuideMain>()
             .HasOne(x => x.Branch)

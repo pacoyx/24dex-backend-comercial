@@ -152,7 +152,13 @@ public static class ServiceExtensions
             };
         });
 
-        services.AddAuthorization();
+        services.AddAuthorization(options =>
+        {
+            foreach (var permissionCode in PermissionCodes.All)
+            {
+                options.AddPolicy(permissionCode, policy => policy.RequireClaim("permissions", permissionCode));
+            }
+        });
         services.AddScoped<JwtService>();
         services.AddScoped(typeof(IAppLogger<>), typeof(LoggerAdapter<>));
         // builder.Services.AddWatchDog(builder.Configuration);

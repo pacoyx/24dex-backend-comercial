@@ -2,7 +2,7 @@ public static class HrReportsEndpoints
 {
     public static RouteGroupBuilder MapHrReports(this IEndpointRouteBuilder app)
     {
-        var group = app.MapGroup("/api/hr/reports").WithTags("HR - Reports");
+        var group = app.MapGroup("/api/hr/reports").WithTags("HR - Reports").RequirePermission(PermissionCodes.Employees);
 
         group.MapGetPayrollReport();
         group.MapGetLoansReport();

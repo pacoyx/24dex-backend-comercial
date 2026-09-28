@@ -57,8 +57,18 @@ public static class LoginUserEndpoint
                 return Results.Problem("User does not have any branch sales assigned", statusCode: 401);
             }
 
+            var roles = await context.UserRoles
+                .Where(ur => ur.UserId == user.Id)
+                .Select(ur => ur.Role.Name)
+                .ToListAsync();
 
-            var token = jwtService.GenerateToken(user.Id.ToString(), loginDto.Username);
+            var permissions = await context.RolePermissions
+                .Where(rp => context.UserRoles.Any(ur => ur.UserId == user.Id && ur.RoleId == rp.RoleId))
+                .Select(rp => rp.Permission.Code)
+                .Distinct()
+                .ToListAsync();
+
+            var token = jwtService.GenerateToken(user.Id.ToString(), loginDto.Username, roles, permissions);
             var refreshToken = jwtService.GenerateRefreshToken();
 
             user.RefreshToken = refreshToken;
@@ -80,7 +90,9 @@ public static class LoginUserEndpoint
                     bsu.BranchSalesId,
                     bsu.BranchSales!.Description,
                     bsu.Status
-                    )).ToList()
+                    )).ToList(),
+                roles,
+                permissions
             );
 
             var response = new ApiResponse<LoginUserResponseDto>()
@@ -124,7 +136,18 @@ public static class LoginUserEndpoint
                 return Results.Unauthorized();
             }
 
-            var newJwtToken = jwtService.GenerateToken(user.Id.ToString(), user.UserName);
+            var roles = await context.UserRoles
+                .Where(ur => ur.UserId == user.Id)
+                .Select(ur => ur.Role.Name)
+                .ToListAsync();
+
+            var permissions = await context.RolePermissions
+                .Where(rp => context.UserRoles.Any(ur => ur.UserId == user.Id && ur.RoleId == rp.RoleId))
+                .Select(rp => rp.Permission.Code)
+                .Distinct()
+                .ToListAsync();
+
+            var newJwtToken = jwtService.GenerateToken(user.Id.ToString(), user.UserName, roles, permissions);
             var newRefreshToken = jwtService.GenerateRefreshToken();
 
             user.RefreshToken = newRefreshToken;
@@ -134,7 +157,9 @@ public static class LoginUserEndpoint
             var response = new
             {
                 Token = newJwtToken,
-                RefreshToken = newRefreshToken
+                RefreshToken = newRefreshToken,
+                Roles = roles,
+                Permissions = permissions
             };
 
             return Results.Ok(response);

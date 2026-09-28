@@ -5,7 +5,7 @@ public static class ExpenseReportsEndpoints
 {
     public static void MapExpenseReports(this IEndpointRouteBuilder app)
     {
-        var group = app.MapGroup("/api/expense-reports").WithTags("ExpenseReports");
+        var group = app.MapGroup("/api/expense-reports").WithTags("ExpenseReports").RequirePermission(PermissionCodes.Expenses);
 
         MapByPeriod(group);
         MapWithSupportingDocuments(group);

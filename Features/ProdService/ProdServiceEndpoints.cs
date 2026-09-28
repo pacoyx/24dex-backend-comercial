@@ -1,6 +1,6 @@
 public static class ProdServiceEndpoints{
     public static RouteGroupBuilder MapProdService(this IEndpointRouteBuilder app){
-        var group = app.MapGroup("/api/prodService");
+        var group = app.MapGroup("/api/prodService").RequirePermission(PermissionCodes.Reception);
         
         
         // group.CacheOutput();

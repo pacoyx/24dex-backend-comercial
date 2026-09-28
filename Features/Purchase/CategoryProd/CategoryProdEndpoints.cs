@@ -1,6 +1,6 @@
 public static class CategoryProdEndpoints{
     public static RouteGroupBuilder MapCategoryProd(this IEndpointRouteBuilder app){
-        var group = app.MapGroup("/api/categoryProd");
+        var group = app.MapGroup("/api/categoryProd").RequirePermission(PermissionCodes.Purchases);
 
         group.MapCreateCategoryProd();
         group.MapGetCategoriesProd();

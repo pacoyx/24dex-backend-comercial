@@ -38,6 +38,6 @@ public static class ReprintPrintQueueEndpoint
 
                 return Results.Ok();
             })
-            .RequireAuthorization();
+            .RequirePermission(PermissionCodes.Settings);
     }
 }

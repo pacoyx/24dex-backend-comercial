@@ -100,5 +100,10 @@ public static class ServicesDiExtensions
         services.AddScoped<IApplicationSeeder, SneakerBrandSeeder>();
         services.AddScoped<IApplicationSeeder, ExpenseCategorySeeder>();
         services.AddScoped<IApplicationSeeder, PaymentMethodSeeder>();
+
+        services.AddScoped<IApplicationSeeder, PermissionSeeder>();
+        services.AddScoped<IApplicationSeeder, RoleSeeder>();
+        services.AddScoped<IApplicationSeeder, RolePermissionSeeder>();
+        services.AddScoped<IApplicationSeeder, UserRoleBootstrapSeeder>();
     }
 }
