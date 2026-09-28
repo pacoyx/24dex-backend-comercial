@@ -91,5 +91,14 @@ public static class ServicesDiExtensions
 
         services.AddScoped<IGetPayrollReportService, GetPayrollReportService>();
         services.AddScoped<IGetLoanReportService, GetLoanReportService>();
+
+        services.AddScoped<IExpenseReportService, ExpenseReportService>();
+
+        services.AddScoped<IApplicationSeeder, AreaSeeder>();
+        services.AddScoped<IApplicationSeeder, PositionSeeder>();
+        services.AddScoped<IApplicationSeeder, EmployeeDocumentTypeSeeder>();
+        services.AddScoped<IApplicationSeeder, SneakerBrandSeeder>();
+        services.AddScoped<IApplicationSeeder, ExpenseCategorySeeder>();
+        services.AddScoped<IApplicationSeeder, PaymentMethodSeeder>();
     }
 }

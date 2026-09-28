@@ -87,6 +87,10 @@ public class RecepcionDbContext : DbContext
     public DbSet<Payroll> Payrolls { get; set; }
     public DbSet<PayrollDetail> PayrollDetails { get; set; }
 
+    public DbSet<ExpenseCategory> ExpenseCategories { get; set; }
+    public DbSet<Expense> Expenses { get; set; }
+    public DbSet<ExpenseAttachment> ExpenseAttachments { get; set; }
+
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -146,6 +150,10 @@ public class RecepcionDbContext : DbContext
         modelBuilder.ApplyConfiguration(new PayrollPeriodConfiguration());
         modelBuilder.ApplyConfiguration(new PayrollConfiguration());
         modelBuilder.ApplyConfiguration(new PayrollDetailConfiguration());
+
+        modelBuilder.ApplyConfiguration(new ExpenseCategoryConfiguration());
+        modelBuilder.ApplyConfiguration(new ExpenseConfiguration());
+        modelBuilder.ApplyConfiguration(new ExpenseAttachmentConfiguration());
 
         modelBuilder.Entity<WorkGuideMain>()
             .HasOne(x => x.Branch)

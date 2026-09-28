@@ -68,32 +68,6 @@ namespace _24dex_backend_comercial.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Areas", (string)null);
-
-                    b.HasData(
-                        new
-                        {
-                            Id = 1,
-                            IsActive = true,
-                            Name = "Recepción"
-                        },
-                        new
-                        {
-                            Id = 2,
-                            IsActive = true,
-                            Name = "Producción"
-                        },
-                        new
-                        {
-                            Id = 3,
-                            IsActive = true,
-                            Name = "Administración"
-                        },
-                        new
-                        {
-                            Id = 4,
-                            IsActive = true,
-                            Name = "Despacho"
-                        });
                 });
 
             modelBuilder.Entity("Attendance", b =>
@@ -1112,48 +1086,6 @@ namespace _24dex_backend_comercial.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("EmployeeDocumentTypes", (string)null);
-
-                    b.HasData(
-                        new
-                        {
-                            Id = 1,
-                            Name = "DNI Frente"
-                        },
-                        new
-                        {
-                            Id = 2,
-                            Name = "DNI Reverso"
-                        },
-                        new
-                        {
-                            Id = 3,
-                            Name = "Contrato"
-                        },
-                        new
-                        {
-                            Id = 4,
-                            Name = "CV"
-                        },
-                        new
-                        {
-                            Id = 5,
-                            Name = "Licencia"
-                        },
-                        new
-                        {
-                            Id = 6,
-                            Name = "Antecedentes"
-                        },
-                        new
-                        {
-                            Id = 7,
-                            Name = "Certificado Médico"
-                        },
-                        new
-                        {
-                            Id = 8,
-                            Name = "Otro"
-                        });
                 });
 
             modelBuilder.Entity("EmployeeEmergencyContact", b =>
@@ -1285,6 +1217,103 @@ namespace _24dex_backend_comercial.Migrations
                     b.ToTable("EmployeeSalaryHistories", (string)null);
                 });
 
+            modelBuilder.Entity("Expense", b =>
+                {
+                    b.Property<long>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bigint");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("Id"));
+
+                    b.Property<decimal>("Amount")
+                        .HasPrecision(18, 2)
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<int>("BranchSalesId")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Description")
+                        .IsRequired()
+                        .HasMaxLength(500)
+                        .HasColumnType("nvarchar(500)");
+
+                    b.Property<string>("DocumentNumber")
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
+                    b.Property<int>("ExpenseCategoryId")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("ExpenseDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<bool>("HasSupportingDocument")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("Observation")
+                        .HasMaxLength(500)
+                        .HasColumnType("nvarchar(500)");
+
+                    b.Property<int>("SourceType")
+                        .HasColumnType("int");
+
+                    b.Property<string>("SupplierName")
+                        .HasMaxLength(150)
+                        .HasColumnType("nvarchar(150)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("BranchSalesId");
+
+                    b.HasIndex("ExpenseCategoryId");
+
+                    b.HasIndex("ExpenseDate");
+
+                    b.ToTable("Expenses", (string)null);
+                });
+
+            modelBuilder.Entity("ExpenseAttachment", b =>
+                {
+                    b.Property<long>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bigint");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("Id"));
+
+                    b.Property<string>("BlobUrl")
+                        .IsRequired()
+                        .HasMaxLength(1000)
+                        .HasColumnType("nvarchar(1000)");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<long>("ExpenseId")
+                        .HasColumnType("bigint");
+
+                    b.Property<string>("FileName")
+                        .IsRequired()
+                        .HasMaxLength(260)
+                        .HasColumnType("nvarchar(260)");
+
+                    b.Property<string>("OriginalFileName")
+                        .IsRequired()
+                        .HasMaxLength(260)
+                        .HasColumnType("nvarchar(260)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ExpenseId");
+
+                    b.ToTable("ExpenseAttachments", (string)null);
+                });
+
             modelBuilder.Entity("ExpenseBox", b =>
                 {
                     b.Property<int>("Id")
@@ -1328,6 +1357,33 @@ namespace _24dex_backend_comercial.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("ExpenseBoxMains");
+                });
+
+            modelBuilder.Entity("ExpenseCategory", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("Name")
+                        .IsUnique();
+
+                    b.ToTable("ExpenseCategories", (string)null);
                 });
 
             modelBuilder.Entity("Invoice", b =>
@@ -1849,38 +1905,6 @@ namespace _24dex_backend_comercial.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Positions", (string)null);
-
-                    b.HasData(
-                        new
-                        {
-                            Id = 1,
-                            IsActive = true,
-                            Name = "Recepcionista"
-                        },
-                        new
-                        {
-                            Id = 2,
-                            IsActive = true,
-                            Name = "Operario"
-                        },
-                        new
-                        {
-                            Id = 3,
-                            IsActive = true,
-                            Name = "Supervisor"
-                        },
-                        new
-                        {
-                            Id = 4,
-                            IsActive = true,
-                            Name = "Administrador"
-                        },
-                        new
-                        {
-                            Id = 5,
-                            IsActive = true,
-                            Name = "Motorizado"
-                        });
                 });
 
             modelBuilder.Entity("Printer", b =>
@@ -2184,68 +2208,6 @@ namespace _24dex_backend_comercial.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("SneakerBrands", (string)null);
-
-                    b.HasData(
-                        new
-                        {
-                            Id = 1,
-                            IsActive = true,
-                            Name = "Nike"
-                        },
-                        new
-                        {
-                            Id = 2,
-                            IsActive = true,
-                            Name = "Adidas"
-                        },
-                        new
-                        {
-                            Id = 3,
-                            IsActive = true,
-                            Name = "Reebok"
-                        },
-                        new
-                        {
-                            Id = 4,
-                            IsActive = true,
-                            Name = "Puma"
-                        },
-                        new
-                        {
-                            Id = 5,
-                            IsActive = true,
-                            Name = "New Balance"
-                        },
-                        new
-                        {
-                            Id = 6,
-                            IsActive = true,
-                            Name = "Converse"
-                        },
-                        new
-                        {
-                            Id = 7,
-                            IsActive = true,
-                            Name = "Vans"
-                        },
-                        new
-                        {
-                            Id = 8,
-                            IsActive = true,
-                            Name = "Asics"
-                        },
-                        new
-                        {
-                            Id = 9,
-                            IsActive = true,
-                            Name = "Fila"
-                        },
-                        new
-                        {
-                            Id = 10,
-                            IsActive = true,
-                            Name = "Under Armour"
-                        });
                 });
 
             modelBuilder.Entity("SneakerDetail", b =>
@@ -3045,6 +3007,36 @@ namespace _24dex_backend_comercial.Migrations
                     b.Navigation("Employee");
                 });
 
+            modelBuilder.Entity("Expense", b =>
+                {
+                    b.HasOne("BranchSales", "BranchSales")
+                        .WithMany()
+                        .HasForeignKey("BranchSalesId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("ExpenseCategory", "ExpenseCategory")
+                        .WithMany()
+                        .HasForeignKey("ExpenseCategoryId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("BranchSales");
+
+                    b.Navigation("ExpenseCategory");
+                });
+
+            modelBuilder.Entity("ExpenseAttachment", b =>
+                {
+                    b.HasOne("Expense", "Expense")
+                        .WithMany("Attachments")
+                        .HasForeignKey("ExpenseId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Expense");
+                });
+
             modelBuilder.Entity("Invoice", b =>
                 {
                     b.HasOne("Customer", "Customer")
@@ -3387,6 +3379,11 @@ namespace _24dex_backend_comercial.Migrations
                     b.Navigation("BankAccounts");
 
                     b.Navigation("EmergencyContacts");
+                });
+
+            modelBuilder.Entity("Expense", b =>
+                {
+                    b.Navigation("Attachments");
                 });
 
             modelBuilder.Entity("Invoice", b =>

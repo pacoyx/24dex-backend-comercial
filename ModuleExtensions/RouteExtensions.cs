@@ -65,5 +65,10 @@ public static class RouteExtensions
         app.MapPayroll();
         app.MapHrDashboard();
         app.MapHrReports();
+
+        app.MapExpenseCategories();
+        app.MapExpenses();
+        app.MapExpenseDashboard();
+        app.MapExpenseReports();
     }
 }
