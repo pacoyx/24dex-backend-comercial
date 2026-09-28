@@ -67,7 +67,9 @@ public class SalesRegisterReportService : ISalesRegisterReportService
             {
                 InvoiceId = x.Id,
                 IssueDate = x.IssueDate,
-                CustomerName = (x.Customer.FirtsName + " " + (x.Customer.LastName ?? "")).Trim(),
+                CustomerName = x.Customer.CustomerType == CustomerType.Company && x.Customer.BillingProfile != null
+                    ? x.Customer.BillingProfile.BusinessName
+                    : (x.Customer.FirtsName + " " + (x.Customer.LastName ?? "")).Trim(),
                 SerieNumero = x.Serie + "-" + x.Numero,
                 SubTotal = x.SubTotal,
                 Igv = x.Igv,
@@ -100,7 +102,9 @@ public class SalesRegisterReportService : ISalesRegisterReportService
         {
             customerName = await _db.Customers
                 .Where(x => x.Id == filter.CustomerId.Value)
-                .Select(x => (x.FirtsName + " " + (x.LastName ?? "")).Trim())
+                .Select(x => x.CustomerType == CustomerType.Company && x.BillingProfile != null
+                    ? x.BillingProfile.BusinessName
+                    : (x.FirtsName + " " + (x.LastName ?? "")).Trim())
                 .FirstOrDefaultAsync();
         }
 

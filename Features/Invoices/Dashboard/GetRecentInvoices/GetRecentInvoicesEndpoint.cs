@@ -15,7 +15,9 @@ public static class GetRecentInvoicesEndpoint
                 {
                     x.Id,
                     x.IssueDate,
-                    CustomerName = (x.Customer.FirtsName + " " + (x.Customer.LastName ?? "")).Trim(),
+                    CustomerName = x.Customer.CustomerType == CustomerType.Company && x.Customer.BillingProfile != null
+                        ? x.Customer.BillingProfile.BusinessName
+                        : (x.Customer.FirtsName + " " + (x.Customer.LastName ?? "")).Trim(),
                     DocumentNumber = x.Serie + "-" + x.Numero,
                     x.Total,
                     x.Status

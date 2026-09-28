@@ -16,7 +16,9 @@ public static class GetOverdueInvoicesEndpoint
                 {
                     x.Id,
                     DocumentNumber = x.Serie + "-" + x.Numero,
-                    CustomerName = (x.Customer.FirtsName + " " + (x.Customer.LastName ?? "")).Trim(),
+                    CustomerName = x.Customer.CustomerType == CustomerType.Company && x.Customer.BillingProfile != null
+                        ? x.Customer.BillingProfile.BusinessName
+                        : (x.Customer.FirtsName + " " + (x.Customer.LastName ?? "")).Trim(),
                     x.Balance,
                     DaysPastDue = EF.Functions.DateDiffDay(x.DueDate, today)
                 })

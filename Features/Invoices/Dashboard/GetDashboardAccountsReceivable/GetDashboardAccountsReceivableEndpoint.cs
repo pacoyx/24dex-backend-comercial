@@ -17,7 +17,9 @@ public static class GetDashboardAccountsReceivableEndpoint
                 .Select(x => new
                 {
                     x.Id,
-                    CustomerName = (x.Customer.FirtsName + " " + (x.Customer.LastName ?? "")).Trim(),
+                    CustomerName = x.Customer.CustomerType == CustomerType.Company && x.Customer.BillingProfile != null
+                        ? x.Customer.BillingProfile.BusinessName
+                        : (x.Customer.FirtsName + " " + (x.Customer.LastName ?? "")).Trim(),
                     DocumentNumber = x.Serie + "-" + x.Numero,
                     x.Total,
                     x.AmountPaid,

@@ -34,8 +34,11 @@ public static class GetCustomerSalesEndpoint
             var customerIds = totalsByCustomer.Select(x => x.CustomerId).ToList();
             var customerNames = await db.Customers
                 .AsNoTracking()
+                .Include(x => x.BillingProfile)
                 .Where(x => customerIds.Contains(x.Id))
-                .ToDictionaryAsync(x => x.Id, x => (x.FirtsName + " " + (x.LastName ?? "")).Trim());
+                .ToDictionaryAsync(x => x.Id, x => x.CustomerType == CustomerType.Company && x.BillingProfile != null
+                    ? x.BillingProfile.BusinessName
+                    : (x.FirtsName + " " + (x.LastName ?? "")).Trim());
 
             var response = totalsByCustomer
                 .Select(x => new CustomerSalesResponseDto(

@@ -15,7 +15,9 @@ public static class GetAccountsReceivableEndpoint
                 .OrderBy(x => x.DueDate)
                 .Select(x => new AccountReceivableResponse(
                     x.CustomerId,
-                    (x.Customer.FirtsName + " " + (x.Customer.LastName ?? "")).Trim(),
+                    x.Customer.CustomerType == CustomerType.Company && x.Customer.BillingProfile != null
+                        ? x.Customer.BillingProfile.BusinessName
+                        : (x.Customer.FirtsName + " " + (x.Customer.LastName ?? "")).Trim(),
                     x.Id,
                     x.Serie,
                     x.Numero,

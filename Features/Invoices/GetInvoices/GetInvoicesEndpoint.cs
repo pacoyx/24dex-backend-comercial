@@ -42,7 +42,9 @@ public static class GetInvoicesEndpoint
                 .Select(x => new InvoiceSummaryResponse(
                     x.Id,
                     x.CustomerId,
-                    (x.Customer.FirtsName + " " + (x.Customer.LastName ?? "")).Trim(),
+                    x.Customer.CustomerType == CustomerType.Company && x.Customer.BillingProfile != null
+                        ? x.Customer.BillingProfile.BusinessName
+                        : (x.Customer.FirtsName + " " + (x.Customer.LastName ?? "")).Trim(),
                     x.Serie,
                     x.Numero,
                     x.CurrencyId,

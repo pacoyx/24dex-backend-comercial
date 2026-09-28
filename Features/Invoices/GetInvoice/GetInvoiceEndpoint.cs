@@ -8,7 +8,7 @@ public static class GetInvoiceEndpoint
         {
             var invoice = await db.Invoices
                 .AsNoTracking()
-                .Include(x => x.Customer)
+                .Include(x => x.Customer).ThenInclude(c => c.BillingProfile)
                 .Include(x => x.Details)
                 .Include(x => x.Payments)
                     .ThenInclude(p => p.PaymentMethod)
@@ -22,7 +22,9 @@ public static class GetInvoiceEndpoint
             var response = new InvoiceResponse(
                 invoice.Id,
                 invoice.CustomerId,
-                $"{invoice.Customer.FirtsName} {invoice.Customer.LastName}".Trim(),
+                invoice.Customer.CustomerType == CustomerType.Company && invoice.Customer.BillingProfile != null
+                    ? invoice.Customer.BillingProfile.BusinessName
+                    : $"{invoice.Customer.FirtsName} {invoice.Customer.LastName}".Trim(),
                 invoice.BranchId,
                 invoice.DocumentTypeId,
                 invoice.Serie,
