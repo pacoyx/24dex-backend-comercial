@@ -14,5 +14,6 @@ public static class WorkGuideMainEndpoints{
         group.MapCancelItemWorkGuide();
         group.MapReturnUnwashedClothes();
         group.MapPickUpItem();
+        group.MapReprintWorkGuideMain();
     }
 }
