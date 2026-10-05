@@ -10,5 +10,7 @@ public record class GetServicesAccessFastResponseDto(
     string IconName,
     string Status,
     decimal Price,
-    string CategoryDescription
+    string CategoryDescription,
+    string IsPeso,
+    string IsLavado
 );

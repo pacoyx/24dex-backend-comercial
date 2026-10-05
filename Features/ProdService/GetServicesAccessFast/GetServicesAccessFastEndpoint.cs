@@ -22,7 +22,7 @@ public static class GetServicesAccessFast
 
              return Results.Ok(response);
          })
-        //  .RequireAuthorization()
+         .AllowAnonymous()
          .CacheOutput();
     }
 }

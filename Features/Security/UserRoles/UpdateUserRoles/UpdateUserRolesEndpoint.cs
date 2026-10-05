@@ -43,9 +43,9 @@ public static class UpdateUserRolesEndpoint
             var roles = await db.UserRoles
                 .AsNoTracking()
                 .Where(x => x.UserId == id)
+                .OrderBy(x => x.Role.Name)
                 .Select(x => new RoleResponse(
                     x.Role.Id, x.Role.Name, x.Role.Description, x.Role.IsActive, x.Role.CreatedAt))
-                .OrderBy(x => x.Name)
                 .ToListAsync();
 
             var response = new UserRolesResponse(user.Id, user.UserName, roles);

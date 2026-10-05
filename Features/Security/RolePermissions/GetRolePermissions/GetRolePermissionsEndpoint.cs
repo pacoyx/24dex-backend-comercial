@@ -15,10 +15,10 @@ public static class GetRolePermissionsEndpoint
             var permissions = await db.RolePermissions
                 .AsNoTracking()
                 .Where(x => x.RoleId == id)
+                .OrderBy(x => x.Permission.Code)
                 .Select(x => new PermissionResponse(
                     x.Permission.Id, x.Permission.Code, x.Permission.Description,
                     x.Permission.IsActive, x.Permission.CreatedAt))
-                .OrderBy(x => x.Code)
                 .ToListAsync();
 
             var response = new RolePermissionsResponse(role.Id, role.Name, permissions);
