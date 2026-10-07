@@ -75,5 +75,8 @@ public static class RouteExtensions
         app.MapPermissions();
         app.MapUserRoles();
         app.MapAuth();
+
+        app.MapCustomerPriceLists();
+        app.MapPickupGuides();
     }
 }

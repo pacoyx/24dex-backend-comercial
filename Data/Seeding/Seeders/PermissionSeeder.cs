@@ -14,7 +14,8 @@ public class PermissionSeeder : IApplicationSeeder
         (PermissionCodes.Payroll, "Acceso al modulo de Planillas"),
         (PermissionCodes.Suppliers, "Acceso al modulo de Proveedores"),
         (PermissionCodes.Reports, "Acceso al modulo de Reportes"),
-        (PermissionCodes.Settings, "Acceso a la configuracion del sistema")
+        (PermissionCodes.Settings, "Acceso a la configuracion del sistema"),
+        (PermissionCodes.CorporateOperations, "Acceso al modulo de Operaciones Corporativas")
     };
 
     public async Task SeedAsync(RecepcionDbContext context, CancellationToken cancellationToken = default)

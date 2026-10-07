@@ -1,0 +1,1 @@
+public record ChangePickupGuideStatusRequest(PickupGuideStatus Status);

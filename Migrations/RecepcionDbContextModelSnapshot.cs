@@ -762,6 +762,78 @@ namespace _24dex_backend_comercial.Migrations
                     b.ToTable("CustomerContacts", (string)null);
                 });
 
+            modelBuilder.Entity("CustomerPriceList", b =>
+                {
+                    b.Property<long>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bigint");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("Id"));
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("CustomerId")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("EffectiveFrom")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime?>("EffectiveTo")
+                        .HasColumnType("datetime2");
+
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(200)
+                        .HasColumnType("nvarchar(200)");
+
+                    b.Property<int>("Version")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CustomerId")
+                        .IsUnique()
+                        .HasDatabaseName("IX_CustomerPriceLists_CustomerId_ActiveOnly")
+                        .HasFilter("[IsActive] = 1");
+
+                    b.HasIndex("CustomerId", "Version")
+                        .IsUnique();
+
+                    b.ToTable("CustomerPriceLists", (string)null);
+                });
+
+            modelBuilder.Entity("CustomerPriceListDetail", b =>
+                {
+                    b.Property<long>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bigint");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("Id"));
+
+                    b.Property<long>("CustomerPriceListId")
+                        .HasColumnType("bigint");
+
+                    b.Property<int>("ServiceItemId")
+                        .HasColumnType("int");
+
+                    b.Property<decimal>("UnitPrice")
+                        .HasPrecision(18, 2)
+                        .HasColumnType("decimal(18,2)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ServiceItemId");
+
+                    b.HasIndex("CustomerPriceListId", "ServiceItemId")
+                        .IsUnique();
+
+                    b.ToTable("CustomerPriceListDetails", (string)null);
+                });
+
             modelBuilder.Entity("DexterCompany.Models.CatService", b =>
                 {
                     b.Property<int>("Id")
@@ -1918,6 +1990,107 @@ namespace _24dex_backend_comercial.Migrations
                     b.ToTable("Permissions", (string)null);
                 });
 
+            modelBuilder.Entity("PickupGuide", b =>
+                {
+                    b.Property<long>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bigint");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("Id"));
+
+                    b.Property<int>("BranchSalesId")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("CustomerId")
+                        .HasColumnType("int");
+
+                    b.Property<long>("CustomerPriceListId")
+                        .HasColumnType("bigint");
+
+                    b.Property<string>("GuideNumber")
+                        .IsRequired()
+                        .HasMaxLength(40)
+                        .HasColumnType("nvarchar(40)");
+
+                    b.Property<string>("Observation")
+                        .HasMaxLength(500)
+                        .HasColumnType("nvarchar(500)");
+
+                    b.Property<DateTime>("PickupDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("Status")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasDefaultValue(1);
+
+                    b.Property<decimal>("TotalAmount")
+                        .HasPrecision(18, 2)
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<DateTime?>("UpdatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("BranchSalesId");
+
+                    b.HasIndex("CustomerPriceListId");
+
+                    b.HasIndex("GuideNumber")
+                        .IsUnique();
+
+                    b.HasIndex("CustomerId", "Status");
+
+                    b.ToTable("PickupGuides", (string)null);
+                });
+
+            modelBuilder.Entity("PickupGuideDetail", b =>
+                {
+                    b.Property<long>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bigint");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("Id"));
+
+                    b.Property<string>("Observation")
+                        .HasMaxLength(500)
+                        .HasColumnType("nvarchar(500)");
+
+                    b.Property<long>("PickupGuideId")
+                        .HasColumnType("bigint");
+
+                    b.Property<decimal>("Quantity")
+                        .HasPrecision(18, 2)
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<int>("ServiceItemId")
+                        .HasColumnType("int");
+
+                    b.Property<decimal>("Total")
+                        .HasPrecision(18, 2)
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<decimal>("UnitPrice")
+                        .HasPrecision(18, 2)
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<decimal?>("Weight")
+                        .HasPrecision(18, 2)
+                        .HasColumnType("decimal(18,2)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("PickupGuideId");
+
+                    b.HasIndex("ServiceItemId");
+
+                    b.ToTable("PickupGuideDetails", (string)null);
+                });
+
             modelBuilder.Entity("Position", b =>
                 {
                     b.Property<int>("Id")
@@ -2989,6 +3162,36 @@ namespace _24dex_backend_comercial.Migrations
                     b.Navigation("Customer");
                 });
 
+            modelBuilder.Entity("CustomerPriceList", b =>
+                {
+                    b.HasOne("Customer", "Customer")
+                        .WithMany()
+                        .HasForeignKey("CustomerId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("Customer");
+                });
+
+            modelBuilder.Entity("CustomerPriceListDetail", b =>
+                {
+                    b.HasOne("CustomerPriceList", "CustomerPriceList")
+                        .WithMany("Details")
+                        .HasForeignKey("CustomerPriceListId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("DexterCompany.Models.ProdService", "ServiceItem")
+                        .WithMany()
+                        .HasForeignKey("ServiceItemId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("CustomerPriceList");
+
+                    b.Navigation("ServiceItem");
+                });
+
             modelBuilder.Entity("DexterCompany.Models.PrintQueue", b =>
                 {
                     b.HasOne("Printer", "Printer")
@@ -3240,6 +3443,52 @@ namespace _24dex_backend_comercial.Migrations
                         .IsRequired();
 
                     b.Navigation("Payroll");
+                });
+
+            modelBuilder.Entity("PickupGuide", b =>
+                {
+                    b.HasOne("BranchSales", "BranchSales")
+                        .WithMany()
+                        .HasForeignKey("BranchSalesId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("Customer", "Customer")
+                        .WithMany()
+                        .HasForeignKey("CustomerId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("CustomerPriceList", "CustomerPriceList")
+                        .WithMany()
+                        .HasForeignKey("CustomerPriceListId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("BranchSales");
+
+                    b.Navigation("Customer");
+
+                    b.Navigation("CustomerPriceList");
+                });
+
+            modelBuilder.Entity("PickupGuideDetail", b =>
+                {
+                    b.HasOne("PickupGuide", "PickupGuide")
+                        .WithMany("Details")
+                        .HasForeignKey("PickupGuideId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("DexterCompany.Models.ProdService", "ServiceItem")
+                        .WithMany()
+                        .HasForeignKey("ServiceItemId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("PickupGuide");
+
+                    b.Navigation("ServiceItem");
                 });
 
             modelBuilder.Entity("Printer", b =>
@@ -3506,6 +3755,11 @@ namespace _24dex_backend_comercial.Migrations
                     b.Navigation("Contacts");
                 });
 
+            modelBuilder.Entity("CustomerPriceList", b =>
+                {
+                    b.Navigation("Details");
+                });
+
             modelBuilder.Entity("Employee", b =>
                 {
                     b.Navigation("BankAccounts");
@@ -3543,6 +3797,11 @@ namespace _24dex_backend_comercial.Migrations
             modelBuilder.Entity("Permission", b =>
                 {
                     b.Navigation("RolePermissions");
+                });
+
+            modelBuilder.Entity("PickupGuide", b =>
+                {
+                    b.Navigation("Details");
                 });
 
             modelBuilder.Entity("PurchaseInvoice", b =>
