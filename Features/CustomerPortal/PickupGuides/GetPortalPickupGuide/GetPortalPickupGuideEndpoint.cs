@@ -17,6 +17,9 @@ public static class GetPortalPickupGuideEndpoint
             var guide = await db.PickupGuides
                 .AsNoTracking()
                 .Include(x => x.Details).ThenInclude(d => d.ServiceItem)
+                .Include(x => x.Employee)
+                .Include(x => x.Vehicle)
+                .Include(x => x.Revisions).ThenInclude(r => r.DetailRevisions)
                 .FirstOrDefaultAsync(x => x.Id == id && x.CustomerId == customerId.Value);
 
             if (guide is null)
@@ -24,12 +27,32 @@ public static class GetPortalPickupGuideEndpoint
                 return Results.NotFound();
             }
 
+            var earliestDetailRevisions = guide.Revisions
+                .OrderBy(r => r.RevisionDate)
+                .SelectMany(r => r.DetailRevisions)
+                .GroupBy(dr => dr.PickupGuideDetailId)
+                .ToDictionary(g => g.Key, g => g.First());
+
             var response = new PortalPickupGuideResponse(
                 guide.Id, guide.GuideNumber, guide.BranchSalesId, guide.PickupDate, guide.Status,
                 guide.Observation, guide.TotalAmount, guide.CreatedAt,
-                guide.Details.Select(d => new PortalPickupGuideDetailResponse(
-                    d.Id, d.ServiceItemId, d.ServiceItem.Name, d.Quantity, d.Weight, d.UnitPrice, d.Total, d.Observation
-                )).ToList()
+                guide.Details.Select(d =>
+                {
+                    var isPricedByWeight = d.ServiceItem.IsPeso == "S";
+                    var confirmedQuantity = isPricedByWeight ? d.Weight ?? 0 : d.Quantity;
+                    var originalQuantity = earliestDetailRevisions.TryGetValue(d.Id, out var firstRevision)
+                        ? firstRevision.OriginalQuantity
+                        : confirmedQuantity;
+
+                    return new PortalPickupGuideDetailResponse(
+                        d.Id, d.ServiceItemId, d.ServiceItem.Name, d.Quantity, d.Weight, d.UnitPrice, d.Total, d.Observation,
+                        originalQuantity, confirmedQuantity
+                    );
+                }).ToList(),
+                guide.Employee is null ? null : new PortalEmployeeSummaryResponse(
+                    guide.Employee.Id, $"{guide.Employee.FirstName} {guide.Employee.LastName}".Trim()),
+                guide.Vehicle is null ? null : new PortalVehicleSummaryResponse(
+                    guide.Vehicle.Id, guide.Vehicle.Plate, guide.Vehicle.Description)
             );
 
             return Results.Ok(new ApiResponse<PortalPickupGuideResponse>

@@ -12,6 +12,9 @@ public static class GetPickupGuideEndpoint
                 .Include(x => x.Details).ThenInclude(d => d.ServiceItem)
                 .Include(x => x.Employee)
                 .Include(x => x.Vehicle)
+                .Include(x => x.Attachments)
+                .Include(x => x.Revisions).ThenInclude(r => r.Employee)
+                .Include(x => x.Revisions).ThenInclude(r => r.DetailRevisions).ThenInclude(dr => dr.PickupGuideDetail).ThenInclude(d => d.ServiceItem)
                 .FirstOrDefaultAsync(x => x.Id == id);
 
             if (guide is null)

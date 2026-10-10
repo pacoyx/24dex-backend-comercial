@@ -6,7 +6,9 @@ public record PortalPickupGuideDetailResponse(
     decimal? Weight,
     decimal UnitPrice,
     decimal Total,
-    string? Observation
+    string? Observation,
+    decimal OriginalQuantity,
+    decimal ConfirmedQuantity
 );
 
 public record PortalPickupGuideSummaryResponse(
@@ -16,7 +18,22 @@ public record PortalPickupGuideSummaryResponse(
     DateTime PickupDate,
     PickupGuideStatus Status,
     decimal TotalAmount,
-    DateTime CreatedAt
+    DateTime CreatedAt,
+    bool HasPdf,
+    bool HasPhotos,
+    bool HasSignature,
+    bool HasRevisions
+);
+
+public record PortalEmployeeSummaryResponse(
+    long Id,
+    string FullName
+);
+
+public record PortalVehicleSummaryResponse(
+    int Id,
+    string Plate,
+    string Description
 );
 
 public record PortalPickupGuideResponse(
@@ -28,12 +45,30 @@ public record PortalPickupGuideResponse(
     string? Observation,
     decimal TotalAmount,
     DateTime CreatedAt,
-    List<PortalPickupGuideDetailResponse> Details
+    List<PortalPickupGuideDetailResponse> Details,
+    PortalEmployeeSummaryResponse? Employee,
+    PortalVehicleSummaryResponse? Vehicle
+);
+
+public record PortalPickupGuideRevisionItemResponse(
+    string ServiceName,
+    decimal OriginalQuantity,
+    decimal NewQuantity,
+    string Reason
+);
+
+public record PortalPickupGuideRevisionResponse(
+    DateTime RevisionDate,
+    string EmployeeName,
+    string Observation,
+    List<PortalPickupGuideRevisionItemResponse> Items
 );
 
 public record PortalPickupGuideAttachmentResponse(
     long Id,
     PickupGuideAttachmentType AttachmentType,
     string OriginalFileName,
+    string ContentType,
+    long FileSize,
     DateTime CreatedAt
 );

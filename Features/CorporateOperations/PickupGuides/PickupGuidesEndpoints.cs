@@ -18,6 +18,7 @@ public static class PickupGuidesEndpoints
         group.MapCreateAttachment();
         group.MapGetAttachments();
         group.MapDeleteAttachment();
+        group.MapDownloadAttachment();
 
         group.MapCreatePickupGuideRevision();
         group.MapGetPickupGuideRevisions();
@@ -40,9 +41,11 @@ public static class PickupGuidesEndpoints
         guide.BranchSalesId, guide.PickupDate, guide.Status, guide.Observation,
         guide.CustomerPriceListId, guide.TotalAmount, guide.CreatedAt, guide.UpdatedAt,
         guide.EmployeeId, guide.Employee is null ? null : $"{guide.Employee.FirstName} {guide.Employee.LastName}".Trim(),
-        guide.VehicleId, guide.Vehicle?.Plate,
+        guide.VehicleId, guide.Vehicle?.Plate, guide.Vehicle?.Description,
         guide.EmailDeliveryStatus, guide.EmailSentAt,
-        guide.Details.Select(ToDetailResponse).ToList()
+        guide.Details.Select(ToDetailResponse).ToList(),
+        guide.Attachments.Select(PickupGuideAttachmentsEndpoints.ToResponse).ToList(),
+        guide.Revisions.Select(PickupGuideRevisionsEndpoints.ToResponse).ToList()
     );
 
     internal static PickupGuideSummaryResponse ToSummaryResponse(PickupGuide guide) => new(

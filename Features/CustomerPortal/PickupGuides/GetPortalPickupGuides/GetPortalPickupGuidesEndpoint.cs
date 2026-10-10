@@ -39,11 +39,16 @@ public static class GetPortalPickupGuidesEndpoint
                 query = query.Where(x => x.Status == status.Value);
             }
 
-            var guides = await query.OrderByDescending(x => x.PickupDate).ToListAsync();
-
-            var response = guides.Select(g => new PortalPickupGuideSummaryResponse(
-                g.Id, g.GuideNumber, g.BranchSalesId, g.PickupDate, g.Status, g.TotalAmount, g.CreatedAt
-            )).ToList();
+            var response = await query
+                .OrderByDescending(x => x.PickupDate)
+                .Select(g => new PortalPickupGuideSummaryResponse(
+                    g.Id, g.GuideNumber, g.BranchSalesId, g.PickupDate, g.Status, g.TotalAmount, g.CreatedAt,
+                    g.Attachments.Any(a => a.IsCurrent && a.AttachmentType == PickupGuideAttachmentType.Pdf),
+                    g.Attachments.Any(a => a.IsCurrent && a.AttachmentType == PickupGuideAttachmentType.Photo),
+                    g.Attachments.Any(a => a.IsCurrent && a.AttachmentType == PickupGuideAttachmentType.Signature),
+                    g.Revisions.Any()
+                ))
+                .ToListAsync();
 
             return Results.Ok(new ApiResponse<List<PortalPickupGuideSummaryResponse>>
             {

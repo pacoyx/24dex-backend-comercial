@@ -3,7 +3,10 @@ public record CustomerContactRequestDto(
     string? Position,
     string PhoneNumber,
     string? Email,
-    bool IsPrimary
+    bool IsPrimary,
+    bool ReceivePickupGuideEmails,
+    bool ReceiveInvoices,
+    bool ReceivePortalNotifications
 );
 
 public record CustomerContactResponseDto(
@@ -13,5 +16,8 @@ public record CustomerContactResponseDto(
     string? Position,
     string PhoneNumber,
     string? Email,
-    bool IsPrimary
+    bool IsPrimary,
+    bool ReceivePickupGuideEmails,
+    bool ReceiveInvoices,
+    bool ReceivePortalNotifications
 );

@@ -19,7 +19,8 @@ public static class CustomerContactEndpoints
                 .OrderByDescending(x => x.IsPrimary)
                 .ThenBy(x => x.FullName)
                 .Select(x => new CustomerContactResponseDto(
-                    x.Id, x.CustomerId, x.FullName, x.Position, x.PhoneNumber, x.Email, x.IsPrimary))
+                    x.Id, x.CustomerId, x.FullName, x.Position, x.PhoneNumber, x.Email, x.IsPrimary,
+                    x.ReceivePickupGuideEmails, x.ReceiveInvoices, x.ReceivePortalNotifications))
                 .ToListAsync();
 
             return Results.Ok(new ApiResponse<List<CustomerContactResponseDto>>
@@ -60,7 +61,10 @@ public static class CustomerContactEndpoints
                 Position = request.Position,
                 PhoneNumber = request.PhoneNumber,
                 Email = request.Email,
-                IsPrimary = request.IsPrimary
+                IsPrimary = request.IsPrimary,
+                ReceivePickupGuideEmails = request.ReceivePickupGuideEmails,
+                ReceiveInvoices = request.ReceiveInvoices,
+                ReceivePortalNotifications = request.ReceivePortalNotifications
             };
 
             await db.CustomerContacts.AddAsync(contact);
@@ -108,6 +112,9 @@ public static class CustomerContactEndpoints
             contact.PhoneNumber = request.PhoneNumber;
             contact.Email = request.Email;
             contact.IsPrimary = request.IsPrimary;
+            contact.ReceivePickupGuideEmails = request.ReceivePickupGuideEmails;
+            contact.ReceiveInvoices = request.ReceiveInvoices;
+            contact.ReceivePortalNotifications = request.ReceivePortalNotifications;
 
             await db.SaveChangesAsync();
 
@@ -157,5 +164,8 @@ public static class CustomerContactEndpoints
         contact.Position,
         contact.PhoneNumber,
         contact.Email,
-        contact.IsPrimary);
+        contact.IsPrimary,
+        contact.ReceivePickupGuideEmails,
+        contact.ReceiveInvoices,
+        contact.ReceivePortalNotifications);
 }

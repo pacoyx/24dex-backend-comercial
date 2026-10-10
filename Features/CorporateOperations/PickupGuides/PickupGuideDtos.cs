@@ -28,9 +28,12 @@ public record PickupGuideResponse(
     string? EmployeeName,
     int? VehicleId,
     string? VehiclePlate,
+    string? VehicleDescription,
     PickupGuideEmailStatus EmailDeliveryStatus,
     DateTime? EmailSentAt,
-    List<PickupGuideDetailResponse> Details
+    List<PickupGuideDetailResponse> Details,
+    List<PickupGuideAttachmentResponse> Attachments,
+    List<PickupGuideRevisionResponse> Revisions
 );
 
 public record PickupGuideSummaryResponse(

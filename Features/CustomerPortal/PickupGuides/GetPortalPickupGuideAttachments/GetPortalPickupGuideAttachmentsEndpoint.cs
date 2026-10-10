@@ -26,7 +26,7 @@ public static class GetPortalPickupGuideAttachmentsEndpoint
                 .AsNoTracking()
                 .Where(x => x.PickupGuideId == id && x.IsCurrent)
                 .OrderByDescending(x => x.CreatedAt)
-                .Select(x => new PortalPickupGuideAttachmentResponse(x.Id, x.AttachmentType, x.OriginalFileName, x.CreatedAt))
+                .Select(x => new PortalPickupGuideAttachmentResponse(x.Id, x.AttachmentType, x.OriginalFileName, x.ContentType, x.FileSize, x.CreatedAt))
                 .ToListAsync();
 
             return Results.Ok(new ApiResponse<List<PortalPickupGuideAttachmentResponse>>
