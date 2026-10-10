@@ -94,6 +94,10 @@ public static class ServicesDiExtensions
 
         services.AddScoped<IExpenseReportService, ExpenseReportService>();
 
+        services.AddScoped<IImageCompressor, SkiaImageCompressor>();
+        services.AddScoped<IEmailService, SmtpEmailService>();
+        services.AddScoped<IPickupGuideReceiptPdfService, PickupGuideReceiptPdfService>();
+
         services.AddScoped<IApplicationSeeder, AreaSeeder>();
         services.AddScoped<IApplicationSeeder, PositionSeeder>();
         services.AddScoped<IApplicationSeeder, EmployeeDocumentTypeSeeder>();

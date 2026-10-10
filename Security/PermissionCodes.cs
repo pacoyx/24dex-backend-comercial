@@ -12,11 +12,12 @@ public static class PermissionCodes
     public const string Reports = "reports.access";
     public const string Settings = "settings.access";
     public const string CorporateOperations = "corporate-operations.access";
+    public const string PickupMobile = "pickup_mobile.access";
 
     public static readonly string[] All =
     {
         Dashboard, Reception, Customers, Invoices, Purchases,
         Expenses, Employees, Payroll, Suppliers, Reports, Settings,
-        CorporateOperations
+        CorporateOperations, PickupMobile
     };
 }

@@ -10,6 +10,8 @@ public static class GetPickupGuideEndpoint
                 .AsNoTracking()
                 .Include(x => x.Customer).ThenInclude(c => c.BillingProfile)
                 .Include(x => x.Details).ThenInclude(d => d.ServiceItem)
+                .Include(x => x.Employee)
+                .Include(x => x.Vehicle)
                 .FirstOrDefaultAsync(x => x.Id == id);
 
             if (guide is null)

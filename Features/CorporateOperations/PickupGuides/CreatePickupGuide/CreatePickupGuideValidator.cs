@@ -7,6 +7,8 @@ public class CreatePickupGuideValidator : AbstractValidator<CreatePickupGuideReq
         RuleFor(x => x.CustomerId).GreaterThan(0);
         RuleFor(x => x.BranchSalesId).GreaterThan(0);
         RuleFor(x => x.Observation).MaximumLength(500);
+        RuleFor(x => x.EmployeeId).GreaterThan(0).When(x => x.EmployeeId.HasValue);
+        RuleFor(x => x.VehicleId).GreaterThan(0).When(x => x.VehicleId.HasValue);
         RuleFor(x => x.Details).NotEmpty()
             .WithMessage("La guía debe tener al menos un detalle.");
 

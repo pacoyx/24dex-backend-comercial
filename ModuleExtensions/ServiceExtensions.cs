@@ -48,6 +48,18 @@ public static class ServiceExtensions
         services.Configure<InvoiceSettings>(configuration.GetSection("Invoice"));
         services.Configure<SneakerSettings>(configuration.GetSection("Sneaker"));
         services.Configure<CustomerPortalSettings>(configuration.GetSection("CustomerPortal"));
+        services.Configure<FileStorageSettings>(configuration.GetSection("FileStorage"));
+        services.Configure<EmailSettings>(configuration.GetSection("Email"));
+
+        var fileStorageProvider = configuration["FileStorage:Provider"];
+        if (string.Equals(fileStorageProvider, "AzureBlob", StringComparison.OrdinalIgnoreCase))
+        {
+            services.AddScoped<IFileStorageService, AzureBlobStorageService>();
+        }
+        else
+        {
+            services.AddScoped<IFileStorageService, LocalStorageService>();
+        }
 
         // Add services to the container.
         services.AddEndpointsApiExplorer();

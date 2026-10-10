@@ -34,5 +34,28 @@ public class PickupGuide
 
     public DateTime? UpdatedAt { get; set; }
 
+    public long? EmployeeId { get; set; }
+
+    public Employee? Employee { get; set; }
+
+    public int? VehicleId { get; set; }
+
+    public Vehicle? Vehicle { get; set; }
+
+    public PickupGuideEmailStatus EmailDeliveryStatus { get; set; } = PickupGuideEmailStatus.Pending;
+
+    public DateTime? EmailSentAt { get; set; }
+
+    public DateTime? LastEmailAttemptAt { get; set; }
+
+    public int EmailRetryCount { get; set; }
+
+    [MaxLength(1000)]
+    public string? LastEmailError { get; set; }
+
     public ICollection<PickupGuideDetail> Details { get; set; } = new List<PickupGuideDetail>();
+
+    public ICollection<PickupGuideAttachment> Attachments { get; set; } = new List<PickupGuideAttachment>();
+
+    public ICollection<PickupGuideRevision> Revisions { get; set; } = new List<PickupGuideRevision>();
 }

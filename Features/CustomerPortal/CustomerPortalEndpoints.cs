@@ -23,6 +23,7 @@ public static class CustomerPortalEndpoints
 
         portalGroup.MapGetPortalPickupGuides();
         portalGroup.MapGetPortalPickupGuide();
+        portalGroup.MapGetPortalPickupGuideAttachments();
 
         portalGroup.MapGetPortalInvoices();
         portalGroup.MapGetPortalInvoice();

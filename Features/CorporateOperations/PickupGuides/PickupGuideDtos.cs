@@ -24,6 +24,12 @@ public record PickupGuideResponse(
     decimal TotalAmount,
     DateTime CreatedAt,
     DateTime? UpdatedAt,
+    long? EmployeeId,
+    string? EmployeeName,
+    int? VehicleId,
+    string? VehiclePlate,
+    PickupGuideEmailStatus EmailDeliveryStatus,
+    DateTime? EmailSentAt,
     List<PickupGuideDetailResponse> Details
 );
 

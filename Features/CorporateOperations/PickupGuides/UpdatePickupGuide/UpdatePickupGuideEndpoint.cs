@@ -20,6 +20,8 @@ public static class UpdatePickupGuideEndpoint
             var guide = await db.PickupGuides
                 .Include(x => x.Customer).ThenInclude(c => c.BillingProfile)
                 .Include(x => x.Details)
+                .Include(x => x.Employee)
+                .Include(x => x.Vehicle)
                 .FirstOrDefaultAsync(x => x.Id == id);
 
             if (guide is null)
@@ -36,6 +38,24 @@ public static class UpdatePickupGuideEndpoint
             if (!branchExists)
             {
                 return Results.BadRequest(new[] { "Sucursal no encontrada." });
+            }
+
+            if (request.EmployeeId.HasValue)
+            {
+                var employeeExists = await db.Employees.AnyAsync(x => x.Id == request.EmployeeId.Value && x.IsActive);
+                if (!employeeExists)
+                {
+                    return Results.BadRequest(new[] { "Empleado no encontrado o inactivo." });
+                }
+            }
+
+            if (request.VehicleId.HasValue)
+            {
+                var vehicleExists = await db.Vehicles.AnyAsync(x => x.Id == request.VehicleId.Value && x.IsActive);
+                if (!vehicleExists)
+                {
+                    return Results.BadRequest(new[] { "Vehículo no encontrado o inactivo." });
+                }
             }
 
             // Los precios se recalculan contra la tarifa ya congelada en la guía (CustomerPriceListId),
@@ -82,6 +102,8 @@ public static class UpdatePickupGuideEndpoint
             guide.BranchSalesId = request.BranchSalesId;
             guide.PickupDate = request.PickupDate;
             guide.Observation = request.Observation;
+            guide.EmployeeId = request.EmployeeId;
+            guide.VehicleId = request.VehicleId;
 
             db.PickupGuideDetails.RemoveRange(guide.Details);
             guide.Details = newDetails;
@@ -89,6 +111,9 @@ public static class UpdatePickupGuideEndpoint
             guide.UpdatedAt = TimeZoneInfo.ConvertTime(DateTime.Now, TimeZoneInfo.FindSystemTimeZoneById("SA Pacific Standard Time"));
 
             await db.SaveChangesAsync();
+
+            await db.Entry(guide).Reference(x => x.Employee).LoadAsync();
+            await db.Entry(guide).Reference(x => x.Vehicle).LoadAsync();
 
             await db.Entry(guide).Collection(x => x.Details).Query()
                 .Include(x => x.ServiceItem)

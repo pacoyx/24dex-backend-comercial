@@ -30,3 +30,10 @@ public record PortalPickupGuideResponse(
     DateTime CreatedAt,
     List<PortalPickupGuideDetailResponse> Details
 );
+
+public record PortalPickupGuideAttachmentResponse(
+    long Id,
+    PickupGuideAttachmentType AttachmentType,
+    string OriginalFileName,
+    DateTime CreatedAt
+);

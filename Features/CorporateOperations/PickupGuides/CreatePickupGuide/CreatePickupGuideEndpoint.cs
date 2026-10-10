@@ -30,6 +30,24 @@ public static class CreatePickupGuideEndpoint
                 return Results.BadRequest(new[] { "Sucursal no encontrada." });
             }
 
+            if (request.EmployeeId.HasValue)
+            {
+                var employeeExists = await db.Employees.AnyAsync(x => x.Id == request.EmployeeId.Value && x.IsActive);
+                if (!employeeExists)
+                {
+                    return Results.BadRequest(new[] { "Empleado no encontrado o inactivo." });
+                }
+            }
+
+            if (request.VehicleId.HasValue)
+            {
+                var vehicleExists = await db.Vehicles.AnyAsync(x => x.Id == request.VehicleId.Value && x.IsActive);
+                if (!vehicleExists)
+                {
+                    return Results.BadRequest(new[] { "Vehículo no encontrado o inactivo." });
+                }
+            }
+
             var activePriceList = await db.CustomerPriceLists
                 .Include(x => x.Details).ThenInclude(d => d.ServiceItem)
                 .FirstOrDefaultAsync(x => x.CustomerId == request.CustomerId && x.IsActive);
@@ -87,6 +105,8 @@ public static class CreatePickupGuideEndpoint
                 CustomerPriceListId = activePriceList.Id,
                 TotalAmount = details.Sum(d => d.Total),
                 CreatedAt = fechaOperacion,
+                EmployeeId = request.EmployeeId,
+                VehicleId = request.VehicleId,
                 Details = details
             };
 
@@ -102,6 +122,16 @@ public static class CreatePickupGuideEndpoint
                 .Include(x => x.ServiceItem)
                 .LoadAsync();
             guide.Customer = customer;
+
+            if (guide.EmployeeId.HasValue)
+            {
+                await db.Entry(guide).Reference(x => x.Employee).LoadAsync();
+            }
+
+            if (guide.VehicleId.HasValue)
+            {
+                await db.Entry(guide).Reference(x => x.Vehicle).LoadAsync();
+            }
 
             var response = new ApiResponse<PickupGuideResponse>
             {

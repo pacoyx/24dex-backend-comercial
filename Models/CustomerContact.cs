@@ -20,5 +20,11 @@ public class CustomerContact
 
     public bool IsPrimary { get; set; }
 
+    public bool ReceivePickupGuideEmails { get; set; }
+
+    public bool ReceiveInvoices { get; set; }
+
+    public bool ReceivePortalNotifications { get; set; }
+
     public Customer Customer { get; set; } = null!;
 }

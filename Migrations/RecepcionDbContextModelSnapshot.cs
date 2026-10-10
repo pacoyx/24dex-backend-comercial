@@ -760,6 +760,15 @@ namespace _24dex_backend_comercial.Migrations
                         .HasMaxLength(100)
                         .HasColumnType("nvarchar(100)");
 
+                    b.Property<bool>("ReceiveInvoices")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("ReceivePickupGuideEmails")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("ReceivePortalNotifications")
+                        .HasColumnType("bit");
+
                     b.HasKey("Id");
 
                     b.HasIndex("CustomerId");
@@ -2183,10 +2192,31 @@ namespace _24dex_backend_comercial.Migrations
                     b.Property<long>("CustomerPriceListId")
                         .HasColumnType("bigint");
 
+                    b.Property<int>("EmailDeliveryStatus")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasDefaultValue(1);
+
+                    b.Property<int>("EmailRetryCount")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime?>("EmailSentAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<long?>("EmployeeId")
+                        .HasColumnType("bigint");
+
                     b.Property<string>("GuideNumber")
                         .IsRequired()
                         .HasMaxLength(40)
                         .HasColumnType("nvarchar(40)");
+
+                    b.Property<DateTime?>("LastEmailAttemptAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("LastEmailError")
+                        .HasMaxLength(1000)
+                        .HasColumnType("nvarchar(1000)");
 
                     b.Property<string>("Observation")
                         .HasMaxLength(500)
@@ -2207,18 +2237,75 @@ namespace _24dex_backend_comercial.Migrations
                     b.Property<DateTime?>("UpdatedAt")
                         .HasColumnType("datetime2");
 
+                    b.Property<int?>("VehicleId")
+                        .HasColumnType("int");
+
                     b.HasKey("Id");
 
                     b.HasIndex("BranchSalesId");
 
                     b.HasIndex("CustomerPriceListId");
 
+                    b.HasIndex("EmployeeId");
+
                     b.HasIndex("GuideNumber")
                         .IsUnique();
+
+                    b.HasIndex("VehicleId");
 
                     b.HasIndex("CustomerId", "Status");
 
                     b.ToTable("PickupGuides", (string)null);
+                });
+
+            modelBuilder.Entity("PickupGuideAttachment", b =>
+                {
+                    b.Property<long>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bigint");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("Id"));
+
+                    b.Property<int>("AttachmentType")
+                        .HasColumnType("int");
+
+                    b.Property<string>("ContentType")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("FilePath")
+                        .IsRequired()
+                        .HasMaxLength(500)
+                        .HasColumnType("nvarchar(500)");
+
+                    b.Property<long>("FileSize")
+                        .HasColumnType("bigint");
+
+                    b.Property<bool>("IsCurrent")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("OriginalFileName")
+                        .IsRequired()
+                        .HasMaxLength(255)
+                        .HasColumnType("nvarchar(255)");
+
+                    b.Property<long>("PickupGuideId")
+                        .HasColumnType("bigint");
+
+                    b.Property<string>("StoredFileName")
+                        .IsRequired()
+                        .HasMaxLength(255)
+                        .HasColumnType("nvarchar(255)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("PickupGuideId", "AttachmentType", "IsCurrent");
+
+                    b.ToTable("PickupGuideAttachments", (string)null);
                 });
 
             modelBuilder.Entity("PickupGuideDetail", b =>
@@ -2262,6 +2349,73 @@ namespace _24dex_backend_comercial.Migrations
                     b.HasIndex("ServiceItemId");
 
                     b.ToTable("PickupGuideDetails", (string)null);
+                });
+
+            modelBuilder.Entity("PickupGuideDetailRevision", b =>
+                {
+                    b.Property<long>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bigint");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("Id"));
+
+                    b.Property<decimal>("NewQuantity")
+                        .HasPrecision(18, 2)
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<decimal>("OriginalQuantity")
+                        .HasPrecision(18, 2)
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<long>("PickupGuideDetailId")
+                        .HasColumnType("bigint");
+
+                    b.Property<long>("PickupGuideRevisionId")
+                        .HasColumnType("bigint");
+
+                    b.Property<string>("Reason")
+                        .IsRequired()
+                        .HasMaxLength(500)
+                        .HasColumnType("nvarchar(500)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("PickupGuideDetailId");
+
+                    b.HasIndex("PickupGuideRevisionId");
+
+                    b.ToTable("PickupGuideDetailRevisions", (string)null);
+                });
+
+            modelBuilder.Entity("PickupGuideRevision", b =>
+                {
+                    b.Property<long>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bigint");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("Id"));
+
+                    b.Property<long>("EmployeeId")
+                        .HasColumnType("bigint");
+
+                    b.Property<string>("Observation")
+                        .IsRequired()
+                        .HasMaxLength(500)
+                        .HasColumnType("nvarchar(500)");
+
+                    b.Property<long>("PickupGuideId")
+                        .HasColumnType("bigint");
+
+                    b.Property<DateTime>("RevisionDate")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("EmployeeId");
+
+                    b.HasIndex("PickupGuideId");
+
+                    b.ToTable("PickupGuideRevisions", (string)null);
                 });
 
             modelBuilder.Entity("Position", b =>
@@ -2981,6 +3135,35 @@ namespace _24dex_backend_comercial.Migrations
                     b.ToTable("UserRoles", (string)null);
                 });
 
+            modelBuilder.Entity("Vehicle", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Description")
+                        .IsRequired()
+                        .HasMaxLength(200)
+                        .HasColumnType("nvarchar(200)");
+
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("Plate")
+                        .IsRequired()
+                        .HasMaxLength(20)
+                        .HasColumnType("nvarchar(20)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("Plate")
+                        .IsUnique();
+
+                    b.ToTable("Vehicles", (string)null);
+                });
+
             modelBuilder.Entity("WorkGuideDetail", b =>
                 {
                     b.Property<int>("Id")
@@ -3685,11 +3868,36 @@ namespace _24dex_backend_comercial.Migrations
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
+                    b.HasOne("Employee", "Employee")
+                        .WithMany()
+                        .HasForeignKey("EmployeeId")
+                        .OnDelete(DeleteBehavior.Restrict);
+
+                    b.HasOne("Vehicle", "Vehicle")
+                        .WithMany()
+                        .HasForeignKey("VehicleId")
+                        .OnDelete(DeleteBehavior.Restrict);
+
                     b.Navigation("BranchSales");
 
                     b.Navigation("Customer");
 
                     b.Navigation("CustomerPriceList");
+
+                    b.Navigation("Employee");
+
+                    b.Navigation("Vehicle");
+                });
+
+            modelBuilder.Entity("PickupGuideAttachment", b =>
+                {
+                    b.HasOne("PickupGuide", "PickupGuide")
+                        .WithMany("Attachments")
+                        .HasForeignKey("PickupGuideId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("PickupGuide");
                 });
 
             modelBuilder.Entity("PickupGuideDetail", b =>
@@ -3709,6 +3917,44 @@ namespace _24dex_backend_comercial.Migrations
                     b.Navigation("PickupGuide");
 
                     b.Navigation("ServiceItem");
+                });
+
+            modelBuilder.Entity("PickupGuideDetailRevision", b =>
+                {
+                    b.HasOne("PickupGuideDetail", "PickupGuideDetail")
+                        .WithMany()
+                        .HasForeignKey("PickupGuideDetailId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("PickupGuideRevision", "PickupGuideRevision")
+                        .WithMany("DetailRevisions")
+                        .HasForeignKey("PickupGuideRevisionId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("PickupGuideDetail");
+
+                    b.Navigation("PickupGuideRevision");
+                });
+
+            modelBuilder.Entity("PickupGuideRevision", b =>
+                {
+                    b.HasOne("Employee", "Employee")
+                        .WithMany()
+                        .HasForeignKey("EmployeeId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("PickupGuide", "PickupGuide")
+                        .WithMany("Revisions")
+                        .HasForeignKey("PickupGuideId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("Employee");
+
+                    b.Navigation("PickupGuide");
                 });
 
             modelBuilder.Entity("Printer", b =>
@@ -4026,7 +4272,16 @@ namespace _24dex_backend_comercial.Migrations
 
             modelBuilder.Entity("PickupGuide", b =>
                 {
+                    b.Navigation("Attachments");
+
                     b.Navigation("Details");
+
+                    b.Navigation("Revisions");
+                });
+
+            modelBuilder.Entity("PickupGuideRevision", b =>
+                {
+                    b.Navigation("DetailRevisions");
                 });
 
             modelBuilder.Entity("PurchaseInvoice", b =>

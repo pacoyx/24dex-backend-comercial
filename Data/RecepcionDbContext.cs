@@ -100,6 +100,10 @@ public class RecepcionDbContext : DbContext
     public DbSet<PickupGuideDetail> PickupGuideDetails { get; set; }
     public DbSet<CustomerPriceList> CustomerPriceLists { get; set; }
     public DbSet<CustomerPriceListDetail> CustomerPriceListDetails { get; set; }
+    public DbSet<Vehicle> Vehicles { get; set; }
+    public DbSet<PickupGuideAttachment> PickupGuideAttachments { get; set; }
+    public DbSet<PickupGuideRevision> PickupGuideRevisions { get; set; }
+    public DbSet<PickupGuideDetailRevision> PickupGuideDetailRevisions { get; set; }
 
     public DbSet<CustomerUser> CustomerUsers { get; set; }
     public DbSet<CustomerRole> CustomerRoles { get; set; }
@@ -186,6 +190,10 @@ public class RecepcionDbContext : DbContext
         modelBuilder.ApplyConfiguration(new CustomerPermissionConfiguration());
         modelBuilder.ApplyConfiguration(new CustomerRolePermissionConfiguration());
         modelBuilder.ApplyConfiguration(new CustomerUserTokenConfiguration());
+        modelBuilder.ApplyConfiguration(new VehicleConfiguration());
+        modelBuilder.ApplyConfiguration(new PickupGuideAttachmentConfiguration());
+        modelBuilder.ApplyConfiguration(new PickupGuideRevisionConfiguration());
+        modelBuilder.ApplyConfiguration(new PickupGuideDetailRevisionConfiguration());
 
         modelBuilder.Entity<WorkGuideMain>()
             .HasOne(x => x.Branch)

@@ -14,6 +14,15 @@ public static class PickupGuidesEndpoints
         group.MapChangePickupGuideStatus();
         group.MapGetPickupGuidesByCustomerReport();
         group.MapGetPickupGuidesMonthlyReport();
+
+        group.MapCreateAttachment();
+        group.MapGetAttachments();
+        group.MapDeleteAttachment();
+
+        group.MapCreatePickupGuideRevision();
+        group.MapGetPickupGuideRevisions();
+
+        group.MapResendPickupGuideEmail();
     }
 
     internal static string GetCustomerDisplayName(Customer customer) =>
@@ -30,6 +39,9 @@ public static class PickupGuidesEndpoints
         guide.Id, guide.GuideNumber, guide.CustomerId, GetCustomerDisplayName(guide.Customer),
         guide.BranchSalesId, guide.PickupDate, guide.Status, guide.Observation,
         guide.CustomerPriceListId, guide.TotalAmount, guide.CreatedAt, guide.UpdatedAt,
+        guide.EmployeeId, guide.Employee is null ? null : $"{guide.Employee.FirstName} {guide.Employee.LastName}".Trim(),
+        guide.VehicleId, guide.Vehicle?.Plate,
+        guide.EmailDeliveryStatus, guide.EmailSentAt,
         guide.Details.Select(ToDetailResponse).ToList()
     );
 
