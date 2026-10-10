@@ -7,6 +7,7 @@ public class CustomerConfiguration : IEntityTypeConfiguration<Customer>
     {
         builder.Property(x => x.CustomerType).HasDefaultValue(CustomerType.Individual);
         builder.Property(x => x.IsActive).HasDefaultValue(true);
+        builder.Property(x => x.PortalEnabled).HasDefaultValue(false);
         builder.Property(x => x.InternalCode).HasMaxLength(20);
 
         builder.HasOne(x => x.BillingProfile)

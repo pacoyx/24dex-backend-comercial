@@ -8,7 +8,8 @@ public class RoleSeeder : IApplicationSeeder
         (RoleNames.Recepcion, "Personal de recepcion"),
         (RoleNames.Compras, "Personal de compras y proveedores"),
         (RoleNames.Rrhh, "Personal de Recursos Humanos"),
-        (RoleNames.Gerencia, "Gerencia con vision transversal del negocio")
+        (RoleNames.Gerencia, "Gerencia con vision transversal del negocio"),
+        (RoleNames.OperacionesCorporativas, "Personal de Operaciones Corporativas")
     };
 
     public async Task SeedAsync(RecepcionDbContext context, CancellationToken cancellationToken = default)

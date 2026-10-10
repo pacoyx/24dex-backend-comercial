@@ -78,5 +78,6 @@ public static class RouteExtensions
 
         app.MapCustomerPriceLists();
         app.MapPickupGuides();
+        app.MapCustomerPortal();
     }
 }

@@ -105,5 +105,9 @@ public static class ServicesDiExtensions
         services.AddScoped<IApplicationSeeder, RoleSeeder>();
         services.AddScoped<IApplicationSeeder, RolePermissionSeeder>();
         services.AddScoped<IApplicationSeeder, UserRoleBootstrapSeeder>();
+
+        services.AddScoped<IApplicationSeeder, CustomerPermissionSeeder>();
+        services.AddScoped<IApplicationSeeder, CustomerRoleSeeder>();
+        services.AddScoped<IApplicationSeeder, CustomerRolePermissionSeeder>();
     }
 }

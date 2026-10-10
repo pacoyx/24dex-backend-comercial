@@ -670,6 +670,11 @@ namespace _24dex_backend_comercial.Migrations
                         .HasMaxLength(20)
                         .HasColumnType("nvarchar(20)");
 
+                    b.Property<bool>("PortalEnabled")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bit")
+                        .HasDefaultValue(false);
+
                     b.Property<string>("Status")
                         .IsRequired()
                         .HasMaxLength(1)
@@ -762,6 +767,32 @@ namespace _24dex_backend_comercial.Migrations
                     b.ToTable("CustomerContacts", (string)null);
                 });
 
+            modelBuilder.Entity("CustomerPermission", b =>
+                {
+                    b.Property<long>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bigint");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("Id"));
+
+                    b.Property<string>("Code")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<string>("Description")
+                        .IsRequired()
+                        .HasMaxLength(300)
+                        .HasColumnType("nvarchar(300)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("Code")
+                        .IsUnique();
+
+                    b.ToTable("CustomerPermissions", (string)null);
+                });
+
             modelBuilder.Entity("CustomerPriceList", b =>
                 {
                     b.Property<long>("Id")
@@ -832,6 +863,148 @@ namespace _24dex_backend_comercial.Migrations
                         .IsUnique();
 
                     b.ToTable("CustomerPriceListDetails", (string)null);
+                });
+
+            modelBuilder.Entity("CustomerRole", b =>
+                {
+                    b.Property<long>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bigint");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("Id"));
+
+                    b.Property<string>("Description")
+                        .IsRequired()
+                        .HasMaxLength(300)
+                        .HasColumnType("nvarchar(300)");
+
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("Name")
+                        .IsUnique();
+
+                    b.ToTable("CustomerRoles", (string)null);
+                });
+
+            modelBuilder.Entity("CustomerRolePermission", b =>
+                {
+                    b.Property<long>("CustomerRoleId")
+                        .HasColumnType("bigint");
+
+                    b.Property<long>("CustomerPermissionId")
+                        .HasColumnType("bigint");
+
+                    b.HasKey("CustomerRoleId", "CustomerPermissionId");
+
+                    b.HasIndex("CustomerPermissionId");
+
+                    b.ToTable("CustomerRolePermissions", (string)null);
+                });
+
+            modelBuilder.Entity("CustomerUser", b =>
+                {
+                    b.Property<long>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bigint");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("Id"));
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("CustomerId")
+                        .HasColumnType("int");
+
+                    b.Property<long>("CustomerRoleId")
+                        .HasColumnType("bigint");
+
+                    b.Property<string>("Email")
+                        .IsRequired()
+                        .HasMaxLength(200)
+                        .HasColumnType("nvarchar(200)");
+
+                    b.Property<string>("FullName")
+                        .IsRequired()
+                        .HasMaxLength(200)
+                        .HasColumnType("nvarchar(200)");
+
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("bit");
+
+                    b.Property<DateTime?>("LastLoginAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("PasswordHash")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("RefreshToken")
+                        .HasMaxLength(200)
+                        .HasColumnType("nvarchar(200)");
+
+                    b.Property<string>("UserName")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CustomerId");
+
+                    b.HasIndex("CustomerRoleId");
+
+                    b.HasIndex("Email")
+                        .IsUnique();
+
+                    b.HasIndex("UserName")
+                        .IsUnique();
+
+                    b.ToTable("CustomerUsers", (string)null);
+                });
+
+            modelBuilder.Entity("CustomerUserToken", b =>
+                {
+                    b.Property<long>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bigint");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("Id"));
+
+                    b.Property<long>("CustomerUserId")
+                        .HasColumnType("bigint");
+
+                    b.Property<DateTime>("ExpiresAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<bool>("IsUsed")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("Purpose")
+                        .IsRequired()
+                        .HasMaxLength(30)
+                        .HasColumnType("nvarchar(30)");
+
+                    b.Property<string>("Token")
+                        .IsRequired()
+                        .HasMaxLength(200)
+                        .HasColumnType("nvarchar(200)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("Token")
+                        .IsUnique();
+
+                    b.HasIndex("CustomerUserId", "Purpose", "IsUsed");
+
+                    b.ToTable("CustomerUserTokens", (string)null);
                 });
 
             modelBuilder.Entity("DexterCompany.Models.CatService", b =>
@@ -3192,6 +3365,53 @@ namespace _24dex_backend_comercial.Migrations
                     b.Navigation("ServiceItem");
                 });
 
+            modelBuilder.Entity("CustomerRolePermission", b =>
+                {
+                    b.HasOne("CustomerPermission", "CustomerPermission")
+                        .WithMany()
+                        .HasForeignKey("CustomerPermissionId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("CustomerRole", "CustomerRole")
+                        .WithMany("Permissions")
+                        .HasForeignKey("CustomerRoleId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("CustomerPermission");
+
+                    b.Navigation("CustomerRole");
+                });
+
+            modelBuilder.Entity("CustomerUser", b =>
+                {
+                    b.HasOne("Customer", "Customer")
+                        .WithMany()
+                        .HasForeignKey("CustomerId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("CustomerRole", "CustomerRole")
+                        .WithMany()
+                        .HasForeignKey("CustomerRoleId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("Customer");
+
+                    b.Navigation("CustomerRole");
+                });
+
+            modelBuilder.Entity("CustomerUserToken", b =>
+                {
+                    b.HasOne("CustomerUser", null)
+                        .WithMany()
+                        .HasForeignKey("CustomerUserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
             modelBuilder.Entity("DexterCompany.Models.PrintQueue", b =>
                 {
                     b.HasOne("Printer", "Printer")
@@ -3758,6 +3978,11 @@ namespace _24dex_backend_comercial.Migrations
             modelBuilder.Entity("CustomerPriceList", b =>
                 {
                     b.Navigation("Details");
+                });
+
+            modelBuilder.Entity("CustomerRole", b =>
+                {
+                    b.Navigation("Permissions");
                 });
 
             modelBuilder.Entity("Employee", b =>

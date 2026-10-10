@@ -7,8 +7,12 @@ public static class CustomersEndpoints
         group.MapBillingProfiles();
         group.MapCustomerContacts();
         group.MapAccountSummary();
+        group.MapPortalAdmin();
 
         var contactsGroup = app.MapGroup("/api/customer-contacts").WithTags("Customers").RequirePermission(PermissionCodes.Customers);
         contactsGroup.MapCustomerContactCommands();
+
+        var portalAdminReportGroup = app.MapGroup("/api/customer-portal-admin").WithTags("Customers").RequirePermission(PermissionCodes.Customers);
+        portalAdminReportGroup.MapGetPortalCustomers();
     }
 }

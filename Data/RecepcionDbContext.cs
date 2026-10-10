@@ -101,6 +101,12 @@ public class RecepcionDbContext : DbContext
     public DbSet<CustomerPriceList> CustomerPriceLists { get; set; }
     public DbSet<CustomerPriceListDetail> CustomerPriceListDetails { get; set; }
 
+    public DbSet<CustomerUser> CustomerUsers { get; set; }
+    public DbSet<CustomerRole> CustomerRoles { get; set; }
+    public DbSet<CustomerPermission> CustomerPermissions { get; set; }
+    public DbSet<CustomerRolePermission> CustomerRolePermissions { get; set; }
+    public DbSet<CustomerUserToken> CustomerUserTokens { get; set; }
+
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -174,6 +180,12 @@ public class RecepcionDbContext : DbContext
         modelBuilder.ApplyConfiguration(new PickupGuideDetailConfiguration());
         modelBuilder.ApplyConfiguration(new CustomerPriceListConfiguration());
         modelBuilder.ApplyConfiguration(new CustomerPriceListDetailConfiguration());
+
+        modelBuilder.ApplyConfiguration(new CustomerUserConfiguration());
+        modelBuilder.ApplyConfiguration(new CustomerRoleConfiguration());
+        modelBuilder.ApplyConfiguration(new CustomerPermissionConfiguration());
+        modelBuilder.ApplyConfiguration(new CustomerRolePermissionConfiguration());
+        modelBuilder.ApplyConfiguration(new CustomerUserTokenConfiguration());
 
         modelBuilder.Entity<WorkGuideMain>()
             .HasOne(x => x.Branch)

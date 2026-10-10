@@ -5,4 +5,5 @@ public static class RoleNames
     public const string Compras = "Compras";
     public const string Rrhh = "RRHH";
     public const string Gerencia = "Gerencia";
+    public const string OperacionesCorporativas = "Operaciones Corporativas";
 }

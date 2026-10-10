@@ -26,6 +26,8 @@ public class Customer
 
     public bool IsActive { get; set; } = true;
 
+    public bool PortalEnabled { get; set; } = false;
+
     public CustomerBillingProfile? BillingProfile { get; set; }
 
     public ICollection<CustomerContact> Contacts { get; set; } = new List<CustomerContact>();

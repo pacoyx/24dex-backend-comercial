@@ -47,6 +47,7 @@ public static class ServiceExtensions
         services.Configure<JwtSettings>(configuration.GetSection("Jwt"));
         services.Configure<InvoiceSettings>(configuration.GetSection("Invoice"));
         services.Configure<SneakerSettings>(configuration.GetSection("Sneaker"));
+        services.Configure<CustomerPortalSettings>(configuration.GetSection("CustomerPortal"));
 
         // Add services to the container.
         services.AddEndpointsApiExplorer();
@@ -157,6 +158,15 @@ public static class ServiceExtensions
             foreach (var permissionCode in PermissionCodes.All)
             {
                 options.AddPolicy(permissionCode, policy => policy.RequireClaim("permissions", permissionCode));
+            }
+
+            options.AddPolicy("CustomerPortalAccess", policy => policy.RequireClaim("userType", "Customer"));
+
+            foreach (var permissionCode in CustomerPermissionCodes.All)
+            {
+                options.AddPolicy(RequireCustomerPermissionExtensions.PolicyPrefix + permissionCode, policy => policy
+                    .RequireClaim("userType", "Customer")
+                    .RequireClaim("customerPermissions", permissionCode));
             }
         });
         services.AddScoped<JwtService>();
