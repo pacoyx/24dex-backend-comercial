@@ -8,23 +8,29 @@ public static class DownloadAttachmentEndpoint
             long attachmentId,
             RecepcionDbContext db,
             IFileStorageService storage,
-            CancellationToken cancellationToken) =>
-        {
-            var attachment = await db.PickupGuideAttachments
-                .AsNoTracking()
-                .FirstOrDefaultAsync(x => x.Id == attachmentId, cancellationToken);
-
-            if (attachment is null)
-            {
-                return Results.NotFound("Evidencia no encontrada.");
-            }
-
-            var stream = await storage.OpenReadAsync(attachment.FilePath, cancellationToken);
-
-            return Results.File(stream, attachment.ContentType, enableRangeProcessing: true);
-        })
+            CancellationToken cancellationToken) => await ExecuteAsync(attachmentId, db, storage, cancellationToken))
         .WithName("DownloadPickupGuideAttachment")
         .Produces(StatusCodes.Status200OK)
         .Produces(StatusCodes.Status404NotFound);
+    }
+
+    internal static async Task<IResult> ExecuteAsync(
+        long attachmentId,
+        RecepcionDbContext db,
+        IFileStorageService storage,
+        CancellationToken cancellationToken)
+    {
+        var attachment = await db.PickupGuideAttachments
+            .AsNoTracking()
+            .FirstOrDefaultAsync(x => x.Id == attachmentId, cancellationToken);
+
+        if (attachment is null)
+        {
+            return Results.NotFound("Evidencia no encontrada.");
+        }
+
+        var stream = await storage.OpenReadAsync(attachment.FilePath, cancellationToken);
+
+        return Results.File(stream, attachment.ContentType, enableRangeProcessing: true);
     }
 }

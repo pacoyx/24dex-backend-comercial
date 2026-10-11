@@ -68,7 +68,7 @@ public static class LoginUserEndpoint
                 .Distinct()
                 .ToListAsync();
 
-            var token = jwtService.GenerateToken(user.Id.ToString(), loginDto.Username, roles, permissions);
+            var token = jwtService.GenerateToken(user.Id.ToString(), loginDto.Username, roles, permissions, user.EmployeeId);
             var refreshToken = jwtService.GenerateRefreshToken();
 
             user.RefreshToken = refreshToken;
@@ -147,7 +147,7 @@ public static class LoginUserEndpoint
                 .Distinct()
                 .ToListAsync();
 
-            var newJwtToken = jwtService.GenerateToken(user.Id.ToString(), user.UserName, roles, permissions);
+            var newJwtToken = jwtService.GenerateToken(user.Id.ToString(), user.UserName, roles, permissions, user.EmployeeId);
             var newRefreshToken = jwtService.GenerateRefreshToken();
 
             user.RefreshToken = newRefreshToken;

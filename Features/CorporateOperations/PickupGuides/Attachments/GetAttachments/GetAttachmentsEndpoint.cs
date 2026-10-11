@@ -5,7 +5,14 @@ public static class GetAttachmentsEndpoint
     public static void MapGetAttachments(this IEndpointRouteBuilder app)
     {
         app.MapGet("/{id:long}/attachments", async (long id, PickupGuideAttachmentType? attachmentType, RecepcionDbContext db) =>
-        {
+            await ExecuteAsync(id, attachmentType, db))
+        .WithName("GetPickupGuideAttachments")
+        .Produces<ApiResponse<List<PickupGuideAttachmentResponse>>>(StatusCodes.Status200OK)
+        .Produces(StatusCodes.Status404NotFound);
+    }
+
+    internal static async Task<IResult> ExecuteAsync(long id, PickupGuideAttachmentType? attachmentType, RecepcionDbContext db)
+    {
             var guideExists = await db.PickupGuides.AnyAsync(x => x.Id == id);
             if (!guideExists)
             {
@@ -27,9 +34,5 @@ public static class GetAttachmentsEndpoint
                 StatusCode = StatusCodes.Status200OK,
                 Data = attachments.Select(PickupGuideAttachmentsEndpoints.ToResponse).ToList()
             });
-        })
-        .WithName("GetPickupGuideAttachments")
-        .Produces<ApiResponse<List<PickupGuideAttachmentResponse>>>(StatusCodes.Status200OK)
-        .Produces(StatusCodes.Status404NotFound);
     }
 }

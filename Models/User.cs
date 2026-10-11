@@ -21,4 +21,7 @@ public class User
     public string Phone { get; set; } = "";
     [MaxLength(500)]
     public string PhotoUrl { get; set; } = "";
+
+    public long? EmployeeId { get; set; }
+    public Employee? Employee { get; set; }
 }

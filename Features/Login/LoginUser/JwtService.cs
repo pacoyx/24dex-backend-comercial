@@ -16,7 +16,7 @@ public class JwtService
         _jwtSettings = jwtSettings.Value;
     }
 
-    public string GenerateToken(string userId, string userName, IEnumerable<string> roles, IEnumerable<string> permissions)
+    public string GenerateToken(string userId, string userName, IEnumerable<string> roles, IEnumerable<string> permissions, long? employeeId = null)
     {
         var securityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_jwtSettings.Key));
         var credentials = new SigningCredentials(securityKey, SecurityAlgorithms.HmacSha256);
@@ -27,6 +27,11 @@ public class JwtService
             new Claim(JwtRegisteredClaimNames.UniqueName, userName),
             new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString())
         };
+
+        if (employeeId.HasValue)
+        {
+            claims.Add(new Claim("employeeId", employeeId.Value.ToString()));
+        }
 
         claims.AddRange(roles.Select(r => new Claim("roles", r)));
         claims.AddRange(permissions.Select(p => new Claim("permissions", p)));

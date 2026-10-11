@@ -80,5 +80,6 @@ public static class RouteExtensions
         app.MapPickupGuides();
         app.MapVehicles();
         app.MapCustomerPortal();
+        app.MapPickupMobile();
     }
 }

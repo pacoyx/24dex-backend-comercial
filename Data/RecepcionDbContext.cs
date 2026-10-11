@@ -195,6 +195,12 @@ public class RecepcionDbContext : DbContext
         modelBuilder.ApplyConfiguration(new PickupGuideRevisionConfiguration());
         modelBuilder.ApplyConfiguration(new PickupGuideDetailRevisionConfiguration());
 
+        modelBuilder.Entity<User>()
+            .HasOne(x => x.Employee)
+            .WithMany()
+            .HasForeignKey(x => x.EmployeeId)
+            .OnDelete(DeleteBehavior.SetNull);
+
         modelBuilder.Entity<WorkGuideMain>()
             .HasOne(x => x.Branch)
             .WithMany()

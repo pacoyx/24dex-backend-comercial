@@ -16,8 +16,21 @@ public static class CreateAttachmentEndpoint
             [FromForm] PickupGuideAttachmentType attachmentType,
             IFormFile file,
             RecepcionDbContext db,
-            IFileStorageService storage) =>
-        {
+            IFileStorageService storage) => await ExecuteAsync(id, attachmentType, file, db, storage))
+        .DisableAntiforgery()
+        .WithName("CreatePickupGuideAttachment")
+        .Produces<ApiResponse<PickupGuideAttachmentResponse>>(StatusCodes.Status201Created)
+        .Produces(StatusCodes.Status400BadRequest)
+        .Produces(StatusCodes.Status404NotFound);
+    }
+
+    internal static async Task<IResult> ExecuteAsync(
+        long id,
+        PickupGuideAttachmentType attachmentType,
+        IFormFile file,
+        RecepcionDbContext db,
+        IFileStorageService storage)
+    {
             var guide = await db.PickupGuides.FirstOrDefaultAsync(x => x.Id == id);
             if (guide is null)
             {
@@ -64,11 +77,5 @@ public static class CreateAttachmentEndpoint
             };
 
             return Results.Created($"/api/pickup-guides/{id}/attachments", response);
-        })
-        .DisableAntiforgery()
-        .WithName("CreatePickupGuideAttachment")
-        .Produces<ApiResponse<PickupGuideAttachmentResponse>>(StatusCodes.Status201Created)
-        .Produces(StatusCodes.Status400BadRequest)
-        .Produces(StatusCodes.Status404NotFound);
     }
 }

@@ -8,8 +8,17 @@ public static class CreatePickupGuideEndpoint
         app.MapPost("/", async (
             CreatePickupGuideRequest request,
             IValidator<CreatePickupGuideRequest> validator,
-            RecepcionDbContext db) =>
-        {
+            RecepcionDbContext db) => await ExecuteAsync(request, validator, db))
+        .WithName("CreatePickupGuide")
+        .Produces<ApiResponse<PickupGuideResponse>>(StatusCodes.Status201Created)
+        .Produces(StatusCodes.Status400BadRequest);
+    }
+
+    internal static async Task<IResult> ExecuteAsync(
+        CreatePickupGuideRequest request,
+        IValidator<CreatePickupGuideRequest> validator,
+        RecepcionDbContext db)
+    {
             var validation = await validator.ValidateAsync(request);
             if (!validation.IsValid)
             {
@@ -142,9 +151,5 @@ public static class CreatePickupGuideEndpoint
             };
 
             return Results.Created($"/api/pickup-guides/{guide.Id}", response);
-        })
-        .WithName("CreatePickupGuide")
-        .Produces<ApiResponse<PickupGuideResponse>>(StatusCodes.Status201Created)
-        .Produces(StatusCodes.Status400BadRequest);
     }
 }

@@ -50,6 +50,7 @@ public static class ServiceExtensions
         services.Configure<CustomerPortalSettings>(configuration.GetSection("CustomerPortal"));
         services.Configure<FileStorageSettings>(configuration.GetSection("FileStorage"));
         services.Configure<EmailSettings>(configuration.GetSection("Email"));
+        services.Configure<PickupMobileSettings>(configuration.GetSection("PickupMobile"));
 
         var fileStorageProvider = configuration["FileStorage:Provider"];
         if (string.Equals(fileStorageProvider, "AzureBlob", StringComparison.OrdinalIgnoreCase))

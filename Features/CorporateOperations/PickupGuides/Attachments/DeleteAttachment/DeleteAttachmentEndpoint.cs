@@ -7,8 +7,15 @@ public static class DeleteAttachmentEndpoint
         app.MapDelete("/attachments/{attachmentId:long}", async (
             long attachmentId,
             RecepcionDbContext db,
-            IFileStorageService storage) =>
-        {
+            IFileStorageService storage) => await ExecuteAsync(attachmentId, db, storage))
+        .WithName("DeletePickupGuideAttachment")
+        .Produces<ApiResponse<object>>(StatusCodes.Status200OK)
+        .Produces(StatusCodes.Status400BadRequest)
+        .Produces(StatusCodes.Status404NotFound);
+    }
+
+    internal static async Task<IResult> ExecuteAsync(long attachmentId, RecepcionDbContext db, IFileStorageService storage)
+    {
             var attachment = await db.PickupGuideAttachments.FirstOrDefaultAsync(x => x.Id == attachmentId);
             if (attachment is null)
             {
@@ -32,10 +39,5 @@ public static class DeleteAttachmentEndpoint
                 StatusCode = StatusCodes.Status200OK,
                 Data = new { attachment.Id }
             });
-        })
-        .WithName("DeletePickupGuideAttachment")
-        .Produces<ApiResponse<object>>(StatusCodes.Status200OK)
-        .Produces(StatusCodes.Status400BadRequest)
-        .Produces(StatusCodes.Status404NotFound);
     }
 }

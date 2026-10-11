@@ -9,8 +9,20 @@ public static class UpdatePickupGuideEndpoint
             long id,
             UpdatePickupGuideRequest request,
             IValidator<UpdatePickupGuideRequest> validator,
-            RecepcionDbContext db) =>
-        {
+            RecepcionDbContext db) => await ExecuteAsync(id, request, validator, db))
+        .WithName("UpdatePickupGuide")
+        .Produces<ApiResponse<PickupGuideResponse>>(StatusCodes.Status200OK)
+        .Produces(StatusCodes.Status400BadRequest)
+        .Produces(StatusCodes.Status404NotFound);
+    }
+
+    internal static async Task<IResult> ExecuteAsync(
+        long id,
+        UpdatePickupGuideRequest request,
+        IValidator<UpdatePickupGuideRequest> validator,
+        RecepcionDbContext db,
+        Func<PickupGuide, IResult?>? additionalGuard = null)
+    {
             var validation = await validator.ValidateAsync(request);
             if (!validation.IsValid)
             {
@@ -32,6 +44,12 @@ public static class UpdatePickupGuideEndpoint
             if (guide.Status is PickupGuideStatus.Invoiced or PickupGuideStatus.Cancelled)
             {
                 return Results.BadRequest(new[] { $"No se puede modificar una guía en estado '{guide.Status}'." });
+            }
+
+            var guardResult = additionalGuard?.Invoke(guide);
+            if (guardResult is not null)
+            {
+                return guardResult;
             }
 
             var branchExists = await db.BranchSales.AnyAsync(x => x.Id == request.BranchSalesId);
@@ -126,10 +144,5 @@ public static class UpdatePickupGuideEndpoint
                 StatusCode = StatusCodes.Status200OK,
                 Data = PickupGuidesEndpoints.ToResponse(guide)
             });
-        })
-        .WithName("UpdatePickupGuide")
-        .Produces<ApiResponse<PickupGuideResponse>>(StatusCodes.Status200OK)
-        .Produces(StatusCodes.Status400BadRequest)
-        .Produces(StatusCodes.Status404NotFound);
     }
 }

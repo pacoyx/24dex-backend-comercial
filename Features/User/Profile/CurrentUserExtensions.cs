@@ -10,4 +10,10 @@ public static class CurrentUserExtensions
 
         return int.TryParse(value, out var id) ? id : null;
     }
+
+    public static long? GetEmployeeId(this ClaimsPrincipal user)
+    {
+        var value = user.FindFirst("employeeId")?.Value;
+        return long.TryParse(value, out var id) ? id : null;
+    }
 }
