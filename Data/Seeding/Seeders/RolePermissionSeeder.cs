@@ -28,6 +28,10 @@ public class RolePermissionSeeder : IApplicationSeeder
         [RoleNames.OperacionesCorporativas] = new[]
         {
             PermissionCodes.CorporateOperations
+        },
+        [RoleNames.Recolector] = new[]
+        {
+            PermissionCodes.PickupMobile
         }
     };
 

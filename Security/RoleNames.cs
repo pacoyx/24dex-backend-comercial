@@ -6,4 +6,5 @@ public static class RoleNames
     public const string Rrhh = "RRHH";
     public const string Gerencia = "Gerencia";
     public const string OperacionesCorporativas = "Operaciones Corporativas";
+    public const string Recolector = "Recolector";
 }
