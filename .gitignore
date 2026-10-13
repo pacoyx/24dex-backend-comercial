@@ -37,6 +37,7 @@ publish/
 bin/
 obj/
 Logs/
+Uploads/
 
 # Recycle Bin used on file shares
 $RECYCLE.BIN/
