@@ -13,8 +13,9 @@ public class AzureBlobStorageService : IFileStorageService
     }
 
     public async Task<StorageFileResult> UploadAsync(
+        string topFolder,
         string category,
-        long pickupGuideId,
+        long entityId,
         string originalFileName,
         string contentType,
         Stream content,
@@ -23,8 +24,8 @@ public class AzureBlobStorageService : IFileStorageService
         await EnsureContainerAsync(cancellationToken);
 
         var extension = Path.GetExtension(originalFileName);
-        var storedFileName = $"pickup-guide-{pickupGuideId}-{Guid.NewGuid():N}{extension}";
-        var blobPath = $"{pickupGuideId}/{category.ToLowerInvariant()}/{storedFileName}";
+        var storedFileName = $"{topFolder.ToLowerInvariant()}-{entityId}-{Guid.NewGuid():N}{extension}";
+        var blobPath = $"{topFolder}/{entityId}/{category.ToLowerInvariant()}/{storedFileName}";
 
         var blobClient = _containerClient.GetBlobClient(blobPath);
         await blobClient.UploadAsync(content, new Azure.Storage.Blobs.Models.BlobHttpHeaders

@@ -12,10 +12,10 @@ public static class GetWorkGuidePhotosEndpoint
 
             var photos = await db.ItemPhotos
                 .AsNoTracking()
-                .Where(p => p.ItemInspection.WorkGuideDetail.WorkGuideMainId == id)
+                .Where(p => p.WorkGuideMainId == id)
                 .OrderBy(p => p.CreatedAt)
                 .Select(p => new WorkGuidePhotoResponse(
-                    p.Id, p.ItemInspection.WorkGuideDetailId, p.ItemInspectionId, p.FileName, p.BlobUrl, p.CreatedAt))
+                    p.Id, p.FileName, p.OriginalFileName, p.ContentType, p.FileSize, p.CreatedAt))
                 .ToListAsync();
 
             var response = new WorkGuidePhotosResponse(id, photos);

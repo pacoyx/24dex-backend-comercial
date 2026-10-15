@@ -16,10 +16,5 @@ public class ItemInspectionConfiguration : IEntityTypeConfiguration<ItemInspecti
             .WithOne(x => x.ItemInspection)
             .HasForeignKey<ItemInspection>(x => x.WorkGuideDetailId)
             .OnDelete(DeleteBehavior.Cascade);
-
-        builder.HasMany(x => x.Photos)
-            .WithOne(x => x.ItemInspection)
-            .HasForeignKey(x => x.ItemInspectionId)
-            .OnDelete(DeleteBehavior.Cascade);
     }
 }

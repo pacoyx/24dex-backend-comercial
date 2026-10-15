@@ -1,9 +1,9 @@
 public record WorkGuidePhotoResponse(
     long Id,
-    int WorkGuideDetailId,
-    long ItemInspectionId,
     string FileName,
-    string BlobUrl,
+    string? OriginalFileName,
+    string ContentType,
+    long FileSize,
     DateTime CreatedAt
 );
 

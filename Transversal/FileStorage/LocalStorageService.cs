@@ -10,20 +10,21 @@ public class LocalStorageService : IFileStorageService
     }
 
     public async Task<StorageFileResult> UploadAsync(
+        string topFolder,
         string category,
-        long pickupGuideId,
+        long entityId,
         string originalFileName,
         string contentType,
         Stream content,
         CancellationToken cancellationToken = default)
     {
         var extension = Path.GetExtension(originalFileName);
-        var storedFileName = $"pickup-guide-{pickupGuideId}-{Guid.NewGuid():N}{extension}";
+        var storedFileName = $"{topFolder.ToLowerInvariant()}-{entityId}-{Guid.NewGuid():N}{extension}";
 
-        var directory = Path.Combine(_settings.BasePath, "PickupGuides", pickupGuideId.ToString(), category);
+        var directory = Path.Combine(_settings.BasePath, topFolder, entityId.ToString(), category);
         Directory.CreateDirectory(directory);
 
-        var relativePath = Path.Combine("PickupGuides", pickupGuideId.ToString(), category, storedFileName)
+        var relativePath = Path.Combine(topFolder, entityId.ToString(), category, storedFileName)
             .Replace('\\', '/');
         var absolutePath = Path.Combine(directory, storedFileName);
 

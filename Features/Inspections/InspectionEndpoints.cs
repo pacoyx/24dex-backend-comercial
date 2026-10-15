@@ -6,12 +6,10 @@ public static class InspectionEndpoints
         detailGroup.MapCreateItemInspection();
         detailGroup.MapGetItemInspection();
 
-        var photoGroup = app.MapGroup("/api/inspections").WithTags("ItemPhotos").RequirePermission(PermissionCodes.Reception);
-        photoGroup.MapCreateItemPhoto();
-        photoGroup.MapGetItemPhotos();
-
         var workGuideGroup = app.MapGroup("/api/workguides").WithTags("WorkGuideInspections").RequirePermission(PermissionCodes.Reception);
         workGuideGroup.MapGetInspectionSummary();
         workGuideGroup.MapGetWorkGuidePhotos();
+        workGuideGroup.MapCreateItemPhoto();
+        workGuideGroup.MapDownloadItemPhoto();
     }
 }

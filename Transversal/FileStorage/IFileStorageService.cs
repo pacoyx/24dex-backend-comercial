@@ -1,8 +1,9 @@
 public interface IFileStorageService
 {
     Task<StorageFileResult> UploadAsync(
+        string topFolder,
         string category,
-        long pickupGuideId,
+        long entityId,
         string originalFileName,
         string contentType,
         Stream content,

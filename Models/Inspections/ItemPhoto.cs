@@ -3,7 +3,7 @@ public class ItemPhoto
 {
     public long Id { get; set; }
 
-    public long ItemInspectionId { get; set; }
+    public int WorkGuideMainId { get; set; }
 
     public string FileName { get; set; } = string.Empty;
 
@@ -11,7 +11,11 @@ public class ItemPhoto
 
     public string BlobUrl { get; set; } = string.Empty;
 
+    public string ContentType { get; set; } = string.Empty;
+
+    public long FileSize { get; set; }
+
     public DateTime CreatedAt { get; set; }
 
-    public ItemInspection ItemInspection { get; set; } = null!;
+    public WorkGuideMain WorkGuideMain { get; set; } = null!;
 }

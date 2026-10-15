@@ -12,7 +12,6 @@ public static class GetInspectionSummaryEndpoint
                     .ThenInclude(d => d.Product)
                 .Include(x => x.WorkGuideDetails)
                     .ThenInclude(d => d.ItemInspection)
-                        .ThenInclude(i => i!.Photos)
                 .Include(x => x.WorkGuideDetails)
                     .ThenInclude(d => d.SneakerDetail)
                         .ThenInclude(s => s!.Brand)
@@ -28,7 +27,7 @@ public static class GetInspectionSummaryEndpoint
                 d.ItemInspection is null ? null : new ItemInspectionResponse(
                     d.ItemInspection.Id, d.ItemInspection.WorkGuideDetailId, d.ItemInspection.HasStains,
                     d.ItemInspection.HasTears, d.ItemInspection.HasFading, d.ItemInspection.HasMissingParts,
-                    d.ItemInspection.Notes, d.ItemInspection.CreatedAt, d.ItemInspection.Photos.Count),
+                    d.ItemInspection.Notes, d.ItemInspection.CreatedAt),
                 d.SneakerDetail is null ? null : new InspectionSummarySneakerResponse(
                     d.SneakerDetail.Id, d.SneakerDetail.SneakerBrandId, d.SneakerDetail.Brand?.Name,
                     d.SneakerDetail.PrimaryColor, d.SneakerDetail.SecondaryColor, d.SneakerDetail.HasLaces,

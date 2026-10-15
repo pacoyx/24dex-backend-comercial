@@ -6,15 +6,15 @@ public record ItemInspectionResponse(
     bool HasFading,
     bool HasMissingParts,
     string? Notes,
-    DateTime CreatedAt,
-    int PhotoCount
+    DateTime CreatedAt
 );
 
 public record ItemPhotoResponse(
     long Id,
-    long ItemInspectionId,
+    int WorkGuideMainId,
     string FileName,
     string? OriginalFileName,
-    string BlobUrl,
+    string ContentType,
+    long FileSize,
     DateTime CreatedAt
 );

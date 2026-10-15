@@ -60,7 +60,7 @@ public static class SneakerReportEndpoint
                     s.HasLaces,
                     s.HasInsoles,
                     DeliveryStatusCode = s.WorkGuideDetail.EstadoSituacion,
-                    PhotoCount = s.WorkGuideDetail.ItemInspection != null ? s.WorkGuideDetail.ItemInspection.Photos.Count : 0
+                    PhotoCount = db.ItemPhotos.Count(p => p.WorkGuideMainId == s.WorkGuideDetail.WorkGuideMainId)
                 })
                 .ToListAsync();
 

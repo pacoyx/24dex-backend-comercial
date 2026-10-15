@@ -50,7 +50,7 @@ public static class CreateAttachmentEndpoint
             var category = attachmentType == PickupGuideAttachmentType.Photo ? "Photos" : "Signatures";
 
             await using var stream = file.OpenReadStream();
-            var uploadResult = await storage.UploadAsync(category, id, file.FileName, file.ContentType, stream);
+            var uploadResult = await storage.UploadAsync("PickupGuides", category, id, file.FileName, file.ContentType, stream);
 
             var attachment = new PickupGuideAttachment
             {

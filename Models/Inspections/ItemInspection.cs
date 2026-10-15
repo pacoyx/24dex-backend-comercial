@@ -18,6 +18,4 @@ public class ItemInspection
     public DateTime CreatedAt { get; set; }
 
     public WorkGuideDetail WorkGuideDetail { get; set; } = null!;
-
-    public ICollection<ItemPhoto> Photos { get; set; } = new List<ItemPhoto>();
 }

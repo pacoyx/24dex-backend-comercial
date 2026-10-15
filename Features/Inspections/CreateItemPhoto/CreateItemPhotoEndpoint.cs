@@ -1,30 +1,33 @@
-using FluentValidation;
 using Microsoft.EntityFrameworkCore;
 
 public static class CreateItemPhotoEndpoint
 {
     public static void MapCreateItemPhoto(this IEndpointRouteBuilder app)
     {
-        app.MapPost("/{id:long}/photos", async (
-            long id,
-            CreateItemPhotoRequest request,
-            IValidator<CreateItemPhotoRequest> validator,
-            RecepcionDbContext db) =>
+        app.MapPost("/{id:int}/photos", async (
+            int id,
+            IFormFile file,
+            RecepcionDbContext db,
+            IFileStorageService storage) =>
         {
-            var validation = await validator.ValidateAsync(request);
-            if (!validation.IsValid)
-                return Results.BadRequest(validation.Errors.Select(e => e.ErrorMessage));
+            var workGuideExists = await db.WorkGuideMains.AnyAsync(x => x.Id == id);
+            if (!workGuideExists)
+                return Results.NotFound("Guía de servicio no encontrada.");
 
-            var inspectionExists = await db.ItemInspections.AnyAsync(x => x.Id == id);
-            if (!inspectionExists)
-                return Results.NotFound("Inspección no encontrada.");
+            if (file.Length == 0)
+                return Results.BadRequest(new[] { "El archivo está vacío." });
+
+            await using var stream = file.OpenReadStream();
+            var uploadResult = await storage.UploadAsync("Inspections", "Photos", id, file.FileName, file.ContentType, stream);
 
             var photo = new ItemPhoto
             {
-                ItemInspectionId = id,
-                FileName = request.FileName,
-                OriginalFileName = request.OriginalFileName,
-                BlobUrl = request.BlobUrl,
+                WorkGuideMainId = id,
+                FileName = uploadResult.StoredFileName,
+                OriginalFileName = file.FileName,
+                BlobUrl = uploadResult.FilePath,
+                ContentType = file.ContentType,
+                FileSize = uploadResult.FileSize,
                 CreatedAt = DateTime.UtcNow
             };
 
@@ -32,9 +35,9 @@ public static class CreateItemPhotoEndpoint
             await db.SaveChangesAsync();
 
             var response = new ItemPhotoResponse(
-                photo.Id, photo.ItemInspectionId, photo.FileName, photo.OriginalFileName, photo.BlobUrl, photo.CreatedAt);
+                photo.Id, photo.WorkGuideMainId, photo.FileName, photo.OriginalFileName, photo.ContentType, photo.FileSize, photo.CreatedAt);
 
-            return Results.Created($"/api/inspections/{id}/photos", new ApiResponse<ItemPhotoResponse>
+            return Results.Created($"/api/workguides/{id}/photos", new ApiResponse<ItemPhotoResponse>
             {
                 Success = true,
                 Message = "Fotografía registrada correctamente.",
@@ -42,6 +45,11 @@ public static class CreateItemPhotoEndpoint
                 Data = response
             });
         })
+        .DisableAntiforgery()
+        .WithName("CreateItemPhoto")
+        .Produces<ApiResponse<ItemPhotoResponse>>(StatusCodes.Status201Created)
+        .Produces(StatusCodes.Status400BadRequest)
+        .Produces(StatusCodes.Status404NotFound)
         .RequireAuthorization();
     }
 }

@@ -88,7 +88,7 @@ public static class ChangePickupGuideStatusEndpoint
 
             var attachmentFileName = $"constancia-{guide.GuideNumber}.pdf";
             using var pdfStream = new MemoryStream(pdfBytes);
-            var uploadResult = await storage.UploadAsync("Pdfs", guideId, attachmentFileName, "application/pdf", pdfStream);
+            var uploadResult = await storage.UploadAsync("PickupGuides", "Pdfs", guideId, attachmentFileName, "application/pdf", pdfStream);
 
             await db.PickupGuideAttachments.AddAsync(new PickupGuideAttachment
             {

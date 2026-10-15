@@ -1868,6 +1868,11 @@ namespace _24dex_backend_comercial.Migrations
                         .HasMaxLength(1000)
                         .HasColumnType("nvarchar(1000)");
 
+                    b.Property<string>("ContentType")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("datetime2");
 
@@ -1876,16 +1881,19 @@ namespace _24dex_backend_comercial.Migrations
                         .HasMaxLength(260)
                         .HasColumnType("nvarchar(260)");
 
-                    b.Property<long>("ItemInspectionId")
+                    b.Property<long>("FileSize")
                         .HasColumnType("bigint");
 
                     b.Property<string>("OriginalFileName")
                         .HasMaxLength(260)
                         .HasColumnType("nvarchar(260)");
 
+                    b.Property<int>("WorkGuideMainId")
+                        .HasColumnType("int");
+
                     b.HasKey("Id");
 
-                    b.HasIndex("ItemInspectionId");
+                    b.HasIndex("WorkGuideMainId");
 
                     b.ToTable("ItemPhotos", (string)null);
                 });
@@ -3803,13 +3811,13 @@ namespace _24dex_backend_comercial.Migrations
 
             modelBuilder.Entity("ItemPhoto", b =>
                 {
-                    b.HasOne("ItemInspection", "ItemInspection")
-                        .WithMany("Photos")
-                        .HasForeignKey("ItemInspectionId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                    b.HasOne("WorkGuideMain", "WorkGuideMain")
+                        .WithMany()
+                        .HasForeignKey("WorkGuideMainId")
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
-                    b.Navigation("ItemInspection");
+                    b.Navigation("WorkGuideMain");
                 });
 
             modelBuilder.Entity("LocationWorkGuide", b =>
@@ -4263,11 +4271,6 @@ namespace _24dex_backend_comercial.Migrations
                     b.Navigation("Details");
 
                     b.Navigation("Payments");
-                });
-
-            modelBuilder.Entity("ItemInspection", b =>
-                {
-                    b.Navigation("Photos");
                 });
 
             modelBuilder.Entity("LocationClothes", b =>

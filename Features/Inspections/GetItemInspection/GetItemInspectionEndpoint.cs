@@ -13,11 +13,9 @@ public static class GetItemInspectionEndpoint
             if (inspection is null)
                 return Results.NotFound("No se encontró inspección para este detalle.");
 
-            var photoCount = await db.ItemPhotos.CountAsync(x => x.ItemInspectionId == inspection.Id);
-
             var response = new ItemInspectionResponse(
                 inspection.Id, inspection.WorkGuideDetailId, inspection.HasStains, inspection.HasTears,
-                inspection.HasFading, inspection.HasMissingParts, inspection.Notes, inspection.CreatedAt, photoCount);
+                inspection.HasFading, inspection.HasMissingParts, inspection.Notes, inspection.CreatedAt);
 
             return Results.Ok(new ApiResponse<ItemInspectionResponse>
             {
