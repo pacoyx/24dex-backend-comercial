@@ -13,13 +13,14 @@ public static class GetProdServiceSearchByDescriptionEndpoint
                                          .Join(context.CatServices,
                                              ps => ps.CatServiceId,
                                              cs => cs.Id,
-                                             (ps, cs) => new
-                                             {
+                                             (ps, cs) => new GetProdServiceSearchByDescriptionResponseDto(
                                                  ps.Id,
                                                  ps.Name,
                                                  ps.Price,
-                                                 CategoryDescription = cs.Name
-                                             })
+                                                 ps.IsPeso,
+                                                 ps.IsLavado,
+                                                 cs.Name
+                                             ))
                                          .ToListAsync();
              return Results.Ok(prodServices);
          });
